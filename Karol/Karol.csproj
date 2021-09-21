@@ -48,7 +48,6 @@
     <None Remove="Resources\Images\robotW7.gif" />
     <None Remove="Resources\Images\robotW8.gif" />
     <None Remove="Resources\Images\robotW9.gif" />
-    <None Remove="Resources\Images\Ziegel.gif" />
   </ItemGroup>
 
   <ItemGroup>

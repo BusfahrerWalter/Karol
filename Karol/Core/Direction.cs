@@ -16,7 +16,7 @@ namespace Karol.Core
 
         public char DirectionChar { get; private set; }
         public string Name { get; private set; }
-        private int Offset { get; set; }
+        public int Offset { get; set; }
 
         static Direction()
         {

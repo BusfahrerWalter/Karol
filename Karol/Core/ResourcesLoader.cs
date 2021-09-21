@@ -1,25 +1,22 @@
 ﻿using Karol.Properties;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Resources;
-using System.Text;
-using System.Windows.Forms;
+using System.Linq;
+using System.Reflection;
 
 namespace Karol.Core
 {
-    public class ResourcesLoader
-    {
-        public static Bitmap LoadBitmap(string name)
+    internal class ResourcesLoader
+    {       
+        public static Bitmap[] LoadRobotBitmaps(int roboNumber)
         {
-            return (Bitmap)Resources.ResourceManager.GetObject(@$"Resources\Images\{name}");
-        }
-
-        public static Bitmap[] LoadRoboters()
-        {
+            roboNumber += 1;
+            var flags = BindingFlags.Static | BindingFlags.NonPublic;
             return new Bitmap[]
             {
-                LoadBitmap("robot0")
+                (Bitmap)typeof(Resources).GetProperty($"robotN{roboNumber}", flags).GetValue(null),
+                (Bitmap)typeof(Resources).GetProperty($"robotO{roboNumber}", flags).GetValue(null),
+                (Bitmap)typeof(Resources).GetProperty($"robotS{roboNumber}", flags).GetValue(null),
+                (Bitmap)typeof(Resources).GetProperty($"robotW{roboNumber}", flags).GetValue(null),
             };
         }
     }

@@ -11,16 +11,23 @@ using Karol.Core.Exceptions;
 using System.Diagnostics;
 using System.Reflection;
 using Karol.Properties;
+using System.Linq;
 
 namespace Karol
 {
     public class World
     {
-        private static readonly Bitmap BrickBitmap = new Bitmap(@"H:\Daten\Fächer_12\TrFi\C_Gartenzaun_Karol\Karol\Karol\Resources\Images\Ziegel.gif");
+        private const int MaxRoboterCount = 9;
+
+        private static readonly Bitmap BrickBitmap = Resources.Ziegel;
+        private static readonly Bitmap MarkBitmap = Resources.Marke;
+        private static readonly Bitmap KubeBitmap = Resources.Quader;
 
         private const int PixelWidth = 30;
         private const int PixelHeight = 15;
         private Bounds Padding = new Bounds(50, 0, 40, 0);
+
+        private int _robotCount;
 
         /// <summary>
         /// Versatz von zeile zu zeile in Pixeln
@@ -60,6 +67,21 @@ namespace Karol
         /// Immer gleich (SizeX * SizeY * SizeZ)
         /// </summary>
         public int CellCount => SizeX * SizeY * SizeZ;
+        /// <summary>
+        /// Anzahl der Roboter die sich in dieser Welt befinden.
+        /// </summary>
+        public int RoboterCount
+        {
+            get => _robotCount;
+            internal set
+            {
+                if (value > MaxRoboterCount)
+                    throw new ArgumentOutOfRangeException($"In einer Welt können sich maximal {MaxRoboterCount} Roboter befinden!");
+
+                _robotCount = value;
+            }
+        }
+
 
         private WorldElement[,,] Grid { get; set; }
         private KarolForm WorldForm { get; set; }
@@ -198,7 +220,7 @@ namespace Karol
         /// Führt die übergebene Methode auf dem UI Thred von WorldForm aus.
         /// </summary>
         /// <param name="method">Methode zum Ausführen</param>
-        private void InvokeFormMethod(Delegate method)
+        private void InvokeFormMethod(Action method)
         {
             while (!WorldForm.IsHandleCreated)
                 Thread.Sleep(10);
@@ -216,10 +238,10 @@ namespace Karol
         /// <param name="zPos">Z Grid-Koordinate</param>
         /// <param name="map">Bild das gezeichnet werden soll</param>
         /// <returns>Pixel-Koordinate</returns>
-        private Point CellToPixelPos(int xPos, int zPos, Bitmap map)
+        private Point CellToPixelPos(int xPos, int zPos, WorldElement element)
         {
             int stackSize = GetStackSize(xPos, zPos);
-            return CellToPixelPos(xPos, stackSize, zPos, map);
+            return CellToPixelPos(xPos, stackSize, zPos, element);
         }
 
         /// <summary>
@@ -229,13 +251,13 @@ namespace Karol
         /// <param name="xPos">X Grid-Koordinate</param>
         /// <param name="yPos">Y Grid-Koordinate</param>
         /// <param name="zPos">Z Grid-Koordinate</param>
-        /// <param name="map">Bild das gezeichnet werden soll</param>
+        /// <param name="element">Bild das gezeichnet werden soll</param>
         /// <returns>Pixel-Koordinate</returns>
-        private Point CellToPixelPos(int xPos, int yPos, int zPos, Bitmap map)
+        private Point CellToPixelPos(int xPos, int yPos, int zPos, WorldElement element)
         {
             int x = BottomLeft.X + zPos * LineOffset + xPos * PixelWidth;
-            int y = BottomLeft.Y - map.Height - (zPos + yPos) * PixelHeight;
-            return new Point(x, y + 1);
+            int y = BottomLeft.Y - element.BitMap.Height - (zPos + yPos) * PixelHeight + 1;
+            return new Point(x + element.XOffset, y + element.YOffset);
         }
 
         /// <summary>
@@ -294,6 +316,9 @@ namespace Karol
             if (stackSize == SizeY)
                 throw new IndexOutOfRangeException();
 
+            if(HasCellAt(xPos, Math.Max(stackSize - 1, 0), zPos, out WorldElement e) && e is Robot)
+                return null;
+
             Grid[xPos, zPos, stackSize] = element;
             return element;
         }
@@ -311,26 +336,39 @@ namespace Karol
         /// <summary>
         /// Zeichnet das gesammte Grid neu (Langsam)
         /// </summary>
-        private void Redraw()
+        internal void Redraw()
         {
-            var map = (Bitmap)BlockMap.Image;
-            for (int y = 0; y < SizeY; y++) 
-            {
-                for (int x = 0; x < SizeX; x++) 
-                {
-                    for (int z = SizeZ - 1; z >= 0; z--) 
-                    {
-                        if (!HasCellAt(x, y, z, out WorldElement cell))
-                            continue;
+            Redraw(BlockMap.ClientRectangle);
+        }
 
-                        var pos = CellToPixelPos(x, y, z, cell.BitMap);
-                        map.DrawImage(pos, cell.BitMap);
+        /// <summary>
+        /// Zeichnet das Grid in dem angegebenen Bereich neu (auch Langsam)
+        /// </summary>
+        internal void Redraw(Rectangle rect)
+        {
+            InvokeFormMethod(() =>
+            {
+                var map = (Bitmap)BlockMap.Image;
+                map.Clear();
+
+                for (int x = 0; x < SizeX; x++)
+                {
+                    for (int z = SizeZ - 1; z >= 0; z--)
+                    {
+                        for (int y = 0; y < SizeY; y++)
+                        {
+                            if (!HasCellAt(x, y, z, out WorldElement cell))
+                                continue;
+
+                            var pos = CellToPixelPos(x, y, z, cell);
+                            map.DrawImage(pos, cell.BitMap);
+                        }
                     }
                 }
-            }
 
-            BlockMap.Invalidate();
-            BlockMap.Update();
+                BlockMap.Invalidate(rect);
+                BlockMap.Update();
+            });
         }
 
         /// <summary>
@@ -338,14 +376,21 @@ namespace Karol
         /// </summary>
         /// <param name="xPos">X Position des sich geänderten Blocks</param>
         /// <param name="zPos">Z Position des sich geänderten Blocks</param>
-        private void Update(int xPos, int zPos)
+        /// <param name="newCell">Neu hinzugefügtes Element</param>
+        internal void Update(int xPos, int zPos, WorldElement newCell)
         {
+            Point pos = CellToPixelPos(xPos, 0, zPos, newCell);
+            var rect = new Rectangle(pos, newCell.BitMap.Size);
+
             #region 1 Ist gut... Layert Blöcke aber falsch
-            //Point pos = CellToPixelPos(xPos, zPos, BrickBitmap);
-            //var rect = new Rectangle(pos, BrickBitmap.Size);
-            //((Bitmap)BlockMap.Image).DrawImage(pos, BrickBitmap);
-            //BlockMap.Invalidate(rect);
-            //BlockMap.Update();
+            //InvokeFormMethod(() =>
+            //{
+            //    var map = ((Bitmap)BlockMap.Image);
+            //    map.Clear(rect);
+            //    map.DrawImage(pos, newCell.BitMap);
+            //    BlockMap.Invalidate(rect);
+            //    BlockMap.Update();
+            //});
             #endregion
 
             #region 2 Geht noch nich
@@ -367,36 +412,39 @@ namespace Karol
             #endregion
 
             // Funktioniert gut.. ist aber unfassbar langsam...
-            InvokeFormMethod((MethodInvoker)delegate
-            {
-                Redraw();
-            });
+            Redraw();
         }
         #endregion
-        
+
         #region Public
         /// <summary>
-        /// Setzt einen Block in die entsprechende Zelle
+        /// Setzt einen Ziegel in die entsprechende Zelle
         /// </summary>
         /// <param name="xPos">X Position des Blocks</param>
         /// <param name="zPos">Z Position des Blocks</param>
-        public void SetCell(int xPos, int zPos)
+        internal void SetCell(int xPos, int zPos)
         {
-            AddToStack(xPos, zPos);
-            Update(xPos, zPos);
+            var cell = AddToStack(xPos, zPos);
+            Update(xPos, zPos, cell);
         }
 
-        public void SetCell(int xPos, int zPos, WorldElement robot)
+        /// <summary>
+        /// Setzt das definierte World Element in die entsprechende Zelle
+        /// </summary>
+        /// <param name="xPos">X Position des Blocks</param>
+        /// <param name="zPos">Z Position des Blocks</param>
+        internal void SetCell(int xPos, int zPos, WorldElement element)
         {
-            AddToStack(xPos, zPos, robot);
+            var cell = AddToStack(xPos, zPos, element);
+            Update(xPos, zPos, cell);
         }
 
         /// <summary>
         /// Plaziert zufällige Ziegel in der Welt
         /// </summary>
-        /// <param name="count">Anzahl der zu plazierenden Steine</param>
-        /// <param name="maxStackHeight">Maximale höhe wie hoch die Steine gestapelt werden können. <br></br>
-        /// Sollte die gegebenne Anzahl nicht in den Bereich passen werden keine Steine mehr plaziert.
+        /// <param name="count">Anzahl der zu plazierenden Ziegel</param>
+        /// <param name="maxStackHeight">Maximale höhe wie hoch die Ziegel gestapelt werden können. <br></br>
+        /// Sollte die gegebenne Anzahl nicht in den Bereich passen werden keine Ziegel mehr plaziert.
         /// </param>
         public void PlaceRandomBricks(int count, int maxStackHeight)
         {
@@ -408,6 +456,7 @@ namespace Karol
             {
                 int xPos = rand.Next(0, SizeX);
                 int zPos = rand.Next(0, SizeZ);
+                int searches = 0;
 
                 while (GetStackSize(xPos, zPos) >= maxStackHeight)
                 {
@@ -419,12 +468,21 @@ namespace Karol
                     {
                         xPos = 0;
                         if(zPos < SizeZ - 1) zPos++;
-                        else zPos = 0;
+                        else
+                        {
+                            zPos = 0;
+                            searches++;
+                        }
                     }
+
+                    if (searches > 1)
+                        break;
                 }
 
-                SetCell(xPos, zPos);
+                AddToStack(xPos, zPos);
             }
+
+            Redraw();
         }
 
         /// <summary>

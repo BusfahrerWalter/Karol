@@ -1,6 +1,6 @@
 ﻿namespace Karol.Core
 {
-    public struct Bounds
+    internal struct Bounds
     {
         public int Left { get; set; }
         public int Right { get; set; }

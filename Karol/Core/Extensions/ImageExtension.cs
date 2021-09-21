@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Karol.Extensions
 {
-    public static class ImageExtension
+    internal static class ImageExtension
     {
         public static void DrawLine(this Bitmap img, int x1, int y1, int x2, int y2, Color color)
         {
@@ -135,6 +135,42 @@ namespace Karol.Extensions
         public static void DrawImage(this Bitmap img, Point position, Bitmap image)
         {
             DrawImage(img, position.X, position.Y, image);
+        }
+
+        public static void Clear(this Bitmap img)
+        {
+            for (int i = 0; i < img.Width; i++)
+            {
+                for (int j = 0; j < img.Height; j++)
+                {
+                    img.SetPixel(i, j, Color.Transparent);
+                }
+            }
+        }
+
+        public static void Clear(this Bitmap img, Rectangle rect)
+        {
+            for (int i = 0; i < rect.Width; i++)
+            {
+                for (int j = 0; j < rect.Height; j++)
+                {
+                    img.SetPixel(i + rect.Left, j + rect.Top, Color.Transparent);
+                }
+            }
+        }
+
+        public static void Clear(this Bitmap img, Point pos, Bitmap map)
+        {
+            for (int i = 0; i < map.Width; i++)
+            {
+                for (int j = 0; j < map.Height; j++)
+                {
+                    if (map.GetPixel(i, j).A != 0)
+                    {
+                        img.SetPixel(i + pos.X, j + pos.Y, Color.Transparent);
+                    }
+                }
+            }
         }
     }
 }
