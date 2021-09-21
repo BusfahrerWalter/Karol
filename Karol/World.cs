@@ -1,0 +1,455 @@
+﻿using System;
+using Karol.Core;
+using Karol.Extensions;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Threading.Tasks;
+using System.Threading;
+using Karol.Core.Exceptions;
+using System.Diagnostics;
+using System.Reflection;
+using Karol.Properties;
+
+namespace Karol
+{
+    public class World
+    {
+        private static readonly Bitmap BrickBitmap = new Bitmap(@"H:\Daten\Fächer_12\TrFi\C_Gartenzaun_Karol\Karol\Karol\Resources\Images\Ziegel.gif");
+
+        private const int PixelWidth = 30;
+        private const int PixelHeight = 15;
+        private Bounds Padding = new Bounds(50, 0, 40, 0);
+
+        /// <summary>
+        /// Versatz von zeile zu zeile in Pixeln
+        /// </summary>
+        private int LineOffset => PixelWidth / 2;
+        /// <summary>
+        /// Obere Linke ecke der Grundfläche
+        /// </summary>
+        private Point TopLeft { get; set; }
+        /// <summary>
+        /// Untere Linke ecke der Grundfläche
+        /// </summary>
+        private Point BottomLeft { get; set; }
+        /// <summary>
+        /// Obere Rechte ecke der Grundfläche
+        /// </summary>
+        private Point TopRight { get; set; }
+        /// <summary>
+        /// Untere Rechte ecke der Grundfläche
+        /// </summary>
+        private Point BottomRight { get; set; }
+
+        /// <summary>
+        /// Breite der Welt
+        /// </summary>
+        public int SizeX { get; private set; }
+        /// <summary>
+        /// Höhe der Welt
+        /// </summary>
+        public int SizeY { get; private set; }
+        /// <summary>
+        /// Länge/Tiefe der Welt
+        /// </summary>
+        public int SizeZ { get; private set; }
+        /// <summary>
+        /// Anzahl der Zellen die in der Welt zur Verfügung stehen. <br></br>
+        /// Immer gleich (SizeX * SizeY * SizeZ)
+        /// </summary>
+        public int CellCount => SizeX * SizeY * SizeZ;
+
+        private WorldElement[,,] Grid { get; set; }
+        private KarolForm WorldForm { get; set; }
+        private PictureBox BlockMap { get; set; }
+
+        /// <summary>
+        /// Erstellt eine neue Welt für Karol. <br></br>
+        /// Die Welt muss mindestens 1x1x1 groß sein.
+        /// </summary>
+        /// <param name="sizeX">Breite der Welt</param>
+        /// <param name="sizeY">Höhe der Welt</param>
+        /// <param name="sizeZ">Länge/Tiefe der Welt</param>
+        /// <exception cref="InvalidSizeException"></exception>
+        public World(int sizeX, int sizeY, int sizeZ)
+        {
+            if (sizeX < 1 || sizeY < 1 || sizeZ < 1)
+                throw new InvalidSizeException($"Unzulässige Weltengröße: ({sizeX}, {sizeY}, {sizeZ})");
+
+            SizeX = sizeX;
+            SizeY = sizeY;
+            SizeZ = sizeZ;
+            Grid = new WorldElement[sizeX, sizeZ, sizeY];
+
+            OpenWindow();
+            Pulse();
+        }
+
+        #region Zeug
+        /// <summary>
+        /// Öffnet und Konfiguriert das Fenster
+        /// </summary>
+        private async void OpenWindow()
+        {
+            WorldForm = new KarolForm();
+            WorldForm.SetUp(CreateGrid());
+            BlockMap = WorldForm.BlockMap;
+
+            await Task.Run(() =>
+            {
+                Application.Run(WorldForm);
+            });
+        }
+
+        /// <summary>
+        /// Erstellt das Hintergrund Grid
+        /// </summary>
+        /// <returns>Bitmap auf der das Grid gemalt ist.</returns>
+        private Image CreateGrid()
+        {
+            int topPadding = PixelHeight * SizeY;           // Abstand von oben damit die Vertikalen Striche passen
+            int height = SizeY * PixelHeight;               // Höhe in Pixeln
+            int width = SizeX * PixelWidth;                 // Breite in Pixeln
+            
+            BottomLeft = new Point(Padding.Left, Padding.Top + topPadding + SizeZ * PixelHeight);
+            BottomRight = new Point(BottomLeft.X + width, BottomLeft.Y);
+            TopLeft = new Point(SizeZ * LineOffset + Padding.Left, Padding.Top + topPadding);
+            TopRight = new Point(TopLeft.X + width, TopLeft.Y);
+
+            Bitmap map = new Bitmap(TopRight.X + 5, BottomRight.Y + 5);
+
+            for (int i = SizeZ; i >= 0; i--)
+            {
+                int x1 = BottomLeft.X + LineOffset * i;
+                int y = BottomLeft.Y - PixelHeight * i;
+                map.DrawLine(x1, y, x1 + width, y, Color.Blue);
+            }
+
+            for (int i = SizeX; i >= 0; i--)
+            {
+                int x1 = BottomLeft.X + PixelWidth * i;
+                int x2 = TopLeft.X + PixelWidth * i;
+                map.DrawLine(x1, BottomLeft.Y, x2, TopLeft.Y, Color.Blue);
+            }
+
+            for (int i = SizeZ; i >= 0; i--)
+            {
+                int x = BottomLeft.X + LineOffset * i;                
+                for(int j = 0; j < SizeY; j++)
+                {
+                    int y1 = BottomLeft.Y - PixelHeight * j - PixelHeight * i;
+                    int y2 = y1 - PixelHeight;
+                    map.DrawSplitLine(x, y1, x, y2, Color.Blue);
+                }
+            }
+
+            for (int i = SizeX; i >= 0; i--)
+            {
+                int x = TopLeft.X + PixelWidth * i;
+                for (int j = 0; j < SizeY; j++)
+                {
+                    int y1 = TopLeft.Y - PixelHeight * j;
+                    int y2 = y1 - PixelHeight;
+                    map.DrawSplitLine(x, y1, x, y2, Color.Blue);
+                }
+            }
+
+            map.DrawLine(BottomLeft.X, BottomLeft.Y - height, TopLeft.X, TopLeft.Y - height, Color.Blue);
+            map.DrawLine(TopLeft.X, TopLeft.Y - height, TopRight.X, TopRight.Y - height, Color.Blue);
+
+            Point arrow = new Point(BottomLeft.X + 20, BottomLeft.Y - height - 50);
+            map.DrawLine(arrow, new Point(arrow.X - 40, arrow.Y + 40), Color.Blue);
+            map.DrawLine(arrow, new Point(arrow.X - 10, arrow.Y), Color.Blue);
+            map.DrawLine(arrow, new Point(arrow.X, arrow.Y + 10), Color.Blue);
+
+            Point nStart = new Point(arrow.X - 40, arrow.Y + 20);
+            map.DrawPath(Color.Blue, false, nStart,
+                new Point(nStart.X, nStart.Y - 15),
+                new Point(nStart.X + 8, nStart.Y),
+                new Point(nStart.X + 8, nStart.Y - 15));
+
+            return map;
+        }
+        
+        /// <summary>
+        /// Sorgt dafür das sich das Fenster nach ablauf aller anweisungen nicht schließt
+        /// </summary>
+        private void Pulse()
+        {
+            Thread worldThread = Thread.CurrentThread;
+            Thread pulseThread = new Thread(() =>
+            {
+                while (!WorldForm.IsDisposed)
+                {
+                    Thread.Sleep(100);
+                    lock (worldThread)
+                    {
+                        Monitor.Pulse(worldThread);
+                    }
+                }
+            });
+
+            pulseThread.Start();
+        }
+
+        /// <summary>
+        /// Führt die übergebene Methode auf dem UI Thred von WorldForm aus.
+        /// </summary>
+        /// <param name="method">Methode zum Ausführen</param>
+        private void InvokeFormMethod(Delegate method)
+        {
+            while (!WorldForm.IsHandleCreated)
+                Thread.Sleep(10);
+
+            WorldForm.Invoke(method);
+        }
+        #endregion
+
+        #region Util
+        /// <summary>
+        /// Übersetzt eine Grid-Koordinate in eine Pixel-Koordinate um einen Block an der gegebenen Stelle 
+        /// zeichnen zu können.
+        /// </summary>
+        /// <param name="xPos">X Grid-Koordinate</param>
+        /// <param name="zPos">Z Grid-Koordinate</param>
+        /// <param name="map">Bild das gezeichnet werden soll</param>
+        /// <returns>Pixel-Koordinate</returns>
+        private Point CellToPixelPos(int xPos, int zPos, Bitmap map)
+        {
+            int stackSize = GetStackSize(xPos, zPos);
+            return CellToPixelPos(xPos, stackSize, zPos, map);
+        }
+
+        /// <summary>
+        /// Übersetzt eine Grid-Koordinate in eine Pixel-Koordinate um einen Block an der gegebenen Stelle 
+        /// zeichnen zu können.
+        /// </summary>
+        /// <param name="xPos">X Grid-Koordinate</param>
+        /// <param name="yPos">Y Grid-Koordinate</param>
+        /// <param name="zPos">Z Grid-Koordinate</param>
+        /// <param name="map">Bild das gezeichnet werden soll</param>
+        /// <returns>Pixel-Koordinate</returns>
+        private Point CellToPixelPos(int xPos, int yPos, int zPos, Bitmap map)
+        {
+            int x = BottomLeft.X + zPos * LineOffset + xPos * PixelWidth;
+            int y = BottomLeft.Y - map.Height - (zPos + yPos) * PixelHeight;
+            return new Point(x, y + 1);
+        }
+
+        /// <summary>
+        /// Zählt wie viele Blöcke auf dem Stapel liegen
+        /// </summary>
+        /// <returns>Anzahl der Blöcke auf dem Stapel</returns>
+        private int GetStackSize(int xPos, int zPos)
+        {
+            int firstEmpty = 0;
+            for(int i = 0; i < SizeY; i++)
+            {
+                if (Grid[xPos, zPos, i] == null)
+                {
+                    firstEmpty = i;
+                    break;
+                }    
+
+                if(i == SizeY - 1)
+                {
+                    firstEmpty = SizeY;
+                    break;
+                }
+            }
+
+            return firstEmpty;
+        }
+
+        /// <summary>
+        /// Gibt zurück ob ein Stapel bis an die maximale höhe reicht
+        /// </summary>
+        /// <param name="xPos">X Position des Stapels</param>
+        /// <param name="zPos">Z Position des Stapels</param>
+        /// <returns>True wenn der Stapel voll ist, ansonsten false</returns>
+        private bool IsStackFull(int xPos, int zPos)
+        {
+            return GetStackSize(xPos, zPos) == SizeY;
+        }
+
+        /// <summary>
+        /// Gibt zurück ob an der Position eine Zelle ist
+        /// </summary>
+        /// <returns>True wenn ja, ansonsten false</returns>
+        private bool HasCellAt(int xPos, int yPos, int zPos, out WorldElement cell)
+        {
+            cell = Grid[xPos, zPos, yPos];
+            return cell != null;
+        }
+
+        /// <summary>
+        /// Fügt einen Block zu einem Stapel hinzu
+        /// </summary>
+        /// <returns>Block der hinzugefügt wurde</returns>
+        private WorldElement AddToStack(int xPos, int zPos, WorldElement element)
+        {
+            int stackSize = GetStackSize(xPos, zPos);
+            if (stackSize == SizeY)
+                throw new IndexOutOfRangeException();
+
+            Grid[xPos, zPos, stackSize] = element;
+            return element;
+        }
+
+        /// <summary>
+        /// Fügt einen Ziegel zu einem Stapel hinzu
+        /// </summary>
+        /// <returns>Ziegel der hinzugefügt wurde</returns>
+        private WorldElement AddToStack(int xPos, int zPos)
+        {
+            var element = new WorldElement(BrickBitmap);
+            return AddToStack(xPos, zPos, element);
+        }
+
+        /// <summary>
+        /// Zeichnet das gesammte Grid neu (Langsam)
+        /// </summary>
+        private void Redraw()
+        {
+            var map = (Bitmap)BlockMap.Image;
+            for (int y = 0; y < SizeY; y++) 
+            {
+                for (int x = 0; x < SizeX; x++) 
+                {
+                    for (int z = SizeZ - 1; z >= 0; z--) 
+                    {
+                        if (!HasCellAt(x, y, z, out WorldElement cell))
+                            continue;
+
+                        var pos = CellToPixelPos(x, y, z, cell.BitMap);
+                        map.DrawImage(pos, cell.BitMap);
+                    }
+                }
+            }
+
+            BlockMap.Invalidate();
+            BlockMap.Update();
+        }
+
+        /// <summary>
+        /// Wird aufgerufen, nachdem sich etwas im Grid geändert hat.
+        /// </summary>
+        /// <param name="xPos">X Position des sich geänderten Blocks</param>
+        /// <param name="zPos">Z Position des sich geänderten Blocks</param>
+        private void Update(int xPos, int zPos)
+        {
+            #region 1 Ist gut... Layert Blöcke aber falsch
+            //Point pos = CellToPixelPos(xPos, zPos, BrickBitmap);
+            //var rect = new Rectangle(pos, BrickBitmap.Size);
+            //((Bitmap)BlockMap.Image).DrawImage(pos, BrickBitmap);
+            //BlockMap.Invalidate(rect);
+            //BlockMap.Update();
+            #endregion
+
+            #region 2 Geht noch nich
+            //var box = new PictureBox();
+            //var map = new Bitmap(BrickBitmap.Width, BrickBitmap.Height);
+
+            //map.DrawImage(0, 0, BrickBitmap);
+            //box.BackColor = Color.Transparent;
+            //box.Image = map;
+            //box.Location = pos;
+
+            //BlockMap.Controls.Add(box);
+            //BlockMap.Controls.SetChildIndex(box, zPos);
+            //BlockMap.Invalidate(rect);
+            //BlockMap.Update();
+
+            //Console.WriteLine(pos);
+            //BlockMap.Controls.SetChildIndex() // vllt. was
+            #endregion
+
+            // Funktioniert gut.. ist aber unfassbar langsam...
+            InvokeFormMethod((MethodInvoker)delegate
+            {
+                Redraw();
+            });
+        }
+        #endregion
+        
+        #region Public
+        /// <summary>
+        /// Setzt einen Block in die entsprechende Zelle
+        /// </summary>
+        /// <param name="xPos">X Position des Blocks</param>
+        /// <param name="zPos">Z Position des Blocks</param>
+        public void SetCell(int xPos, int zPos)
+        {
+            AddToStack(xPos, zPos);
+            Update(xPos, zPos);
+        }
+
+        public void SetCell(int xPos, int zPos, WorldElement robot)
+        {
+            AddToStack(xPos, zPos, robot);
+        }
+
+        /// <summary>
+        /// Plaziert zufällige Ziegel in der Welt
+        /// </summary>
+        /// <param name="count">Anzahl der zu plazierenden Steine</param>
+        /// <param name="maxStackHeight">Maximale höhe wie hoch die Steine gestapelt werden können. <br></br>
+        /// Sollte die gegebenne Anzahl nicht in den Bereich passen werden keine Steine mehr plaziert.
+        /// </param>
+        public void PlaceRandomBricks(int count, int maxStackHeight)
+        {
+            maxStackHeight = Math.Clamp(maxStackHeight, 0, SizeY);
+            count = Math.Clamp(count, 0, SizeX * SizeZ * maxStackHeight);
+            Random rand = new Random();
+
+            for(int i = 0; i < count; i++)
+            {
+                int xPos = rand.Next(0, SizeX);
+                int zPos = rand.Next(0, SizeZ);
+
+                while (GetStackSize(xPos, zPos) >= maxStackHeight)
+                {
+                    if (xPos < SizeX - 1)
+                    {
+                        xPos++;
+                    }
+                    else
+                    {
+                        xPos = 0;
+                        if(zPos < SizeZ - 1) zPos++;
+                        else zPos = 0;
+                    }
+                }
+
+                SetCell(xPos, zPos);
+            }
+        }
+
+        /// <summary>
+        /// Plaziert zufällige Ziegel in der Welt
+        /// </summary>
+        /// <param name="count">Anzahl der zu plazierenden Steine</param>
+        public void PlaceRandomBricks(int count)
+        {
+            PlaceRandomBricks(count, int.MaxValue);
+        }
+
+        public void Load(string filePath)
+        {
+
+        }
+
+        public void SaveScreenshot(string filePath)
+        {
+
+        }
+
+        public void SaveImage(string filePath)
+        {
+
+        }
+        #endregion
+    }
+}

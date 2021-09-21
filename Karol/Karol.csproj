@@ -1,0 +1,115 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Images\Marke.gif" />
+    <None Remove="Resources\Images\Quader.gif" />
+    <None Remove="Resources\Images\robot0.gif" />
+    <None Remove="Resources\Images\robot1.gif" />
+    <None Remove="Resources\Images\robot2.gif" />
+    <None Remove="Resources\Images\robot3.gif" />
+    <None Remove="Resources\Images\robotN1.gif" />
+    <None Remove="Resources\Images\robotN2.gif" />
+    <None Remove="Resources\Images\robotN3.gif" />
+    <None Remove="Resources\Images\robotN4.gif" />
+    <None Remove="Resources\Images\robotN5.gif" />
+    <None Remove="Resources\Images\robotN6.gif" />
+    <None Remove="Resources\Images\robotN7.gif" />
+    <None Remove="Resources\Images\robotN8.gif" />
+    <None Remove="Resources\Images\robotN9.gif" />
+    <None Remove="Resources\Images\robotO1.gif" />
+    <None Remove="Resources\Images\robotO2.gif" />
+    <None Remove="Resources\Images\robotO3.gif" />
+    <None Remove="Resources\Images\robotO4.gif" />
+    <None Remove="Resources\Images\robotO5.gif" />
+    <None Remove="Resources\Images\robotO6.gif" />
+    <None Remove="Resources\Images\robotO7.gif" />
+    <None Remove="Resources\Images\robotO8.gif" />
+    <None Remove="Resources\Images\robotO9.gif" />
+    <None Remove="Resources\Images\robotS1.gif" />
+    <None Remove="Resources\Images\robotS2.gif" />
+    <None Remove="Resources\Images\robotS3.gif" />
+    <None Remove="Resources\Images\robotS4.gif" />
+    <None Remove="Resources\Images\robotS5.gif" />
+    <None Remove="Resources\Images\robotS6.gif" />
+    <None Remove="Resources\Images\robotS7.gif" />
+    <None Remove="Resources\Images\robotS8.gif" />
+    <None Remove="Resources\Images\robotS9.gif" />
+    <None Remove="Resources\Images\robotW1.gif" />
+    <None Remove="Resources\Images\robotW2.gif" />
+    <None Remove="Resources\Images\robotW3.gif" />
+    <None Remove="Resources\Images\robotW4.gif" />
+    <None Remove="Resources\Images\robotW5.gif" />
+    <None Remove="Resources\Images\robotW6.gif" />
+    <None Remove="Resources\Images\robotW7.gif" />
+    <None Remove="Resources\Images\robotW8.gif" />
+    <None Remove="Resources\Images\robotW9.gif" />
+    <None Remove="Resources\Images\Ziegel.gif" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\Marke.gif" />
+    <Resource Include="Resources\Images\Quader.gif" />
+    <Resource Include="Resources\Images\robot0.gif" />
+    <Resource Include="Resources\Images\robot1.gif" />
+    <Resource Include="Resources\Images\robot2.gif" />
+    <Resource Include="Resources\Images\robot3.gif" />
+    <Resource Include="Resources\Images\robotN1.gif" />
+    <Resource Include="Resources\Images\robotN2.gif" />
+    <Resource Include="Resources\Images\robotN3.gif" />
+    <Resource Include="Resources\Images\robotN4.gif" />
+    <Resource Include="Resources\Images\robotN5.gif" />
+    <Resource Include="Resources\Images\robotN6.gif" />
+    <Resource Include="Resources\Images\robotN7.gif" />
+    <Resource Include="Resources\Images\robotN8.gif" />
+    <Resource Include="Resources\Images\robotN9.gif" />
+    <Resource Include="Resources\Images\robotO1.gif" />
+    <Resource Include="Resources\Images\robotO2.gif" />
+    <Resource Include="Resources\Images\robotO3.gif" />
+    <Resource Include="Resources\Images\robotO4.gif" />
+    <Resource Include="Resources\Images\robotO5.gif" />
+    <Resource Include="Resources\Images\robotO6.gif" />
+    <Resource Include="Resources\Images\robotO7.gif" />
+    <Resource Include="Resources\Images\robotO8.gif" />
+    <Resource Include="Resources\Images\robotO9.gif" />
+    <Resource Include="Resources\Images\robotS1.gif" />
+    <Resource Include="Resources\Images\robotS2.gif" />
+    <Resource Include="Resources\Images\robotS3.gif" />
+    <Resource Include="Resources\Images\robotS4.gif" />
+    <Resource Include="Resources\Images\robotS5.gif" />
+    <Resource Include="Resources\Images\robotS6.gif" />
+    <Resource Include="Resources\Images\robotS7.gif" />
+    <Resource Include="Resources\Images\robotS8.gif" />
+    <Resource Include="Resources\Images\robotS9.gif" />
+    <Resource Include="Resources\Images\robotW1.gif" />
+    <Resource Include="Resources\Images\robotW2.gif" />
+    <Resource Include="Resources\Images\robotW3.gif" />
+    <Resource Include="Resources\Images\robotW4.gif" />
+    <Resource Include="Resources\Images\robotW5.gif" />
+    <Resource Include="Resources\Images\robotW6.gif" />
+    <Resource Include="Resources\Images\robotW7.gif" />
+    <Resource Include="Resources\Images\robotW8.gif" />
+    <Resource Include="Resources\Images\robotW9.gif" />
+    <Resource Include="Resources\Images\Ziegel.gif" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
