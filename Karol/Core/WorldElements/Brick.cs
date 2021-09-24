@@ -1,0 +1,25 @@
+﻿using Karol.Properties;
+using Karol.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Text;
+
+namespace Karol.Core.WorldElements
+{
+    internal class Brick : WorldElement
+    {
+        private static readonly Bitmap BrickBitmap = Resources.Ziegel;
+
+        public Color Paint { get; set; }
+
+        public Brick(Color paint)
+        {
+            Paint = paint;
+            BitMap = new Bitmap(BrickBitmap);
+            BitMap.MultiplyColor(paint);
+        }
+
+        public Brick() : this(Color.Red) { }
+    }
+}

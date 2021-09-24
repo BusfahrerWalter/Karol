@@ -20,21 +20,34 @@ namespace Karol
         /// Die Welt in der dieser Roboter lebt
         /// </summary>
         public World World { get; private set; }
-
         /// <summary>
         /// Gibt an wie hoch der Roboter Springen kann. (in Zellen) <br></br>
         /// Standard ist 1
         /// </summary>
         public int JumpHeight { get; set; }
-
         /// <summary>
         /// Die Verzögerung in Millisekunden zwischen 2 Aktionen des Roboters. <br></br>
         /// Standard ist 300
         /// </summary>
         public int Delay { get; set; }
+        /// <summary>
+        /// Die Farbe in der die von diesem Roboter platzierten Ziegel angemalt werden.
+        /// Standard ist Rot
+        /// </summary>
+        public Color Paint { get; set; }
 
         /// <summary>
-        /// Gibt zurück ob sich vor dem Roboter ein Hindernis befindet, das er nicht überwinden kann.
+        /// Die Anzahl der Ziegel die sich im Rucksack befinden.
+        /// </summary>
+        public int BricksInBackpack { get; private set; }
+        /// <summary>
+        /// Maximale Rucksackgröße. Durch setzen von -1 wird die Rucksack funktion deaktiviert. <br></br>
+        /// Standard ist -1
+        /// </summary>
+        public int MaxBackpackSize { get; set; }
+
+        /// <summary>
+        /// Gibt zurück ob der Roboter einen Schritt nach vorne machen kann oder nicht.
         /// </summary>
         public bool CanMove
         {
@@ -44,10 +57,25 @@ namespace Karol
                 if (!World.IsPositionValid(facePos))
                     return false;
 
-                bool hasObstacle = World.HasCellAt(facePos.X, facePos.Y, facePos.Z, out WorldElement e) && e.IsObstacle;
-                bool canClimbWall = Math.Abs(Position.Y - World.GetStackSize(facePos.X, facePos.Z)) <= JumpHeight;
+                int stackSize = World.GetStackSize(facePos.X, facePos.Z);
+                var cell = World.GetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z);
+                bool canClimb = Math.Abs(Position.Y - stackSize) <= JumpHeight && stackSize != World.SizeY;
 
-                return !hasObstacle || canClimbWall;
+                return canClimb && (cell == null || cell.CanStackOnTop);
+            }
+        }
+        /// <summary>
+        /// Gibt zurück ob sich vor dem Roboter eine Wand oder ein Ziegel befindet.
+        /// </summary>
+        public bool HasWall
+        {
+            get
+            {
+                Position facePos = FaceDirection.OffsetPosition(Position);
+                if (!World.IsPositionValid(facePos))
+                    return true;
+
+                return World.HasCellAt(facePos.X, facePos.Y, facePos.Z, out WorldElement e) && e is Brick;
             }
         }
         /// <summary>
@@ -59,9 +87,20 @@ namespace Karol
             {
                 Position facePos = FaceDirection.OffsetPosition(Position);
                 if (!World.IsPositionValid(facePos))
-                    return true;
+                    return false;
 
                 return World.HasCellAt(facePos.X, facePos.Y, facePos.Z, out WorldElement e) && e is Robot;
+            }
+        }
+        /// <summary>
+        /// Gibt die anzahl der Ziegel vor dem Roboter zurück.
+        /// </summary>
+        public int BricksInFront
+        {
+            get
+            {
+                Position facePos = FaceDirection.OffsetPosition(Position);
+                return World.GetStackSize(facePos.X, facePos.Z);
             }
         }
 
@@ -108,8 +147,11 @@ namespace Karol
             World = world;
             Delay = 300;
             JumpHeight = 1;
+            MaxBackpackSize = -1;
+            Paint = Color.Red;
 
             CanStackOnTop = false;
+            CanPickUp = false;
             XOffset = -2;
             YOffset = -2;
 
@@ -170,12 +212,66 @@ namespace Karol
                 throw new InvalidMoveException(Position, newPos);
 
             newPos.Y = World.GetStackSize(newPos.X, newPos.Z);
-            if (Math.Abs(Position.Y - newPos.Y) > JumpHeight)
+            if (HasRobot)
+                throw new InvalidMoveException(Position, newPos, "Auf einer Position kann sich maximal ein Roboter befinden!");
+
+            if (!CanMove)
                 throw new InvalidMoveException(Position, newPos, $"Ziel {newPos} liegt außerhalb der Sprunghöhe!");
 
             World.SetCell(Position.X, Position.Y, Position.Z, null, false);
             World.SetCell(newPos.X, newPos.Y, newPos.Z, this);
             Position = newPos;
+
+            Wait();
+        }
+
+        /// <summary>
+        /// Legt einen Ziegel vor den Roboter hin.
+        /// </summary>
+        /// <exception cref="InvalidActionException"></exception>
+        public void Place()
+        {
+            if (MaxBackpackSize != -1 && BricksInBackpack <= 0)
+                throw new InvalidActionException($"Kann keine Ziegel mehr platzieren. Rucksack ist leer!");
+
+            var facePos = FaceDirection.OffsetPosition(Position);
+            int stackSize = World.GetStackSize(facePos.X, facePos.Z);
+            var cell = World.GetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z);
+
+            if (stackSize >= World.SizeY || (cell != null && !cell.CanStackOnTop))
+            {
+                facePos.Y = stackSize;
+                throw new InvalidActionException($"An der Position {facePos} kann kein Ziegel platziert werden!");
+            }
+
+            var newCell = World.AddToStack(facePos.X, facePos.Z, new Brick(Paint));
+            BricksInBackpack--;
+            World.Update(facePos.X, facePos.Z, newCell);
+
+            Wait();
+        }
+
+        /// <summary>
+        /// Hebt den Ziegel vor dem Roboter auf.
+        /// </summary>
+        /// <exception cref="InvalidActionException"></exception>
+        public void PickUp()
+        {
+            if (MaxBackpackSize != -1 && BricksInBackpack == MaxBackpackSize)
+                throw new InvalidActionException($"Kann keine Ziegel mehr aufheben. Maximale Rucksackgröße von {MaxBackpackSize} erreicht!");
+
+            var facePos = FaceDirection.OffsetPosition(Position);
+            int stackSize = World.GetStackSize(facePos.X, facePos.Z);
+            var cell = World.GetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z);
+
+            if (cell == null || !cell.CanPickUp)
+            {
+                Wait();
+                return;
+            }
+
+            BricksInBackpack++;
+            World.SetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z, null, true);
 
             Wait();
         }

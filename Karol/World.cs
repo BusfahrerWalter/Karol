@@ -118,6 +118,7 @@ namespace Karol
         {
             WorldForm = new KarolForm();
             WorldForm.SetUp(CreateGrid());
+            WorldForm.Text = $"Karol World - ({SizeX}, {SizeY}, {SizeZ})";
             BlockMap = WorldForm.BlockMap;
 
             await Task.Run(() =>
@@ -429,7 +430,7 @@ namespace Karol
         /// Fügt einen Block zu einem Stapel hinzu
         /// </summary>
         /// <returns>Block der hinzugefügt wurde</returns>
-        private WorldElement AddToStack(int xPos, int zPos, WorldElement element)
+        internal WorldElement AddToStack(int xPos, int zPos, WorldElement element)
         {
             int stackSize = GetStackSize(xPos, zPos);
             if (stackSize == SizeY)
@@ -448,9 +449,9 @@ namespace Karol
         /// Fügt einen Ziegel zu einem Stapel hinzu
         /// </summary>
         /// <returns>Ziegel der hinzugefügt wurde</returns>
-        private WorldElement AddToStack(int xPos, int zPos)
+        internal WorldElement AddToStack(int xPos, int zPos)
         {
-            var element = new WorldElement(BrickBitmap);
+            var element = new Brick();
             return AddToStack(xPos, zPos, element);
         }
 
@@ -460,9 +461,9 @@ namespace Karol
         /// <param name="xPos">X Position des Blocks</param>
         /// <param name="zPos">Z Position des Blocks</param>
         /// <param name="updateView">Soll das View neu Gerendert werden</param>
-        public void SetCell(int xPos, int zPos, bool updateView = true)
+        internal void SetCell(int xPos, int zPos, bool updateView = true)
         {
-            SetCell(xPos, zPos, new WorldElement(BrickBitmap), updateView);
+            SetCell(xPos, zPos, new Brick(), updateView);
         }
 
         /// <summary>
@@ -482,6 +483,16 @@ namespace Karol
         /// <summary>
         /// Setzt das definierte World Element in die entsprechende Zelle
         /// </summary>
+        /// <param name="pos">Position des Blocks</param>
+        /// <param name="updateView">Soll das View neu Gerendert werden</param>
+        internal void SetCell(Position pos, WorldElement element, bool updateView = true)
+        {
+            SetCell(pos.X, pos.Y, pos.Z, element, updateView);
+        }
+
+        /// <summary>
+        /// Setzt das definierte World Element in die entsprechende Zelle
+        /// </summary>
         /// <param name="xPos">X Position des Blocks</param>
         /// <param name="yPos">Y Position des Blocks</param>
         /// <param name="zPos">Z Position des Blocks</param>
@@ -492,6 +503,24 @@ namespace Karol
 
             if (updateView)
                 Update(xPos, zPos, element);
+        }
+
+        /// <summary>
+        /// Gibt das World Element an der entsprechenden Position zurück.
+        /// </summary>
+        /// <returns>World Element an der entsprechenden Position</returns>
+        internal WorldElement GetCell(Position pos)
+        {
+            return GetCell(pos.X, pos.Y, pos.Z);
+        }
+
+        /// <summary>
+        /// Gibt das World Element an der entsprechenden Position zurück.
+        /// </summary>
+        /// <returns>World Element an der entsprechenden Position</returns>
+        internal WorldElement GetCell(int xPos, int yPos, int zPos)
+        {
+            return Grid[xPos, zPos, yPos];
         }
         #endregion
 

@@ -8,6 +8,7 @@ namespace Karol.Extensions
 {
     internal static class ImageExtension
     {
+        #region Draw Line / Path
         public static void DrawLine(this Bitmap img, int x1, int y1, int x2, int y2, Color color)
         {
             int dx = Math.Abs(x1 - x2);
@@ -116,7 +117,9 @@ namespace Karol.Extensions
         {
             DrawPath(img, color, true, start, nextPoints);
         }
+        #endregion
 
+        #region Draw Image
         public static void DrawImage(this Bitmap img, int xPos, int yPos, Bitmap image)
         {
             for(int x = 0; x < image.Width; x++)
@@ -136,7 +139,9 @@ namespace Karol.Extensions
         {
             DrawImage(img, position.X, position.Y, image);
         }
+        #endregion
 
+        #region Clear
         public static void Clear(this Bitmap img)
         {
             for (int i = 0; i < img.Width; i++)
@@ -172,5 +177,29 @@ namespace Karol.Extensions
                 }
             }
         }
+        #endregion
+
+        #region Color
+        public static void MultiplyColor(this Bitmap img, Color multiplier)
+        {
+            for (int x = 0; x < img.Width; x++)
+            {
+                for (int y = 0; y < img.Height; y++)
+                {
+                    Color color = img.GetPixel(x, y);
+                    float r1 = color.R / 255.0f;
+                    float g1 = color.G / 255.0f;
+                    float b1 = color.B / 255.0f;
+
+                    float r2 = multiplier.R / 255.0f;
+                    float g2 = multiplier.G / 255.0f;
+                    float b2 = multiplier.B / 255.0f;
+
+                    Color ergColor = Color.FromArgb(color.A, (int)(r1 * r2 * 255), (int)(g1 * g2 * 255), (int)(b1 * b2 * 255));
+                    img.SetPixel(x, y, ergColor);
+                }
+            }
+        }
+        #endregion
     }
 }

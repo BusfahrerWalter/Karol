@@ -2,10 +2,11 @@
 
 namespace Karol.Core.WorldElements
 {
-    public class WorldElement
+    public abstract class WorldElement
     {
         private bool _canStackOnTop = true;
         private bool _isObstacle = true;
+        private bool _canPickUp = true;
         private Position _position;
 
         /// <summary>
@@ -41,6 +42,16 @@ namespace Karol.Core.WorldElements
         {
             get => _isObstacle;
             set => _isObstacle = value;
+        }
+
+        /// <summary>
+        /// Gibt an ob dieses World element aufgehoben werden kann oder nicht. <br></br>
+        /// Standrad ist True.
+        /// </summary>
+        internal bool CanPickUp
+        {
+            get => _canPickUp;
+            set => _canPickUp = value;
         }
 
         /// <summary>
