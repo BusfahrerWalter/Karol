@@ -34,6 +34,20 @@ namespace Karol.Core
             Offset = offset;
         }
 
+        public Position OffsetPosition(Position pos)
+        {
+            Position newPos = new Position(pos);
+            switch (DirectionChar)
+            {
+                case 'N': newPos.Z += 1; break;
+                case 'O': newPos.X += 1; break;
+                case 'S': newPos.Z -= 1; break;
+                case 'W': newPos.X -= 1; break;
+            }
+
+            return newPos;
+        }
+
         public override string ToString()
         {
             return $"{Name} ({DirectionChar})";

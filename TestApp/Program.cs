@@ -13,28 +13,19 @@ namespace TestApp
         static void Main(string[] args)
         {
             World w1 = new World(10, 4, 10);
-            w1.PlaceRandomBricks(10, 4);
-
-            Robot[] rs = new Robot[]
+            //w1.PlaceRandomBricks(10, 4);
+            
+            Robot r1 = new Robot(0, 0, w1);
+            r1.Delay = 10; 
+            
+            for(int i = 0; i < 5; i++)
             {
-                new Robot(0, 0, w1),
-                new Robot(0, 4, w1),
-                new Robot(1, 4, w1),
-                new Robot(2, 4, w1),
-                new Robot(3, 4, w1),
-                new Robot(4, 4, w1),
-                new Robot(1, 0, w1),
-                new Robot(2, 0, w1),
-                new Robot(3, 0, w1)
-            };
-
-            foreach (var r in rs)
-            {
-                r.Delay = 50;
-                for (int i = 0; i < 2; i++)
-                {
-                    r.TurnRight();
-                }
+                r1.Move();
+                Console.WriteLine(r1.Position + " | " + r1.FaceDirection);
+                r1.Move();
+                Console.WriteLine(r1.Position + " | " + r1.FaceDirection);
+                r1.TurnRight();
+                Console.WriteLine(r1.Position + " | " + r1.FaceDirection);
             }
         }
     }

@@ -264,7 +264,7 @@ namespace Karol
         /// Zählt wie viele Blöcke auf dem Stapel liegen
         /// </summary>
         /// <returns>Anzahl der Blöcke auf dem Stapel</returns>
-        private int GetStackSize(int xPos, int zPos)
+        internal int GetStackSize(int xPos, int zPos)
         {
             int firstEmpty = 0;
             for(int i = 0; i < SizeY; i++)
@@ -291,48 +291,37 @@ namespace Karol
         /// <param name="xPos">X Position des Stapels</param>
         /// <param name="zPos">Z Position des Stapels</param>
         /// <returns>True wenn der Stapel voll ist, ansonsten false</returns>
-        private bool IsStackFull(int xPos, int zPos)
+        internal bool IsStackFull(int xPos, int zPos)
         {
             return GetStackSize(xPos, zPos) == SizeY;
+        }
+
+        /// <summary>
+        /// Gibt zurück ob eine Position innerhalt der Welt ist oder nicht
+        /// </summary>
+        /// <param name="xPos">X Position</param>
+        /// <param name="yPos">Y Position</param>
+        /// <param name="zPos">Z Position</param>
+        /// <returns>True wenn die Position innerhalb der Welt ist, ansonsten false.</returns>
+        internal bool IsPositionValid(int xPos, int yPos, int zPos)
+        {
+            return xPos >= 0 && xPos < SizeX &&
+                   yPos >= 0 && yPos < SizeY &&
+                   zPos >= 0 && zPos < SizeZ;
         }
 
         /// <summary>
         /// Gibt zurück ob an der Position eine Zelle ist
         /// </summary>
         /// <returns>True wenn ja, ansonsten false</returns>
-        private bool HasCellAt(int xPos, int yPos, int zPos, out WorldElement cell)
+        internal bool HasCellAt(int xPos, int yPos, int zPos, out WorldElement cell)
         {
             cell = Grid[xPos, zPos, yPos];
             return cell != null;
         }
+        #endregion
 
-        /// <summary>
-        /// Fügt einen Block zu einem Stapel hinzu
-        /// </summary>
-        /// <returns>Block der hinzugefügt wurde</returns>
-        private WorldElement AddToStack(int xPos, int zPos, WorldElement element)
-        {
-            int stackSize = GetStackSize(xPos, zPos);
-            if (stackSize == SizeY)
-                throw new IndexOutOfRangeException();
-
-            if(HasCellAt(xPos, Math.Max(stackSize - 1, 0), zPos, out WorldElement e) && e is Robot)
-                return null;
-
-            Grid[xPos, zPos, stackSize] = element;
-            return element;
-        }
-
-        /// <summary>
-        /// Fügt einen Ziegel zu einem Stapel hinzu
-        /// </summary>
-        /// <returns>Ziegel der hinzugefügt wurde</returns>
-        private WorldElement AddToStack(int xPos, int zPos)
-        {
-            var element = new WorldElement(BrickBitmap);
-            return AddToStack(xPos, zPos, element);
-        }
-
+        #region Grid Rendern
         /// <summary>
         /// Zeichnet das gesammte Grid neu (Langsam)
         /// </summary>
@@ -379,8 +368,8 @@ namespace Karol
         /// <param name="newCell">Neu hinzugefügtes Element</param>
         internal void Update(int xPos, int zPos, WorldElement newCell)
         {
-            Point pos = CellToPixelPos(xPos, 0, zPos, newCell);
-            var rect = new Rectangle(pos, newCell.BitMap.Size);
+            //Point pos = CellToPixelPos(xPos, 0, zPos, newCell);
+            //var rect = new Rectangle(pos, newCell.BitMap.Size);
 
             #region 1 Ist gut... Layert Blöcke aber falsch
             //InvokeFormMethod(() =>
@@ -416,16 +405,45 @@ namespace Karol
         }
         #endregion
 
-        #region Public
+        #region Zellen ändern
+        /// <summary>
+        /// Fügt einen Block zu einem Stapel hinzu
+        /// </summary>
+        /// <returns>Block der hinzugefügt wurde</returns>
+        private WorldElement AddToStack(int xPos, int zPos, WorldElement element)
+        {
+            int stackSize = GetStackSize(xPos, zPos);
+            if (stackSize == SizeY)
+                throw new IndexOutOfRangeException();
+
+            if (HasCellAt(xPos, Math.Max(stackSize - 1, 0), zPos, out WorldElement e) && !e.CanStackOnTop)
+                return null;
+
+            Grid[xPos, zPos, stackSize] = element;
+            element.Position = new Position(element.Position.X, stackSize, element.Position.Z);
+
+            return element;
+        }
+
+        /// <summary>
+        /// Fügt einen Ziegel zu einem Stapel hinzu
+        /// </summary>
+        /// <returns>Ziegel der hinzugefügt wurde</returns>
+        private WorldElement AddToStack(int xPos, int zPos)
+        {
+            var element = new WorldElement(BrickBitmap);
+            return AddToStack(xPos, zPos, element);
+        }
+
         /// <summary>
         /// Setzt einen Ziegel in die entsprechende Zelle
         /// </summary>
         /// <param name="xPos">X Position des Blocks</param>
         /// <param name="zPos">Z Position des Blocks</param>
-        internal void SetCell(int xPos, int zPos)
+        /// <param name="updateView">Soll das View neu Gerendert werden</param>
+        internal void SetCell(int xPos, int zPos, bool updateView = true)
         {
-            var cell = AddToStack(xPos, zPos);
-            Update(xPos, zPos, cell);
+            SetCell(xPos, zPos, new WorldElement(BrickBitmap), updateView);
         }
 
         /// <summary>
@@ -433,12 +451,30 @@ namespace Karol
         /// </summary>
         /// <param name="xPos">X Position des Blocks</param>
         /// <param name="zPos">Z Position des Blocks</param>
-        internal void SetCell(int xPos, int zPos, WorldElement element)
+        /// <param name="updateView">Soll das View neu Gerendert werden</param>
+        internal void SetCell(int xPos, int zPos, WorldElement element, bool updateView = true)
         {
-            var cell = AddToStack(xPos, zPos, element);
-            Update(xPos, zPos, cell);
+            int yPos = GetStackSize(xPos, zPos);
+            SetCell(xPos, yPos, zPos, element, updateView);
         }
 
+        /// <summary>
+        /// Setzt das definierte World Element in die entsprechende Zelle
+        /// </summary>
+        /// <param name="xPos">X Position des Blocks</param>
+        /// <param name="yPos">Y Position des Blocks</param>
+        /// <param name="zPos">Z Position des Blocks</param>
+        /// <param name="updateView">Soll das View neu Gerendert werden</param>
+        internal void SetCell(int xPos, int yPos, int zPos, WorldElement element, bool updateView = true)
+        {
+            Grid[xPos, zPos, yPos] = element;
+
+            if (updateView)
+                Update(xPos, zPos, element);
+        }
+        #endregion
+
+        #region Public
         /// <summary>
         /// Plaziert zufällige Ziegel in der Welt
         /// </summary>

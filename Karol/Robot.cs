@@ -10,7 +10,6 @@ namespace Karol
 {
     public class Robot : WorldElement
     {
-
         private Direction _faceDirection = Direction.North;
 
         private Bitmap[] RoboterBitmaps { get; set; }
@@ -19,19 +18,12 @@ namespace Karol
         /// Die Welt in der dieser Roboter lebt
         /// </summary>
         public World World { get; private set; }
-        /// <summary>
-        /// Aktuelle X Position des Roboters
-        /// </summary>
-        public int PositionX { get; private set; }
-        /// <summary>
-        /// Aktuelle Z Position des Roboters
-        /// </summary>
-        public int PositionZ { get; private set; }
 
         /// <summary>
         /// Gibt an wie hoch der Roboter Springen kann. (in Zellen)
         /// </summary>
         public int JumpHeight { get; set; }
+
         /// <summary>
         /// Die Verzögerung in Millisekunden zwischen 2 Aktionen des Roboters. <br></br>
         /// Standard ist 300
@@ -48,7 +40,7 @@ namespace Karol
             {
                 _faceDirection = value;
                 BitMap = RoboterBitmaps[FaceDirection.Offset];
-                World.Update(PositionX, PositionZ, this);
+                World.Update(Position.X, Position.Z, this);
             }
         }
 
@@ -60,10 +52,11 @@ namespace Karol
         /// <param name="world">Welt in der der Roboter leben soll</param>
         public Robot(int xStart, int zStart, World world) 
         {
-            PositionX = xStart;
-            PositionZ = zStart;
+            Position = new Position(xStart, 0, zStart);
             World = world;
             Delay = 300;
+
+            CanStackOnTop = false;
             XOffset = -2;
             YOffset = -2;
 
@@ -110,6 +103,23 @@ namespace Karol
         public void TurnRight()
         {
             FaceDirection += 1;
+            Wait();
+        }
+
+        public void Move()
+        {
+            if (!World.IsPositionValid(Position.X, Position.Y, Position.Z))
+            {
+                return;
+            }
+
+            Position newPos = FaceDirection.OffsetPosition(Position);
+            newPos.Y = World.GetStackSize(newPos.X, newPos.Z);
+
+            World.SetCell(Position.X, Position.Y, Position.Z, null, false);
+            World.SetCell(newPos.X, newPos.Y, newPos.Z, this);
+            Position = newPos;
+
             Wait();
         }
         #endregion
