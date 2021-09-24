@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Karol.Core
 {
+    /// <summary>
+    /// Gibt eine der folgenden Richtung an: <br></br>
+    /// Norden, Süden, Osten oder Westen
+    /// </summary>
     public struct Direction
     {
         private static readonly Direction[] Directions;
@@ -14,16 +18,21 @@ namespace Karol.Core
         public static readonly Direction South;
         public static readonly Direction East;
 
+        internal const char NorthChar = 'N';
+        internal const char OstChar = 'O';
+        internal const char SouthChar = 'S';
+        internal const char EastChar = 'E';
+
         public char DirectionChar { get; private set; }
         public string Name { get; private set; }
         public int Offset { get; set; }
 
         static Direction()
         {
-            North = new Direction('N', "North", 0);
-            Ost = new Direction('O', "Ost", 1);
-            South = new Direction('S', "South", 2);
-            East = new Direction('E', "East", 3);
+            North = new Direction(NorthChar, "North", 0);
+            Ost = new Direction(OstChar, "Ost", 1);
+            South = new Direction(SouthChar, "South", 2);
+            East = new Direction(EastChar, "East", 3);
             Directions = new Direction[] { North, Ost, South, East };
         }
 
@@ -34,15 +43,22 @@ namespace Karol.Core
             Offset = offset;
         }
 
-        public Position OffsetPosition(Position pos)
+        /// <summary>
+        /// Verschiebt eine Position um das angegebene Offset in die aktuelle richtung.
+        /// Verändert die übergebene Position nicht.
+        /// </summary>
+        /// <param name="pos">Position die verschoben werden soll</param>
+        /// <param name="offset">Zahl um wie viel die Position verschoben werden soll</param>
+        /// <returns>Neue und verchobene Position</returns>
+        public Position OffsetPosition(Position pos, int offset = 1)
         {
             Position newPos = new Position(pos);
             switch (DirectionChar)
             {
-                case 'N': newPos.Z += 1; break;
-                case 'O': newPos.X += 1; break;
-                case 'S': newPos.Z -= 1; break;
-                case 'W': newPos.X -= 1; break;
+                case NorthChar: newPos.Z += offset; break;
+                case OstChar: newPos.X += offset; break;
+                case SouthChar: newPos.Z -= offset; break;
+                case EastChar: newPos.X -= offset; break;
             }
 
             return newPos;

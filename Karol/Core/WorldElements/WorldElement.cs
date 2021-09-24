@@ -1,10 +1,11 @@
 ﻿using System.Drawing;
 
-namespace Karol.Core
+namespace Karol.Core.WorldElements
 {
-    public class WorldElement  
+    public class WorldElement
     {
         private bool _canStackOnTop = true;
+        private bool _isObstacle = true;
         private Position _position;
 
         /// <summary>
@@ -30,6 +31,16 @@ namespace Karol.Core
         {
             get => _canStackOnTop;
             set => _canStackOnTop = value;
+        }
+
+        /// <summary>
+        /// Gibt an ob dieses World element ein Hindernis ist oder nicht <br></br>
+        /// Standard ist True.
+        /// </summary>
+        internal bool IsObstacle
+        {
+            get => _isObstacle;
+            set => _isObstacle = value;
         }
 
         /// <summary>

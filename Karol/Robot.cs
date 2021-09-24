@@ -1,4 +1,6 @@
 ﻿using Karol.Core;
+using Karol.Core.Exceptions;
+using Karol.Core.WorldElements;
 using Karol.Properties;
 using System;
 using System.Collections.Generic;
@@ -20,7 +22,8 @@ namespace Karol
         public World World { get; private set; }
 
         /// <summary>
-        /// Gibt an wie hoch der Roboter Springen kann. (in Zellen)
+        /// Gibt an wie hoch der Roboter Springen kann. (in Zellen) <br></br>
+        /// Standard ist 1
         /// </summary>
         public int JumpHeight { get; set; }
 
@@ -29,6 +32,55 @@ namespace Karol
         /// Standard ist 300
         /// </summary>
         public int Delay { get; set; }
+
+        /// <summary>
+        /// Gibt zurück ob sich vor dem Roboter ein Hindernis befindet, das er nicht überwinden kann.
+        /// </summary>
+        public bool CanMove
+        {
+            get
+            {
+                Position facePos = FaceDirection.OffsetPosition(Position);
+                if (!World.IsPositionValid(facePos))
+                    return false;
+
+                bool hasObstacle = World.HasCellAt(facePos.X, facePos.Y, facePos.Z, out WorldElement e) && e.IsObstacle;
+                bool canClimbWall = Math.Abs(Position.Y - World.GetStackSize(facePos.X, facePos.Z)) <= JumpHeight;
+
+                return !hasObstacle || canClimbWall;
+            }
+        }
+        /// <summary>
+        /// Gibt zurück ob sich vor dem Roboter ein anderer Roboter befindet.
+        /// </summary>
+        public bool HasRobot
+        {
+            get
+            {
+                Position facePos = FaceDirection.OffsetPosition(Position);
+                if (!World.IsPositionValid(facePos))
+                    return true;
+
+                return World.HasCellAt(facePos.X, facePos.Y, facePos.Z, out WorldElement e) && e is Robot;
+            }
+        }
+
+        /// <summary>
+        /// Schaut der Roboter gerade nach Norden
+        /// </summary>
+        public bool IsFacingNorth => FaceDirection == Direction.North;
+        /// <summary>
+        /// Schaut der Roboter gerade nach Osten
+        /// </summary>
+        public bool IsFacingOst => FaceDirection == Direction.Ost;
+        /// <summary>
+        /// Schaut der Roboter gerade nach Süden
+        /// </summary>
+        public bool IsFacingSouth => FaceDirection == Direction.South;
+        /// <summary>
+        /// Schaut der Roboter gerade nach Westen
+        /// </summary>
+        public bool IsFacingEast => FaceDirection == Direction.East;
 
         /// <summary>
         /// Aktuelle Blickrichtung des Roboters
@@ -55,6 +107,7 @@ namespace Karol
             Position = new Position(xStart, 0, zStart);
             World = world;
             Delay = 300;
+            JumpHeight = 1;
 
             CanStackOnTop = false;
             XOffset = -2;
@@ -106,15 +159,19 @@ namespace Karol
             Wait();
         }
 
+        /// <summary>
+        /// Lässt den Roboter einen Schritt nach vorne Machen
+        /// </summary>
+        /// <exception cref="InvalidMoveException"></exception>
         public void Move()
         {
-            if (!World.IsPositionValid(Position.X, Position.Y, Position.Z))
-            {
-                return;
-            }
-
             Position newPos = FaceDirection.OffsetPosition(Position);
+            if (!World.IsPositionValid(newPos))
+                throw new InvalidMoveException(Position, newPos);
+
             newPos.Y = World.GetStackSize(newPos.X, newPos.Z);
+            if (Math.Abs(Position.Y - newPos.Y) > JumpHeight)
+                throw new InvalidMoveException(Position, newPos, $"Ziel {newPos} liegt außerhalb der Sprunghöhe!");
 
             World.SetCell(Position.X, Position.Y, Position.Z, null, false);
             World.SetCell(newPos.X, newPos.Y, newPos.Z, this);

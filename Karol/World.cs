@@ -8,10 +8,10 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Threading;
 using Karol.Core.Exceptions;
-using System.Diagnostics;
 using System.Reflection;
 using Karol.Properties;
 using System.Linq;
+using Karol.Core.WorldElements;
 
 namespace Karol
 {
@@ -86,6 +86,7 @@ namespace Karol
         private WorldElement[,,] Grid { get; set; }
         private KarolForm WorldForm { get; set; }
         private PictureBox BlockMap { get; set; }
+        private Thread UIThread { get; set; }
 
         /// <summary>
         /// Erstellt eine neue Welt für Karol. <br></br>
@@ -121,6 +122,7 @@ namespace Karol
 
             await Task.Run(() =>
             {
+                UIThread = Thread.CurrentThread;
                 Application.Run(WorldForm);
             });
         }
@@ -225,7 +227,14 @@ namespace Karol
             while (!WorldForm.IsHandleCreated)
                 Thread.Sleep(10);
 
-            WorldForm.Invoke(method);
+            if (WorldForm.IsDisposed || UIThread == null || !UIThread.IsAlive)
+                return;
+
+            try
+            {
+                WorldForm.Invoke(method);
+            }
+            catch (Exception) { }
         }
         #endregion
 
@@ -308,6 +317,16 @@ namespace Karol
             return xPos >= 0 && xPos < SizeX &&
                    yPos >= 0 && yPos < SizeY &&
                    zPos >= 0 && zPos < SizeZ;
+        }
+
+        /// <summary>
+        /// Gibt zurück ob eine Position innerhalt der Welt ist oder nicht
+        /// </summary>
+        /// <param name="pos">Position</param>
+        /// <returns>True wenn die Position innerhalb der Welt ist, ansonsten false.</returns>
+        internal bool IsPositionValid(Position pos)
+        {
+            return IsPositionValid(pos.X, pos.Y, pos.Z);
         }
 
         /// <summary>
@@ -441,7 +460,7 @@ namespace Karol
         /// <param name="xPos">X Position des Blocks</param>
         /// <param name="zPos">Z Position des Blocks</param>
         /// <param name="updateView">Soll das View neu Gerendert werden</param>
-        internal void SetCell(int xPos, int zPos, bool updateView = true)
+        public void SetCell(int xPos, int zPos, bool updateView = true)
         {
             SetCell(xPos, zPos, new WorldElement(BrickBitmap), updateView);
         }
@@ -454,8 +473,10 @@ namespace Karol
         /// <param name="updateView">Soll das View neu Gerendert werden</param>
         internal void SetCell(int xPos, int zPos, WorldElement element, bool updateView = true)
         {
-            int yPos = GetStackSize(xPos, zPos);
-            SetCell(xPos, yPos, zPos, element, updateView);
+            AddToStack(xPos, zPos, element);
+
+            if (updateView)
+                Update(xPos, zPos, element);
         }
 
         /// <summary>

@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Karol.Core
 {
+    /// <summary>
+    /// Gibt eine Position im 3D Raum an.
+    /// </summary>
     public struct Position
     {
         public int X { get; internal set; }
