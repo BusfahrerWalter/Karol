@@ -12,9 +12,11 @@ namespace Karol
 {
     public class Robot : WorldElement
     {
+        #region Properties / Felder
         private Direction _faceDirection = Direction.North;
 
         private Bitmap[] RoboterBitmaps { get; set; }
+        private DateTime WaitStartTime { get; set; }
 
         /// <summary>
         /// Die Welt in der dieser Roboter lebt
@@ -100,7 +102,30 @@ namespace Karol
             get
             {
                 Position facePos = FaceDirection.OffsetPosition(Position);
+                if (!World.IsPositionValid(facePos))
+                    return 0;
+
                 return World.GetStackSize(facePos.X, facePos.Z);
+            }
+        }
+        /// <summary>
+        /// Gibt die Farbe des höchsten Ziegels vor dem Roboter zurück. <br></br>
+        /// Wenn sich vor dem Roboter kein Ziegel befindet wird Color.Transparent zurück gegeben.
+        /// </summary>
+        public Color BrickColor
+        {
+            get
+            {
+                Position facePos = FaceDirection.OffsetPosition(Position);
+                if (!World.IsPositionValid(facePos))
+                    return Color.Transparent;
+
+                int stackSize = World.GetStackSize(facePos.X, facePos.Z);
+                var cell = World.GetCell(facePos.X, Math.Max(0, stackSize - 1), facePos.Z);
+                if (cell is Brick brick)
+                    return brick.Paint;
+
+                return Color.Transparent;
             }
         }
 
@@ -134,7 +159,9 @@ namespace Karol
                 World.Update(Position.X, Position.Z, this);
             }
         }
+        #endregion
 
+        #region Konstruktoren
         /// <summary>
         /// Erstellt einen neuen Roboter.
         /// </summary>
@@ -174,11 +201,18 @@ namespace Karol
         {
             FaceDirection = initialDirection;
         }
+        #endregion
 
         #region Util
         private void Wait()
         {
-            Thread.Sleep(Delay);
+            int time = (int)(DateTime.Now - WaitStartTime).TotalMilliseconds;
+            Thread.Sleep(Math.Max(Delay - time, 0));
+        }
+
+        private void PrepareWait()
+        {
+            WaitStartTime = DateTime.Now;
         }
         #endregion
 
@@ -188,6 +222,7 @@ namespace Karol
         /// </summary>
         public void TurnLeft()
         {
+            PrepareWait();
             FaceDirection -= 1;
             Wait();
         }
@@ -197,6 +232,7 @@ namespace Karol
         /// </summary>
         public void TurnRight()
         {
+            PrepareWait();
             FaceDirection += 1;
             Wait();
         }
@@ -207,6 +243,8 @@ namespace Karol
         /// <exception cref="InvalidMoveException"></exception>
         public void Move()
         {
+            PrepareWait();
+
             Position newPos = FaceDirection.OffsetPosition(Position);
             if (!World.IsPositionValid(newPos))
                 throw new InvalidMoveException(Position, newPos);
@@ -226,15 +264,24 @@ namespace Karol
         }
 
         /// <summary>
-        /// Legt einen Ziegel vor den Roboter hin.
+        /// Platziert einen Ziegel vor dem Roboter.
         /// </summary>
+        /// <param name="paintOverride">Überschreibung der Standard Farbe für diesen Roboter.</param>
         /// <exception cref="InvalidActionException"></exception>
-        public void Place()
+        public void Place(Color paintOverride)
         {
+            PrepareWait();
+
             if (MaxBackpackSize != -1 && BricksInBackpack <= 0)
                 throw new InvalidActionException($"Kann keine Ziegel mehr platzieren. Rucksack ist leer!");
 
-            var facePos = FaceDirection.OffsetPosition(Position);
+            Position facePos = FaceDirection.OffsetPosition(Position);
+            if (!World.IsPositionValid(facePos))
+            {
+                facePos.Y = 0;
+                throw new InvalidActionException($"An der Position {facePos} kann kein Ziegel platziert werden!");
+            }
+
             int stackSize = World.GetStackSize(facePos.X, facePos.Z);
             var cell = World.GetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z);
 
@@ -244,11 +291,20 @@ namespace Karol
                 throw new InvalidActionException($"An der Position {facePos} kann kein Ziegel platziert werden!");
             }
 
-            var newCell = World.AddToStack(facePos.X, facePos.Z, new Brick(Paint));
+            var newCell = World.AddToStack(facePos.X, facePos.Z, new Brick(paintOverride));
             BricksInBackpack--;
             World.Update(facePos.X, facePos.Z, newCell);
 
             Wait();
+        }
+
+        /// <summary>
+        /// Platziert einen Ziegel vor dem Roboter.
+        /// </summary>
+        /// <exception cref="InvalidActionException"></exception>
+        public void Place()
+        {
+            Place(Paint);
         }
 
         /// <summary>
@@ -257,6 +313,8 @@ namespace Karol
         /// <exception cref="InvalidActionException"></exception>
         public void PickUp()
         {
+            PrepareWait();
+
             if (MaxBackpackSize != -1 && BricksInBackpack == MaxBackpackSize)
                 throw new InvalidActionException($"Kann keine Ziegel mehr aufheben. Maximale Rucksackgröße von {MaxBackpackSize} erreicht!");
 

@@ -88,7 +88,7 @@ namespace Karol.Core
 
         public static Direction operator -(Direction dir, int offset)
         {
-            return dir + (offset + 2);
+            return dir + (Directions.Length - offset);
         }
 
         public static bool operator ==(Direction dir, object obj)

@@ -12,6 +12,7 @@ using System.Reflection;
 using Karol.Properties;
 using System.Linq;
 using Karol.Core.WorldElements;
+using System.IO;
 
 namespace Karol
 {
@@ -386,7 +387,7 @@ namespace Karol
         /// <param name="xPos">X Position des sich geänderten Blocks</param>
         /// <param name="zPos">Z Position des sich geänderten Blocks</param>
         /// <param name="newCell">Neu hinzugefügtes Element</param>
-        internal void Update(int xPos, int zPos, WorldElement newCell)
+        internal void Update(int xPos, int zPos, WorldElement newCell) // TODO: Besser machen...
         {
             //Point pos = CellToPixelPos(xPos, 0, zPos, newCell);
             //var rect = new Rectangle(pos, newCell.BitMap.Size);
@@ -532,13 +533,14 @@ namespace Karol
         /// <param name="maxStackHeight">Maximale höhe wie hoch die Ziegel gestapelt werden können. <br></br>
         /// Sollte die gegebenne Anzahl nicht in den Bereich passen werden keine Ziegel mehr plaziert.
         /// </param>
-        public void PlaceRandomBricks(int count, int maxStackHeight)
+        /// <param name="randomColor">Blöcke in zufälliger farbe platzieren oder nicht</param>
+        public void PlaceRandomBricks(int count, int maxStackHeight, bool randomColor = false)
         {
             maxStackHeight = Math.Clamp(maxStackHeight, 0, SizeY);
             count = Math.Clamp(count, 0, SizeX * SizeZ * maxStackHeight);
             Random rand = new Random();
 
-            for(int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 int xPos = rand.Next(0, SizeX);
                 int zPos = rand.Next(0, SizeZ);
@@ -565,7 +567,11 @@ namespace Karol
                         break;
                 }
 
-                AddToStack(xPos, zPos);
+                Color color = Color.Red;
+                if (randomColor)
+                    color = Color.FromArgb(rand.Next(0, 256), rand.Next(0, 256), rand.Next(0, 256));
+
+                AddToStack(xPos, zPos, new Brick(color));
             }
 
             Redraw();
@@ -575,9 +581,42 @@ namespace Karol
         /// Plaziert zufällige Ziegel in der Welt
         /// </summary>
         /// <param name="count">Anzahl der zu plazierenden Steine</param>
-        public void PlaceRandomBricks(int count)
+        /// <param name="randomColor">Blöcke in zufälliger farbe platzieren oder nicht</param>
+        public void PlaceRandomBricks(int count, bool randomColor = false)
         {
-            PlaceRandomBricks(count, int.MaxValue);
+            PlaceRandomBricks(count, int.MaxValue, randomColor);
+        }
+
+        /// <summary>
+        /// Erstellt eine Welt aus einem Bild. Jeder Pixel in dem Bild repräsentiert eine Zelle in der Welt.
+        /// </summary>
+        /// <param name="filePath">Pfad zu dem Bild. <br></br>
+        /// Unterstützte Dateitypen: bmp, gif, jpeg, png, exif, tiff
+        /// </param>
+        /// <param name="worldHeight">Höhe der Welt.</param>
+        /// <returns></returns>
+        public static World LoadImage(string filePath, int worldHeight = 5)
+        {
+            if (!File.Exists(filePath))
+                return null;
+
+            var map = new Bitmap(filePath);
+            World world = new World(map.Width, worldHeight, map.Height);
+
+            for(int x = 0; x < map.Width; x++)
+            {
+                for(int y = 0; y < map.Height; y++)
+                {
+                    Color color = map.GetPixel(x, y);
+                    if (color.A == 0)
+                        continue;
+
+                    world.AddToStack(x, map.Height - y - 1, new Brick(color));
+                }
+            }
+
+            world.Redraw();
+            return world;
         }
 
         public void Load(string filePath)

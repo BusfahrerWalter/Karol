@@ -12,37 +12,59 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            World w1 = new World(10, 5, 10);
-            //w1.PlaceRandomBricks(88, 2);
+            World w1 = World.LoadImage(@"C:\Users\danie\Downloads\map.png", 2);
+            //w1.PlaceRandomBricks(30 * 30 / 2, 1, true);
 
             Robot r1 = new Robot(0, 0, w1);
-            r1.Delay = 5;
+            r1.JumpHeight = 2;
+
+            Console.WriteLine(r1.BrickColor);
+            r1.Place();
+            r1.Place(Color.Orange);
+            Console.WriteLine(r1.BrickColor);
+
+            //Random rand = new Random();
+            //Color[] paints = new Color[]
+            //{
+            //    Color.Red,
+            //    Color.Green,
+            //    Color.Blue,
+            //    Color.Yellow,
+            //    Color.Purple,
+            //    Color.Orange,
+            //    Color.Cyan,
+            //    Color.Magenta
+            //};
 
 
+            //for(int j = 0; j < w1.SizeX; j++)
+            //{
+            //    for (int i = 0; i < w1.SizeZ - 1; i++)
+            //    {
+            //        r1.Paint = paints[rand.Next(0, paints.Length)];
+            //        r1.Place();
+            //        r1.Move();
+            //    }
 
-            for(int j = 0; j < w1.SizeX; j++)
-            {
-                for (int i = 0; i < w1.SizeZ - 1; i++)
-                {
-                    r1.Place();
-                    r1.Move();
-                }
+            //    r1.Paint = paints[rand.Next(0, paints.Length)];
+            //    if (j % 2 == 0)
+            //    {
+            //        r1.TurnRight();
+            //        if (!r1.CanMove)
+            //            break;
 
-                if (j % 2 == 0)
-                {
-                    r1.TurnRight();
-                    r1.Place();
-                    r1.Move();
-                    r1.TurnRight();
-                }
-                else
-                {
-                    r1.TurnLeft();
-                    r1.Place();
-                    r1.Move();
-                    r1.TurnLeft();
-                }
-            }
+            //        r1.Place();
+            //        r1.Move();
+            //        r1.TurnRight();
+            //    }
+            //    else
+            //    {
+            //        r1.TurnLeft();
+            //        r1.Place();
+            //        r1.Move();
+            //        r1.TurnLeft();
+            //    }
+            //}
 
 
 
