@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Karol.Core.Exceptions
 {
-    public class InvalidMoveException : Exception
+    /// <summary>
+    /// Wird geworfen wenn ein Roboter eine Ungültige bewegung ausführt.
+    /// </summary>
+    public class InvalidMoveException : KarolException
     {
         public Position CurrentPosition { get; set; }
         public Position TargetPosition { get; set; }

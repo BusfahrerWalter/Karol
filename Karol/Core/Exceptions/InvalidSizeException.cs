@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Karol.Core.Exceptions
 {
-    public class InvalidSizeException : Exception
+    /// <summary>
+    /// Wird geworfen wenn die größe der Welt ungültig ist.
+    /// </summary>
+    public class InvalidSizeException : KarolException
     {
         public InvalidSizeException(string msg) : base(msg)
         { }

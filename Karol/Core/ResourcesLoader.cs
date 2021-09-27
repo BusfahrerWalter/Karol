@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace Karol.Core
 {
+    /// <summary>
+    /// Hilfsklasse um Resourcen zu laden.
+    /// </summary>
     internal class ResourcesLoader
     {       
         public static Bitmap[] LoadRobotBitmaps(int roboNumber)

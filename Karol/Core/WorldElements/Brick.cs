@@ -7,6 +7,9 @@ using System.Text;
 
 namespace Karol.Core.WorldElements
 {
+    /// <summary>
+    /// Stellt einen Ziegel in der Welt dar.
+    /// </summary>
     internal class Brick : WorldElement
     {
         private static readonly Bitmap BrickBitmap = Resources.Ziegel;

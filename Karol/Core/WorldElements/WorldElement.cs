@@ -2,6 +2,9 @@
 
 namespace Karol.Core.WorldElements
 {
+    /// <summary>
+    /// Basisklasse für alle Objekte die in einer Welt sein sollen.
+    /// </summary>
     public abstract class WorldElement
     {
         private bool _canStackOnTop = true;

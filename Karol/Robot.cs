@@ -152,7 +152,7 @@ namespace Karol
         public Direction FaceDirection
         {
             get => _faceDirection;
-            set
+            internal set
             {
                 _faceDirection = value;
                 BitMap = RoboterBitmaps[FaceDirection.Offset];
