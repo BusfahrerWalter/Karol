@@ -14,6 +14,7 @@ namespace TestApp
         {
             World w1 = new World(5, 5, 5);
             Robot r1 = new Robot(0, 0, w1);
+            Robot r2 = new Robot(4, 4, w1);
         }
     }
 }

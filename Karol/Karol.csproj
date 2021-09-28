@@ -111,4 +111,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\UI\" />
+  </ItemGroup>
+
 </Project>

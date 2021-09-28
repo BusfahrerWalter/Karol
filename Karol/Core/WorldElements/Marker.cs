@@ -7,34 +7,60 @@ using System.Text;
 
 namespace Karol.Core.WorldElements
 {
-    internal class Marker : WorldElement
-    {
-        private Robot _robotOnTop;
 
-        public Robot RobotOnTop
+    public class Marker : WorldElement, IContainer
+    {
+        private WorldElement _content;
+
+        /// <summary>
+        /// Roboter der auf der Marke steht
+        /// </summary>
+        public WorldElement Content
         {
-            get => _robotOnTop;
+            get => _content;
             set
             {
-                _robotOnTop = value;
+                _content = value;
                 if(value != null)
                 {
-                    int width = Math.Max(value.BitMap.Width, Resources.Marke.Width);
-                    BitMap = new Bitmap(width, value.BitMap.Height);
-                    BitMap.DrawImage(0, BitMap.Height - Resources.Marke.Height, Resources.Marke);
+                    int absX = Math.Abs(value.XOffset);
+                    int absY = Math.Abs(value.YOffset);
+                    int width = Math.Max(value.BitMap.Width, Resources.Marke.Width) + absX;
+                    int height = value.BitMap.Height + absY;
+
+                    BitMap = new Bitmap(width, height);
+                    BitMap.DrawImage(absX, BitMap.Height - Resources.Marke.Height, Resources.Marke);
                     BitMap.DrawImage(0, 0, value.BitMap);
+
+                    XOffset = value.XOffset;
                 }
                 else
                 {
                     BitMap = new Bitmap(Resources.Marke);
+                    XOffset = 0;
+                    YOffset = 0;
                 }
             }
         }
 
+        public bool IsEmpty => Content == null;
+
         public Marker() : base(new Bitmap(Resources.Marke))
         {
             CanStackOnTop = false;
-            CanPickUp = true;
+            CanPickUp = false;
+        }
+
+        public Marker(Robot robot) 
+        {
+            CanStackOnTop = false;
+            CanPickUp = false;
+            Content = robot;
+        }
+
+        public void Reset()
+        {
+            Content = null;
         }
     }
 }

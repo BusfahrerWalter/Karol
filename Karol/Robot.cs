@@ -10,6 +10,9 @@ using System.Threading;
 
 namespace Karol
 {
+    /// <summary>
+    /// Ein Roboter der sich in einer Welt bewegen und dort leben kann...
+    /// </summary>
     public class Robot : WorldElement
     {
         #region Properties / Felder
@@ -17,6 +20,11 @@ namespace Karol
 
         private Bitmap[] RoboterBitmaps { get; set; }
         private DateTime WaitStartTime { get; set; }
+
+        public event EventHandler onEnterMark;
+        public event EventHandler onLeaveMark;
+        public event EventHandler onPlaceBrick;
+        public event EventHandler onPickUpBrick;
 
         /// <summary>
         /// Die Welt in der dieser Roboter lebt
@@ -41,7 +49,7 @@ namespace Karol
         /// <summary>
         /// Die Anzahl der Ziegel die sich im Rucksack befinden.
         /// </summary>
-        public int BricksInBackpack { get; private set; }
+        public int BricksInBackpack { get; internal set; }
         /// <summary>
         /// Maximale Rucksackgröße. Durch setzen von -1 wird die Rucksack funktion deaktiviert. <br></br>
         /// Standard ist -1
@@ -61,9 +69,12 @@ namespace Karol
 
                 int stackSize = World.GetStackSize(facePos.X, facePos.Z);
                 var cell = World.GetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z);
-                bool canClimb = Math.Abs(Position.Y - stackSize) <= JumpHeight && stackSize != World.SizeY;
+                if (cell is IContainer)
+                    stackSize = Math.Max(stackSize - 1, 0);
 
-                return canClimb && (cell == null || cell.CanStackOnTop);
+                bool canClimb = Math.Abs(Position.Y - stackSize) <= JumpHeight && stackSize != World.SizeY;
+                bool isEmptyContainer = cell is IContainer c && c.IsEmpty;
+                return canClimb && (cell == null || cell.CanStackOnTop || isEmptyContainer);
             }
         }
         /// <summary>
@@ -168,6 +179,7 @@ namespace Karol
         }
 
         internal Marker Mark { get; set; }
+        internal int Number { get; set; }
         #endregion
 
         #region Konstruktoren
@@ -200,6 +212,7 @@ namespace Karol
 
             RoboterBitmaps = ResourcesLoader.LoadRobotBitmaps(world.RoboterCount - 1);
             BitMap = RoboterBitmaps[FaceDirection.Offset];
+            Number = world.RoboterCount;
 
             world.SetCell(xStart, zStart, this);
             world.OnRobotAdded(this);
@@ -268,28 +281,38 @@ namespace Karol
                 throw new InvalidMoveException(Position, newPos);
 
             newPos.Y = World.GetStackSize(newPos.X, newPos.Z);
+            if (HasRobot)
+                throw new InvalidMoveException(Position, newPos, "Auf einer Position kann sich maximal ein Roboter befinden!");
 
-            if (World.HasCellAt(newPos.X, Math.Max(newPos.Y - 1, 0), newPos.Z, out WorldElement cell) && cell is Marker mark)
+            if (!CanMove)
+                throw new InvalidMoveException(Position, newPos, $"Ziel {newPos} liegt außerhalb der Sprunghöhe!");
+
+            if (World.HasCellAt(newPos.X, newPos.Y - 1, newPos.Z, out WorldElement cell) && cell is Marker mark)
             {
-                mark.RobotOnTop = this;
-                World.SetCell(Position, null);
+                if (HasMark)
+                {
+                    Mark.Reset();
+                    Mark = null;
+                    OnLeaveMark();
+                }
+                else
+                {
+                    World.SetCell(Position, null, false);               
+                }
 
-                newPos.Y = Math.Max(newPos.Y - 1, 0);
-                Position = newPos;
                 Mark = mark;
+                Mark.Content = this;
+                Position = Mark.Position;
+                World.Update(Position.X, Position.Z, Mark);
+                OnEnterMark();
             }
             else
             {
-                if (HasRobot)
-                    throw new InvalidMoveException(Position, newPos, "Auf einer Position kann sich maximal ein Roboter befinden!");
-
-                if (!CanMove)
-                    throw new InvalidMoveException(Position, newPos, $"Ziel {newPos} liegt außerhalb der Sprunghöhe!");
-
                 if (HasMark)
                 {
-                    Mark.RobotOnTop = null;
+                    Mark.Reset();
                     Mark = null;
+                    OnLeaveMark();
 
                     World.SetCell(newPos, this);
                     Position = newPos;
@@ -337,6 +360,7 @@ namespace Karol
             BricksInBackpack--;
             World.Update(facePos.X, facePos.Z, newCell);
 
+            OnPlaceBrick();
             Wait();
         }
 
@@ -361,6 +385,9 @@ namespace Karol
                 throw new InvalidActionException($"Kann keine Ziegel mehr aufheben. Maximale Rucksackgröße von {MaxBackpackSize} erreicht!");
 
             var facePos = FaceDirection.OffsetPosition(Position);
+            if (!World.IsPositionValid(facePos))
+                throw new InvalidActionException($"An der Position {facePos} kann kein Ziegel aufgehogen werden!");
+
             int stackSize = World.GetStackSize(facePos.X, facePos.Z);
             var cell = World.GetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z);
 
@@ -373,17 +400,62 @@ namespace Karol
             BricksInBackpack++;
             World.SetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z, null, true);
 
+            OnPickUpBrick();
             Wait();
         }
 
+        /// <summary>
+        /// Platziert eine Marke unter dem Roboter.
+        /// </summary>
+        /// <exception cref="InvalidActionException"></exception>
         public void PlaceMark()
         {
+            PrepareWait();
+            if (HasMark)
+                throw new InvalidActionException($"Kann an Position {Position} keine Marke platzieren!");
 
+            Mark = new Marker(this);
+            World.SetCell(Position, Mark);
+            OnEnterMark();
+            Wait();
         }
 
+        /// <summary>
+        /// Hebt eine Marke unter dem Roboter auf.
+        /// </summary>
+        /// <exception cref="InvalidActionException"></exception>
         public void PickUpMark()
         {
+            PrepareWait();
+            if (!HasMark)
+                throw new InvalidActionException($"Kann an Position {Position} keine Marke aufheben!");
 
+            World.SetCell(Position, this);
+            Mark = null;
+            OnLeaveMark();
+            Wait();
+        }
+        #endregion
+
+        #region Events
+        internal void OnEnterMark()
+        {
+            onEnterMark?.Invoke(this, EventArgs.Empty);
+        }
+
+        internal void OnLeaveMark()
+        {
+            onLeaveMark?.Invoke(this, EventArgs.Empty);
+        }
+
+        internal void OnPlaceBrick()
+        {
+            onPlaceBrick?.Invoke(this, EventArgs.Empty);
+        }
+
+        internal void OnPickUpBrick()
+        {
+            onPickUpBrick?.Invoke(this, EventArgs.Empty);
         }
         #endregion
     }

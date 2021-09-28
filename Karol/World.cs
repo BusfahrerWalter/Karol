@@ -16,6 +16,9 @@ using System.IO;
 
 namespace Karol
 {
+    /// <summary>
+    /// Eine Karol Welt in der Roboter, Ziegel, Marken, usw.. platziert werden können.
+    /// </summary>
     public class World
     {
         #region Properties & Felder
@@ -340,6 +343,10 @@ namespace Karol
         /// <returns>True wenn ja, ansonsten false</returns>
         internal bool HasCellAt(int xPos, int yPos, int zPos, out WorldElement cell)
         {
+            xPos = Math.Max(xPos, 0);
+            yPos = Math.Max(yPos, 0);
+            zPos = Math.Max(zPos, 0);
+
             cell = Grid[xPos, zPos, yPos];
             return cell != null;
         }
@@ -453,7 +460,7 @@ namespace Karol
                 return null;
 
             Grid[xPos, zPos, stackSize] = element;
-            element.Position = new Position(element.Position.X, stackSize, element.Position.Z);
+            element.Position = new Position(xPos, stackSize, zPos);
 
             return element;
         }
@@ -513,6 +520,8 @@ namespace Karol
         internal void SetCell(int xPos, int yPos, int zPos, WorldElement element, bool updateView = true)
         {
             Grid[xPos, zPos, yPos] = element;
+            if(element != null)
+                element.Position = new Position(xPos, yPos, zPos);
 
             if (updateView)
                 Update(xPos, zPos, element);
