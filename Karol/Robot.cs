@@ -95,6 +95,13 @@ namespace Karol
             }
         }
         /// <summary>
+        /// Gibt zurück ob sich der Roboter auf einer Marke befindet.
+        /// </summary>
+        public bool HasMark
+        {
+            get => Mark != null;
+        }
+        /// <summary>
         /// Gibt die anzahl der Ziegel vor dem Roboter zurück.
         /// </summary>
         public int BricksInFront
@@ -159,6 +166,8 @@ namespace Karol
                 World.Update(Position.X, Position.Z, this);
             }
         }
+
+        internal Marker Mark { get; set; }
         #endregion
 
         #region Konstruktoren
@@ -168,14 +177,18 @@ namespace Karol
         /// <param name="xStart">Start X Position des Roboters</param>
         /// <param name="zStart">Start Z Position des Roboters</param>
         /// <param name="world">Welt in der der Roboter leben soll</param>
+        /// <exception cref="InvalidActionException"></exception>
         public Robot(int xStart, int zStart, World world) 
         {
-            Position = new Position(xStart, 0, zStart);
+            Position = new Position(xStart, Math.Max(world.GetStackSize(xStart, zStart) - 1, 0), zStart);
             World = world;
             Delay = 300;
             JumpHeight = 1;
             MaxBackpackSize = -1;
             Paint = Color.Red;
+
+            if (World.HasCellAt(Position, out WorldElement e) || (e != null && !e.CanStackOnTop))
+                throw new InvalidActionException($"An der gegebenen Position {Position} befindet sich bereits etwas!");
 
             CanStackOnTop = false;
             CanPickUp = false;
@@ -183,10 +196,15 @@ namespace Karol
             YOffset = -2;
 
             world.RoboterCount++;
+            world.Robots.Add(this);
+
             RoboterBitmaps = ResourcesLoader.LoadRobotBitmaps(world.RoboterCount - 1);
             BitMap = RoboterBitmaps[FaceDirection.Offset];
 
             world.SetCell(xStart, zStart, this);
+            world.OnRobotAdded(this);
+
+            world.SetCell(1, 1, new Marker());
         }
 
         /// <summary>
@@ -250,16 +268,40 @@ namespace Karol
                 throw new InvalidMoveException(Position, newPos);
 
             newPos.Y = World.GetStackSize(newPos.X, newPos.Z);
-            if (HasRobot)
-                throw new InvalidMoveException(Position, newPos, "Auf einer Position kann sich maximal ein Roboter befinden!");
 
-            if (!CanMove)
-                throw new InvalidMoveException(Position, newPos, $"Ziel {newPos} liegt außerhalb der Sprunghöhe!");
+            if (World.HasCellAt(newPos.X, Math.Max(newPos.Y - 1, 0), newPos.Z, out WorldElement cell) && cell is Marker mark)
+            {
+                mark.RobotOnTop = this;
+                World.SetCell(Position, null);
 
-            World.SetCell(Position.X, Position.Y, Position.Z, null, false);
-            World.SetCell(newPos.X, newPos.Y, newPos.Z, this);
-            Position = newPos;
+                newPos.Y = Math.Max(newPos.Y - 1, 0);
+                Position = newPos;
+                Mark = mark;
+            }
+            else
+            {
+                if (HasRobot)
+                    throw new InvalidMoveException(Position, newPos, "Auf einer Position kann sich maximal ein Roboter befinden!");
 
+                if (!CanMove)
+                    throw new InvalidMoveException(Position, newPos, $"Ziel {newPos} liegt außerhalb der Sprunghöhe!");
+
+                if (HasMark)
+                {
+                    Mark.RobotOnTop = null;
+                    Mark = null;
+
+                    World.SetCell(newPos, this);
+                    Position = newPos;
+                }
+                else
+                {
+                    World.SetCell(Position, null, false);
+                    World.SetCell(newPos, this);
+                    Position = newPos;
+                }
+            }
+            
             Wait();
         }
 
@@ -332,6 +374,16 @@ namespace Karol
             World.SetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z, null, true);
 
             Wait();
+        }
+
+        public void PlaceMark()
+        {
+
+        }
+
+        public void PickUpMark()
+        {
+
         }
         #endregion
     }

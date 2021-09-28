@@ -18,17 +18,15 @@ namespace Karol
 {
     public class World
     {
+        #region Properties & Felder
         private const int MaxRoboterCount = 9;
-
-        private static readonly Bitmap BrickBitmap = Resources.Ziegel;
-        private static readonly Bitmap MarkBitmap = Resources.Marke;
-        private static readonly Bitmap KubeBitmap = Resources.Quader;
-
         private const int PixelWidth = 30;
         private const int PixelHeight = 15;
-        private Bounds Padding = new Bounds(50, 0, 40, 0);
+        private Bounds Padding = new Bounds(30, 0, 50, 0);
 
         private int _robotCount;
+
+        public event EventHandler<WorldChangedEventArgs> onRobotAdded;
 
         /// <summary>
         /// Versatz von zeile zu zeile in Pixeln
@@ -83,12 +81,15 @@ namespace Karol
             }
         }
 
-
+        internal List<Robot> Robots { get; set; }
         private WorldElement[,,] Grid { get; set; }
-        private KarolForm WorldForm { get; set; }
-        private PictureBox BlockMap { get; set; }
-        private Thread UIThread { get; set; }
 
+        private KarolForm WorldForm { get; set; }
+        private Thread UIThread { get; set; }
+        private PictureBox BlockMap => WorldForm.BlockMap;
+        #endregion
+
+        #region Konstruktoren
         /// <summary>
         /// Erstellt eine neue Welt für Karol. <br></br>
         /// Die Welt muss mindestens 1x1x1 groß sein.
@@ -105,11 +106,13 @@ namespace Karol
             SizeX = sizeX;
             SizeY = sizeY;
             SizeZ = sizeZ;
+            Robots = new List<Robot>();
             Grid = new WorldElement[sizeX, sizeZ, sizeY];
 
             OpenWindow();
             Pulse();
         }
+        #endregion
 
         #region Zeug
         /// <summary>
@@ -118,9 +121,9 @@ namespace Karol
         private async void OpenWindow()
         {
             WorldForm = new KarolForm();
-            WorldForm.SetUp(CreateGrid());
+            WorldForm.World = this;
             WorldForm.Text = $"Karol World - ({SizeX}, {SizeY}, {SizeZ})";
-            BlockMap = WorldForm.BlockMap;
+            WorldForm.SetUp(CreateGrid());
 
             await Task.Run(() =>
             {
@@ -339,6 +342,15 @@ namespace Karol
         {
             cell = Grid[xPos, zPos, yPos];
             return cell != null;
+        }
+
+        /// <summary>
+        /// Gibt zurück ob an der Position eine Zelle ist
+        /// </summary>
+        /// <returns>True wenn ja, ansonsten false</returns>
+        internal bool HasCellAt(Position pos, out WorldElement cell)
+        {
+            return HasCellAt(pos.X, pos.Y, pos.Z, out cell);
         }
         #endregion
 
@@ -616,6 +628,7 @@ namespace Karol
             }
 
             world.Redraw();
+            map.Dispose();
             return world;
         }
 
@@ -624,14 +637,56 @@ namespace Karol
 
         }
 
+        /// <summary>
+        /// Speichert einen Screenshot der Welt an dem angegebenen Pfad.
+        /// </summary>
+        /// <param name="filePath">Pfad wo das Bild gespeichert werden soll.</param>
         public void SaveScreenshot(string filePath)
+        {
+            Bitmap map = new Bitmap(WorldForm.GridPicture.Image);
+            map.DrawImage(0, 0, (Bitmap)BlockMap.Image);
+            map.Save(filePath);
+        }
+
+        /// <summary>
+        /// Speichert eine Ebene der Welt als .png Datei ab die weider geladen werden kann.
+        /// </summary>
+        /// <param name="filePath">Pfad wo die Datei gespeichert werden soll.</param>
+        /// <param name="layer">Welche Ebene der Welt soll gespeichert werden <br></br>
+        /// Standard ist 0
+        /// </param>
+        public void SaveImage(string filePath, int layer = 0)
+        {
+            if (layer >= SizeY)
+                return;
+
+            Bitmap map = new Bitmap(SizeX, SizeZ);
+            for(int x = 0; x < SizeX; x++)
+            {
+                for(int z = 0; z < SizeZ; z++)
+                {
+                    var cell = GetCell(x, layer, z);
+                    if (cell is Brick brick)
+                    {
+                        map.SetPixel(x, SizeZ - z - 1, brick.Paint);
+                    }
+                }
+            }
+
+            map.Save(filePath);
+        }
+
+        public void Save(string filePath)
         {
 
         }
+        #endregion
 
-        public void SaveImage(string filePath)
+        #region Events
+        internal void OnRobotAdded(Robot robo)
         {
-
+            var args = new WorldChangedEventArgs(robo);
+            onRobotAdded?.Invoke(this, args);
         }
         #endregion
     }

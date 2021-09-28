@@ -13,10 +13,7 @@ namespace TestApp
         static void Main(string[] args)
         {
             World w1 = new World(5, 5, 5);
-
             Robot r1 = new Robot(0, 0, w1);
-            Controller c1 = new Controller(r1);
-            r1.JumpHeight = 2;
         }
     }
 }

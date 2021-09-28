@@ -19,10 +19,19 @@ namespace Karol
             OpenWindow();
         }
 
+        public static Controller Create(Robot robo)
+        {
+            return new Controller(robo);
+        }
+
         #region Zeug
         private void OpenWindow()
         {
             Form = new ControllerForm();
+            Form.JumpHeightInput.Value = ControlledRobot.JumpHeight;
+            Form.DelayInput.Value = ControlledRobot.Delay;
+            Form.ColorDialog.Color = ControlledRobot.Paint;
+
             Task.Run(() =>
             {
                 Application.Run(Form);
@@ -83,8 +92,39 @@ namespace Karol
                     ControlledRobot.Place();
                 });
             };
+
+            Form.PickUpBrickButton.Click += (e, args) =>
+            {
+                RobotAction(() =>
+                {
+                    ControlledRobot.PickUp();
+                });
+            };
+
+            Form.DelayInput.ValueChanged += (e, args) =>
+            {
+                RobotAction(() =>
+                {
+                    ControlledRobot.Delay = (int)Form.DelayInput.Value;
+                });
+            };
+
+            Form.JumpHeightInput.ValueChanged += (e, args) =>
+            {
+                RobotAction(() =>
+                {
+                    ControlledRobot.JumpHeight = (int)Form.JumpHeightInput.Value;
+                });
+            };
+
+            Form.onColorChanged += (e, args) =>
+            {
+                RobotAction(() =>
+                {
+                    ControlledRobot.Paint = Form.ColorDialog.Color;
+                });
+            };
         }
-        #endregion
 
         private void MoveTo(Direction dir)
         {
@@ -104,9 +144,11 @@ namespace Karol
             catch(KarolException e)
             {
                 Form.LogListBox.Items.Add(e.Message);
+                Form.LogListBox.SelectedIndex = Form.LogListBox.Items.Count - 1;
             }
 
             ControlledRobot.Delay = delay;
         }
+        #endregion
     }
 }
