@@ -4,12 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using Karol.Core.Annotations;
 
 namespace Karol.Core.WorldElements
 {
     /// <summary>
     /// Stellt einen Ziegel in der Welt dar.
     /// </summary>
+    [WorldElementInfo('B')]
     public class Brick : WorldElement
     {
         private static readonly Bitmap BrickBitmap = Resources.Ziegel;
@@ -19,6 +21,7 @@ namespace Karol.Core.WorldElements
         public Brick(Color paint)
         {
             Paint = paint;
+
             BitMap = new Bitmap(BrickBitmap);
             BitMap.MultiplyColor(paint);
         }

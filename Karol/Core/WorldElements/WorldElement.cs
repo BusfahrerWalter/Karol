@@ -1,4 +1,9 @@
-﻿using System.Drawing;
+﻿using Karol.Core.Annotations;
+using System;
+using System.Drawing;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace Karol.Core.WorldElements
 {
@@ -7,6 +12,8 @@ namespace Karol.Core.WorldElements
     /// </summary>
     public abstract class WorldElement
     {
+        private static Type[] ElementTypes { get; set; }
+
         private bool _canStackOnTop = true;
         private bool _isObstacle = true;
         private bool _canPickUp = true;
@@ -57,6 +64,8 @@ namespace Karol.Core.WorldElements
             set => _canPickUp = value;
         }
 
+        internal char ID => GetInfo().ID;
+
         /// <summary>
         /// Aktuelle Position
         /// </summary>
@@ -72,5 +81,37 @@ namespace Karol.Core.WorldElements
         }
 
         public WorldElement() : this(null) { }
+
+        internal WorldElementInfoAttribute GetInfo()
+        {
+            return GetType()
+                .GetCustomAttributes(typeof(WorldElementInfoAttribute), true)
+                .First() as WorldElementInfoAttribute;
+        }
+
+        /// <summary>
+        /// Gibt das zu der ID gehörende World Element zurück. Funktioniert nicht für Roboter!
+        /// </summary>
+        /// <param name="id">ID des World Elements</param>
+        /// <returns>World Element</returns>
+        internal static WorldElement ForID(char id)
+        {
+            if(ElementTypes == null)
+            {
+                ElementTypes = typeof(WorldElement).Assembly
+                    .GetTypes()
+                    .Where(t => t.IsSubclassOf(typeof(WorldElement)))
+                    .ToArray();
+            }
+
+            var type = ElementTypes
+                .Where(t => t.GetCustomAttribute<WorldElementInfoAttribute>().ID == id)
+                .FirstOrDefault();
+
+            if (type == default)
+                return null;
+
+            return (WorldElement)Activator.CreateInstance(type);
+        }
     }
 }

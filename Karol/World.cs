@@ -13,6 +13,7 @@ using Karol.Properties;
 using System.Linq;
 using Karol.Core.WorldElements;
 using System.IO;
+using System.Text;
 
 namespace Karol
 {
@@ -641,9 +642,24 @@ namespace Karol
             return world;
         }
 
-        public void Load(string filePath)
+        /// <summary>
+        /// Lädt eine Welt aus einer .cskw (C Sharp Karol World) Datei.
+        /// </summary>
+        /// <param name="filePath">Ort an dem die Datei liegt.</param>
+        /// <returns></returns>
+        public static World Load(string filePath)
         {
-
+            //try
+            //{
+                WorldParser parser = new WorldParser();
+                World world = parser.Load(filePath);
+                world.Redraw();
+                return world;
+            //}
+            //catch (Exception)
+            //{
+            //    return null;
+            //}
         }
 
         /// <summary>
@@ -685,9 +701,14 @@ namespace Karol
             map.Save(filePath);
         }
 
+        /// <summary>
+        /// Speichert eine Welt als .cskw (C Sharp Karol World). Diese kann jederzeit wieder geladen werden.
+        /// </summary>
+        /// <param name="filePath">Ort an dem die Welt gespeichert werden soll.</param>
         public void Save(string filePath)
         {
-
+            WorldParser parser = new WorldParser();
+            parser.Save(this, filePath);
         }
         #endregion
 

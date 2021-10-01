@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using Karol.Core.Annotations;
 
 namespace Karol.Core.WorldElements
 {
-
+    [WorldElementInfo('M')]
     public class Marker : WorldElement, IContainer
     {
         private WorldElement _content;
