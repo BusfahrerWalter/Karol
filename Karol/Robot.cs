@@ -1,4 +1,5 @@
 ﻿using Karol.Core;
+using Karol.Core.Annotations;
 using Karol.Core.Exceptions;
 using Karol.Core.WorldElements;
 using Karol.Properties;
@@ -13,6 +14,7 @@ namespace Karol
     /// <summary>
     /// Ein Roboter der sich in einer Welt bewegen und dort leben kann...
     /// </summary>
+    [WorldElementInfo('R')]
     public class Robot : WorldElement
     {
         #region Properties / Felder
@@ -188,7 +190,7 @@ namespace Karol
         /// <exception cref="InvalidActionException"></exception>
         public Robot(int xStart, int zStart, World world) 
         {
-            Position = new Position(xStart, Math.Max(world.GetStackSize(xStart, zStart) - 1, 0), zStart);
+            Position = new Position(xStart, world.GetStackSize(xStart, zStart), zStart);
             World = world;
             Delay = 300;
             JumpHeight = 1;
@@ -212,8 +214,6 @@ namespace Karol
 
             world.SetCell(xStart, zStart, this);
             world.OnRobotAdded(this);
-
-            world.SetCell(1, 1, new Marker());
         }
 
         /// <summary>

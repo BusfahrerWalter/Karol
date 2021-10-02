@@ -13,10 +13,8 @@ namespace TestApp
         static void Main(string[] args)
         {
             World w1 = new World(5, 5, 5);
-
-            w1.SetCell(1, 0);
-            w1.SetCell(0, 0);
-            w1.SetCell(0, 1);
+            Robot r1 = new Robot(0, 0, w1);
+            World w2 = World.Load(@"C:\Users\damuelle\Desktop\map.cskw");
         }
     }
 }
