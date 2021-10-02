@@ -2,6 +2,7 @@
 using Karol.Core.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,8 +19,9 @@ namespace Karol
 
         public Robot ControlledRobot { get; set; }
         private ControllerForm Form { get; set; }
+        private Dictionary<Keys, Action> InputMap { get; set; }
 
-        public Controller(Robot robot)
+        private Controller(Robot robot)
         {
             ControlledRobot = robot;
             OpenWindow();
@@ -32,18 +34,18 @@ namespace Karol
         /// <returns>Controller instantz die mit dem Roboter verknüpft ist.</returns>
         public static Controller Create(Robot robo)
         {
+            if (ActiveControllers.Any(c => c.ControlledRobot == robo))
+            {
+                MessageBox.Show("Für einen Roboter kann nur eine Controller Instanz zur gleichen Zeit aktiv sein!", "Oh nein!!!!!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return null;
+            }
+
             return new Controller(robo);
         }
 
         #region Zeug
         private void OpenWindow()
         {
-            if(ActiveControllers.Any(c => c.ControlledRobot == ControlledRobot))
-            {
-                MessageBox.Show("Für einen Roboter kann nur eine Controller Instanz zur gleichen Zeit aktiv sein!", "Oh nein!!!!!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
             Form = new ControllerForm();
             Form.JumpHeightInput.Value = ControlledRobot.JumpHeight;
             Form.DelayInput.Value = ControlledRobot.Delay;
@@ -51,7 +53,24 @@ namespace Karol
             Form.MaxBackpackSizeInput.Value = ControlledRobot.MaxBackpackSize;
             Form.BrickCountInput.Value = ControlledRobot.BricksInBackpack;
             Form.Text = $"Karol Controller - Robot {ControlledRobot.Number}";
+
             ActiveControllers.Add(this);
+            InputMap = new Dictionary<Keys, Action>()
+            {
+                { Keys.W, Form.ButtonUp.PerformClick },
+                { Keys.A, Form.ButtonLeft.PerformClick },
+                { Keys.S, Form.ButtonDown.PerformClick },
+                { Keys.D, Form.ButtonRight.PerformClick },
+                { Keys.Up, Form.ButtonUp.PerformClick },
+                { Keys.Left, Form.ButtonLeft.PerformClick },
+                { Keys.Down, Form.ButtonDown.PerformClick },
+                { Keys.Right, Form.ButtonRight.PerformClick },
+                { Keys.E, Form.TurnRightButton.PerformClick },
+                { Keys.Q, Form.TurnLeftButton.PerformClick },
+                { Keys.R, Form.PickUpBrickButton.PerformClick },
+                { Keys.F, Form.PlaceBrickButton.PerformClick },
+                { Keys.M, PlaceOrPickUpMark },
+            };
 
             Task.Run(() =>
             {
@@ -63,6 +82,14 @@ namespace Karol
                 ActiveControllers.Remove(this);
             };
 
+            Form.KeyUp += (e, args) =>
+            {
+                if (!InputMap.ContainsKey(args.KeyCode))
+                    return;
+
+                InputMap[args.KeyCode].Invoke();
+            };
+            
             Form.ButtonDown.Click += (e, args) =>
             {
                 RobotAction(() =>
@@ -167,6 +194,19 @@ namespace Karol
                 });
             };
 
+            Form.GetPaintButton.Click += (e, args) =>
+            {
+                RobotAction(() =>
+                {
+                    if (ControlledRobot.BrickColor == Color.Transparent)
+                        return;
+
+                    ControlledRobot.Paint = ControlledRobot.BrickColor;
+                    Form.ColorDialog.Color = ControlledRobot.BrickColor;
+                    Form.SelectColorButton.BackColor = ControlledRobot.BrickColor;
+                });
+            };
+
             Form.BrickCountInput.ValueChanged += (e, args) =>
             {
                 RobotAction(() =>
@@ -210,6 +250,18 @@ namespace Karol
         {
             ControlledRobot.FaceDirection = dir;
             ControlledRobot.Move();
+        }
+
+        private void PlaceOrPickUpMark()
+        {
+            if (ControlledRobot.HasMark)
+            {
+                Form.PickUpMarkButton.PerformClick();
+            }
+            else
+            {
+                Form.PlaceMarkButton.PerformClick();
+            }
         }
 
         private void RobotAction(Action action)

@@ -53,6 +53,7 @@ namespace Karol.Core
             this.DelayInput = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
+            this.GetPaintButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BrickCountInput)).BeginInit();
@@ -210,6 +211,7 @@ namespace Karol.Core
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.GetPaintButton);
             this.groupBox2.Controls.Add(this.BrickCountInput);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.MaxBackpackSizeInput);
@@ -230,7 +232,7 @@ namespace Karol.Core
             // BrickCountInput
             // 
             this.BrickCountInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.BrickCountInput.Location = new System.Drawing.Point(96, 152);
+            this.BrickCountInput.Location = new System.Drawing.Point(96, 177);
             this.BrickCountInput.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -248,7 +250,7 @@ namespace Karol.Core
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 154);
+            this.label5.Location = new System.Drawing.Point(6, 179);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(69, 15);
             this.label5.TabIndex = 9;
@@ -257,7 +259,7 @@ namespace Karol.Core
             // MaxBackpackSizeInput
             // 
             this.MaxBackpackSizeInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MaxBackpackSizeInput.Location = new System.Drawing.Point(96, 123);
+            this.MaxBackpackSizeInput.Location = new System.Drawing.Point(96, 148);
             this.MaxBackpackSizeInput.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -275,7 +277,7 @@ namespace Karol.Core
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 125);
+            this.label4.Location = new System.Drawing.Point(6, 150);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(84, 15);
             this.label4.TabIndex = 7;
@@ -345,6 +347,16 @@ namespace Karol.Core
             this.label1.TabIndex = 0;
             this.label1.Text = "Delay";
             // 
+            // GetPaintButton
+            // 
+            this.GetPaintButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.GetPaintButton.Location = new System.Drawing.Point(96, 109);
+            this.GetPaintButton.Name = "GetPaintButton";
+            this.GetPaintButton.Size = new System.Drawing.Size(84, 23);
+            this.GetPaintButton.TabIndex = 11;
+            this.GetPaintButton.Text = "Get Paint";
+            this.GetPaintButton.UseVisualStyleBackColor = true;
+            // 
             // ControllerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -354,6 +366,7 @@ namespace Karol.Core
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.LogListBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ControllerForm";
@@ -384,7 +397,6 @@ namespace Karol.Core
         public System.Windows.Forms.Button PickUpBrickButton;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button SelectColorButton;
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.NumericUpDown JumpHeightInput;
         private System.Windows.Forms.Label label2;
@@ -395,5 +407,7 @@ namespace Karol.Core
         private System.Windows.Forms.Label label5;
         public System.Windows.Forms.NumericUpDown MaxBackpackSizeInput;
         private System.Windows.Forms.Label label4;
+        public System.Windows.Forms.Button GetPaintButton;
+        public System.Windows.Forms.Button SelectColorButton;
     }
 }

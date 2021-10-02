@@ -251,11 +251,23 @@ namespace Karol
         /// Übersetzt eine Grid-Koordinate in eine Pixel-Koordinate um einen Block an der gegebenen Stelle 
         /// zeichnen zu können.
         /// </summary>
+        /// <param name="pos">Grid-Koordinate</param>
+        /// <param name="map">Bild das gezeichnet werden soll</param>
+        /// <returns>Pixel-Koordinate</returns>
+        internal Point CellToPixelPos(Position pos, WorldElement element)
+        {
+            return CellToPixelPos(pos.X, pos.Y, pos.Z, element);
+        }
+
+        /// <summary>
+        /// Übersetzt eine Grid-Koordinate in eine Pixel-Koordinate um einen Block an der gegebenen Stelle 
+        /// zeichnen zu können.
+        /// </summary>
         /// <param name="xPos">X Grid-Koordinate</param>
         /// <param name="zPos">Z Grid-Koordinate</param>
         /// <param name="map">Bild das gezeichnet werden soll</param>
         /// <returns>Pixel-Koordinate</returns>
-        private Point CellToPixelPos(int xPos, int zPos, WorldElement element)
+        internal Point CellToPixelPos(int xPos, int zPos, WorldElement element)
         {
             int stackSize = GetStackSize(xPos, zPos);
             return CellToPixelPos(xPos, stackSize, zPos, element);
@@ -270,7 +282,7 @@ namespace Karol
         /// <param name="zPos">Z Grid-Koordinate</param>
         /// <param name="element">Bild das gezeichnet werden soll</param>
         /// <returns>Pixel-Koordinate</returns>
-        private Point CellToPixelPos(int xPos, int yPos, int zPos, WorldElement element)
+        internal Point CellToPixelPos(int xPos, int yPos, int zPos, WorldElement element)
         {
             int x = BottomLeft.X + zPos * LineOffset + xPos * PixelWidth;
             int y = BottomLeft.Y - element.BitMap.Height - (zPos + yPos) * PixelHeight + 1;
@@ -378,7 +390,7 @@ namespace Karol
             InvokeFormMethod(() =>
             {
                 var map = (Bitmap)BlockMap.Image;
-                map.Clear();
+                map.Clear(rect);
 
                 for (int x = 0; x < SizeX; x++)
                 {
@@ -441,7 +453,81 @@ namespace Karol
             #endregion
 
             // Funktioniert gut.. ist aber unfassbar langsam...
-            Redraw();
+            //Redraw();
+
+            //TODO: AAAAAAA
+            var blocks = new List<WorldElement>();
+            AddBlock(newCell.Position);
+            AddBlock(newCell.Position + new Position(1, 0, 0));
+            AddBlock(newCell.Position + new Position(0, 0, -1));
+            AddBlock(newCell.Position + new Position(1, 0, -1));
+
+            var rect = GetRect();
+            var map = (Bitmap)BlockMap.Image;
+            //map.Clear(rect);
+            Console.WriteLine(rect);
+            foreach(var e in blocks)
+            {
+                if (e == null)
+                    continue;
+
+                var pos = CellToPixelPos(e.Position, e);
+                map.DrawImage(pos, e.BitMap);
+            }
+
+            InvokeFormMethod(() =>
+            {
+                BlockMap.Invalidate(rect);
+                BlockMap.Update();
+            });
+
+            void AddBlock(Position pos)
+            {
+                if (IsPositionValid(pos))
+                {
+                    var cell = GetCell(pos);
+                    blocks.Add(cell);
+                }
+            }
+
+            Rectangle GetRect()
+            {
+                var first = blocks.FirstOrDefault(bl => bl != null);
+                if (first == null)
+                    return new Rectangle();
+
+                if (blocks.Count(b => b != null) == 1)
+                    return first.Rect;
+
+                int minX = first.Rect.X;
+                int maxX = 0;
+                int minY = first.Rect.Y;
+                int maxY = 0;
+                foreach(var b in blocks.Where(bl => bl != null))
+                {
+                    var rect = b.Rect;
+                    if (rect.X < minX)
+                        minX = rect.X;
+                    if (rect.X > maxX)
+                        maxX = rect.X;
+
+                    if (rect.Y < minY)
+                        minY = rect.Y;
+                    if (rect.Y > maxY)
+                        maxY = rect.Y;
+                }
+
+                int height = maxY - minY;
+                int widht = maxX - minX;
+
+                if (minX == maxX)
+                    widht = first.Rect.Width;
+
+                if (minY == maxY)
+                    height = first.Rect.Height;
+
+                return new Rectangle(minX, minY, widht, height);
+            }
         }
         #endregion
 
@@ -461,6 +547,7 @@ namespace Karol
 
             Grid[xPos, zPos, stackSize] = element;
             element.Position = new Position(xPos, stackSize, zPos);
+            element.World = this;
 
             return element;
         }
@@ -481,7 +568,7 @@ namespace Karol
         /// <param name="xPos">X Position des Blocks</param>
         /// <param name="zPos">Z Position des Blocks</param>
         /// <param name="updateView">Soll das View neu Gerendert werden</param>
-        internal void SetCell(int xPos, int zPos, bool updateView = true)
+        public void SetCell(int xPos, int zPos, bool updateView = true)
         {
             SetCell(xPos, zPos, new Brick(), updateView);
         }
@@ -521,7 +608,10 @@ namespace Karol
         {
             Grid[xPos, zPos, yPos] = element;
             if(element != null)
+            {
                 element.Position = new Position(xPos, yPos, zPos);
+                element.World = this;
+            }
 
             if (updateView)
                 Update(xPos, zPos, element);

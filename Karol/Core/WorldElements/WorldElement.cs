@@ -13,9 +13,19 @@ namespace Karol.Core.WorldElements
         private Position _position;
 
         /// <summary>
+        /// Die Welt in der sich dieses Objekt befindet.
+        /// </summary>
+        public World World { get; internal set; }
+
+        /// <summary>
         /// Bild das Gerendert werden soll.
         /// </summary>
         internal Bitmap BitMap { get; set; }
+
+        /// <summary>
+        /// Rechteck das Position und Größe der Bitmap angibt.
+        /// </summary>
+        internal Rectangle Rect => new Rectangle(World.CellToPixelPos(Position, this), new Size(BitMap.Width, BitMap.Height));
 
         /// <summary>
         /// X Offset für das Bild

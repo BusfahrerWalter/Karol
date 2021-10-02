@@ -13,8 +13,10 @@ namespace TestApp
         static void Main(string[] args)
         {
             World w1 = new World(5, 5, 5);
-            Robot r1 = new Robot(0, 0, w1);
-            Robot r2 = new Robot(4, 4, w1);
+
+            w1.SetCell(1, 0);
+            w1.SetCell(0, 0);
+            w1.SetCell(0, 1);
         }
     }
 }

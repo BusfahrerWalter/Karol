@@ -27,10 +27,6 @@ namespace Karol
         public event EventHandler onPickUpBrick;
 
         /// <summary>
-        /// Die Welt in der dieser Roboter lebt
-        /// </summary>
-        public World World { get; private set; }
-        /// <summary>
         /// Gibt an wie hoch der Roboter Springen kann. (in Zellen) <br></br>
         /// Standard ist 1
         /// </summary>
