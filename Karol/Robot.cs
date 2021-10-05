@@ -2,10 +2,12 @@
 using Karol.Core.Annotations;
 using Karol.Core.Exceptions;
 using Karol.Core.WorldElements;
+using Karol.Extensions;
 using Karol.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Media;
 using System.Text;
 using System.Threading;
 
@@ -19,15 +21,19 @@ namespace Karol
     {
         #region Properties / Felder
         private Direction _faceDirection = Direction.North;
+        private bool _isVisible = true;
+        private int _bricksInBackpack;
 
         private Bitmap[] RoboterBitmaps { get; set; }
         private DateTime WaitStartTime { get; set; }
+        internal Marker Mark { get; set; }
 
         public event EventHandler onEnterMark;
         public event EventHandler onLeaveMark;
         public event EventHandler onPlaceBrick;
         public event EventHandler onPickUpBrick;
 
+        #region Anderes Public
         /// <summary>
         /// Gibt an wie hoch der Roboter Springen kann. (in Zellen) <br></br>
         /// Standard ist 1
@@ -43,17 +49,68 @@ namespace Karol
         /// Standard ist Rot
         /// </summary>
         public Color Paint { get; set; }
+        /// <summary>
+        /// Gibt die nummer des Roboters zurück.
+        /// </summary>
+        public int Identifier { get; private set; }
 
+        /// <summary>
+        /// Sichtbarkeit des Roboters <br></br>
+        /// Standard ist True
+        /// </summary>
+        public bool IsVisible
+        {
+            get => _isVisible;
+            set
+            {
+                _isVisible = value;
+                BitMap = value ? RoboterBitmaps[FaceDirection.Offset] : ImageExtension.EmptyBitmap;
+                World.Update(Position.X, Position.Z, this);
+            }
+        }
+        #endregion
+
+        #region Rucksack
         /// <summary>
         /// Die Anzahl der Ziegel die sich im Rucksack befinden.
         /// </summary>
-        public int BricksInBackpack { get; internal set; }
+        public int BricksInBackpack
+        {
+            get => _bricksInBackpack;
+            set
+            {
+                if (value > MaxBackpackSize && MaxBackpackSize != -1)
+                    throw new InvalidOperationException($"Kann maximale Rucksack größe von {MaxBackpackSize} nicht überschreiben.");
+
+                _bricksInBackpack = value;
+            }
+        }
         /// <summary>
         /// Maximale Rucksackgröße. Durch setzen von -1 wird die Rucksack funktion deaktiviert. <br></br>
         /// Standard ist -1
         /// </summary>
         public int MaxBackpackSize { get; set; }
 
+        /// <summary>
+        /// Gibt zurück ob der Rucksack voll ist. <br></br>
+        /// Gibt immer false zurück wenn MaxBackpackSize = -1 ist.
+        /// </summary>
+        public bool IsBackpackFull
+        {
+            get => BricksInBackpack == MaxBackpackSize && MaxBackpackSize != -1;
+        }
+
+        /// <summary>
+        /// Gibt zurück ob der Rucksack leer ist. <br></br>
+        /// Gibt immer false zurück wenn MaxBackpackSize = -1 ist.
+        /// </summary>
+        public bool IsBackpackEmpty
+        {
+            get => BricksInBackpack == 0 && MaxBackpackSize != -1;
+        }
+        #endregion
+
+        #region Abfragen auf andere Zellen
         /// <summary>
         /// Gibt zurück ob der Roboter einen Schritt nach vorne machen kann oder nicht.
         /// </summary>
@@ -76,7 +133,7 @@ namespace Karol
             }
         }
         /// <summary>
-        /// Gibt zurück ob sich vor dem Roboter eine Wand oder ein Ziegel befindet.
+        /// Gibt zurück ob sich der Roboter vor einer Wand bzw. ein Quader befindet.
         /// </summary>
         public bool HasWall
         {
@@ -86,7 +143,7 @@ namespace Karol
                 if (!World.IsPositionValid(facePos))
                     return true;
 
-                return World.HasCellAt(facePos.X, facePos.Y, facePos.Z, out WorldElement e) && e is Brick;
+                return World.HasCellAt(facePos.X, facePos.Y, facePos.Z, out WorldElement e) && e is Cube;
             }
         }
         /// <summary>
@@ -110,6 +167,29 @@ namespace Karol
         {
             get => Mark != null;
         }
+
+        /// <summary>
+        /// Gibt zurück ob sich vor dem Roboter ein Ziegel befindet
+        /// </summary>
+        public bool HasBrick
+        {
+            get => HasBrickInDirection(FaceDirection);
+        }
+        /// <summary>
+        /// Gibt zurück ob sich links neben dem Roboter ein Ziegel befindet
+        /// </summary>
+        public bool HasBrickLeft
+        {
+            get => HasBrickInDirection(FaceDirection + 1);
+        }
+        /// <summary>
+        /// Gibt zurück ob sich rechts neben dem Roboter ein Ziegel befindet
+        /// </summary>
+        public bool HasBrickRight
+        {
+            get => HasBrickInDirection(FaceDirection - 1);
+        }
+
         /// <summary>
         /// Gibt die anzahl der Ziegel vor dem Roboter zurück.
         /// </summary>
@@ -146,6 +226,29 @@ namespace Karol
         }
 
         /// <summary>
+        /// Gibt die nummer des Roboters vor dem Roboter zurück. <br></br>
+        /// Gibt -1 zurück wenn sich vor dem Roboter kein anderer befindet.
+        /// </summary>
+        public int FrontRobotIdentifier
+        {
+            get
+            {
+                var pos = FaceDirection.OffsetPosition(Position);
+                pos.Y = World.GetStackSize(pos.X, pos.Z) - 1;
+                if (!World.IsPositionValid(pos))
+                    return -1;
+
+                var cell = World.GetCell(pos);
+                if (!(cell is Robot robo))
+                    return -1;
+
+                return robo.Identifier;
+            }
+        }
+        #endregion
+
+        #region Direction
+        /// <summary>
         /// Schaut der Roboter gerade nach Norden
         /// </summary>
         public bool IsFacingNorth => FaceDirection == Direction.North;
@@ -161,7 +264,6 @@ namespace Karol
         /// Schaut der Roboter gerade nach Westen
         /// </summary>
         public bool IsFacingEast => FaceDirection == Direction.East;
-
         /// <summary>
         /// Aktuelle Blickrichtung des Roboters
         /// </summary>
@@ -171,13 +273,11 @@ namespace Karol
             internal set
             {
                 _faceDirection = value;
-                BitMap = RoboterBitmaps[FaceDirection.Offset];
+                BitMap = IsVisible ? RoboterBitmaps[FaceDirection.Offset] : ImageExtension.EmptyBitmap;
                 World.Update(Position.X, Position.Z, this);
             }
         }
-
-        internal Marker Mark { get; set; }
-        internal int Number { get; set; }
+        #endregion
         #endregion
 
         #region Konstruktoren
@@ -210,7 +310,7 @@ namespace Karol
 
             RoboterBitmaps = ResourcesLoader.LoadRobotBitmaps(world.RoboterCount - 1);
             BitMap = RoboterBitmaps[FaceDirection.Offset];
-            Number = world.RoboterCount;
+            Identifier = world.RoboterCount;
 
             world.SetCell(xStart, zStart, this);
             world.OnRobotAdded(this);
@@ -231,6 +331,15 @@ namespace Karol
         #endregion
 
         #region Util
+        /// <summary>
+        /// Lässt den Roboter warten.
+        /// </summary>
+        /// <param name="time">Dauer die der Roboter warten soll.</param>
+        public void Wait(int time)
+        {
+            Thread.Sleep(time);
+        }
+
         private void Wait()
         {
             int time = (int)(DateTime.Now - WaitStartTime).TotalMilliseconds;
@@ -240,6 +349,15 @@ namespace Karol
         private void PrepareWait()
         {
             WaitStartTime = DateTime.Now;
+        }
+
+        private bool HasBrickInDirection(Direction dir)
+        {
+            var pos = dir.OffsetPosition(Position);
+            if (!World.IsPositionValid(pos))
+                return false;
+
+            return World.HasCellAt(pos, out WorldElement cell) && cell is Brick;
         }
         #endregion
 
@@ -430,6 +548,49 @@ namespace Karol
             Mark = null;
             OnLeaveMark();
             Wait();
+        }
+
+        public void PlaceCube()
+        {
+
+        }
+
+        public void PickUpCube()
+        {
+
+        }
+
+        /// <summary>
+        /// Der Roboter gibt einen Piep-Ton aus
+        /// </summary>
+        public void MakeSound()
+        {
+            SystemSounds.Beep.Play();
+        }
+
+        /// <summary>
+        /// Gibt den Zustand des Roboters als String aus.
+        /// </summary>
+        /// <returns>Zustand des Roboters</returns>
+        public override string ToString()
+        {
+            return $"Robot {Identifier}: {Position} {FaceDirection}";
+        }
+
+        /// <summary>
+        /// Prüft ob das übergebene Objekt dieser Roboter ist.
+        /// </summary>
+        /// <param name="obj">Anderes Objekt</param>
+        /// <returns>True wenn sie gleich sind. Ansonsten False</returns>
+        public override bool Equals(object obj)
+        {
+            return obj is Robot robot &&
+                   Identifier == robot.Identifier;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Identifier);
         }
         #endregion
 

@@ -454,81 +454,83 @@ namespace Karol
             #endregion
 
             // Funktioniert gut.. ist aber unfassbar langsam...
-            //Redraw();
+            Redraw();
 
+            #region AAAAAAAAAAA
             //TODO: AAAAAAA
-            var blocks = new List<WorldElement>();
-            AddBlock(newCell.Position);
-            AddBlock(newCell.Position + new Position(1, 0, 0));
-            AddBlock(newCell.Position + new Position(0, 0, -1));
-            AddBlock(newCell.Position + new Position(1, 0, -1));
+            //var blocks = new List<WorldElement>();
+            //AddBlock(newCell.Position);
+            //AddBlock(newCell.Position + new Position(1, 0, 0));
+            //AddBlock(newCell.Position + new Position(0, 0, -1));
+            //AddBlock(newCell.Position + new Position(1, 0, -1));
 
-            var rect = GetRect();
-            var map = (Bitmap)BlockMap.Image;
-            //map.Clear(rect);
-            Console.WriteLine(rect);
-            foreach(var e in blocks)
-            {
-                if (e == null)
-                    continue;
+            //var rect = GetRect();
+            //var map = (Bitmap)BlockMap.Image;
+            ////map.Clear(rect);
+            //Console.WriteLine(rect);
+            //foreach(var e in blocks)
+            //{
+            //    if (e == null)
+            //        continue;
 
-                var pos = CellToPixelPos(e.Position, e);
-                map.DrawImage(pos, e.BitMap);
-            }
+            //    var pos = CellToPixelPos(e.Position, e);
+            //    map.DrawImage(pos, e.BitMap);
+            //}
 
-            InvokeFormMethod(() =>
-            {
-                BlockMap.Invalidate(rect);
-                BlockMap.Update();
-            });
+            //InvokeFormMethod(() =>
+            //{
+            //    BlockMap.Invalidate(rect);
+            //    BlockMap.Update();
+            //});
 
-            void AddBlock(Position pos)
-            {
-                if (IsPositionValid(pos))
-                {
-                    var cell = GetCell(pos);
-                    blocks.Add(cell);
-                }
-            }
+            //void AddBlock(Position pos)
+            //{
+            //    if (IsPositionValid(pos))
+            //    {
+            //        var cell = GetCell(pos);
+            //        blocks.Add(cell);
+            //    }
+            //}
 
-            Rectangle GetRect()
-            {
-                var first = blocks.FirstOrDefault(bl => bl != null);
-                if (first == null)
-                    return new Rectangle();
+            //Rectangle GetRect()
+            //{
+            //    var first = blocks.FirstOrDefault(bl => bl != null);
+            //    if (first == null)
+            //        return new Rectangle();
 
-                if (blocks.Count(b => b != null) == 1)
-                    return first.Rect;
+            //    if (blocks.Count(b => b != null) == 1)
+            //        return first.Rect;
 
-                int minX = first.Rect.X;
-                int maxX = 0;
-                int minY = first.Rect.Y;
-                int maxY = 0;
-                foreach(var b in blocks.Where(bl => bl != null))
-                {
-                    var rect = b.Rect;
-                    if (rect.X < minX)
-                        minX = rect.X;
-                    if (rect.X > maxX)
-                        maxX = rect.X;
+            //    int minX = first.Rect.X;
+            //    int maxX = 0;
+            //    int minY = first.Rect.Y;
+            //    int maxY = 0;
+            //    foreach(var b in blocks.Where(bl => bl != null))
+            //    {
+            //        var rect = b.Rect;
+            //        if (rect.X < minX)
+            //            minX = rect.X;
+            //        if (rect.X > maxX)
+            //            maxX = rect.X;
 
-                    if (rect.Y < minY)
-                        minY = rect.Y;
-                    if (rect.Y > maxY)
-                        maxY = rect.Y;
-                }
+            //        if (rect.Y < minY)
+            //            minY = rect.Y;
+            //        if (rect.Y > maxY)
+            //            maxY = rect.Y;
+            //    }
 
-                int height = maxY - minY;
-                int widht = maxX - minX;
+            //    int height = maxY - minY;
+            //    int widht = maxX - minX;
 
-                if (minX == maxX)
-                    widht = first.Rect.Width;
+            //    if (minX == maxX)
+            //        widht = first.Rect.Width;
 
-                if (minY == maxY)
-                    height = first.Rect.Height;
+            //    if (minY == maxY)
+            //        height = first.Rect.Height;
 
-                return new Rectangle(minX, minY, widht, height);
-            }
+            //    return new Rectangle(minX, minY, widht, height);
+            //}
+            #endregion
         }
         #endregion
 
@@ -714,8 +716,11 @@ namespace Karol
 
             var map = new Bitmap(filePath);
             World world = new World(map.Width, worldHeight, map.Height);
+            world.WorldForm.ProgressBar.Visible = true;
+            world.WorldForm.ProgressBar.Value = 0;
+            world.WorldForm.ProgressBar.MarqueeAnimationSpeed = 30;
 
-            for(int x = 0; x < map.Width; x++)
+            for (int x = 0; x < map.Width; x++)
             {
                 for(int y = 0; y < map.Height; y++)
                 {
@@ -739,17 +744,21 @@ namespace Karol
         /// <returns></returns>
         public static World Load(string filePath)
         {
-            //try
-            //{
+            try
+            {
                 WorldParser parser = new WorldParser();
                 World world = parser.Load(filePath);
                 world.Redraw();
                 return world;
-            //}
-            //catch (Exception)
-            //{
-            //    return null;
-            //}
+            }
+            catch (InvalidDataException e)
+            {
+                throw e;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         /// <summary>

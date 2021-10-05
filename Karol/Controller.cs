@@ -52,7 +52,7 @@ namespace Karol
             Form.ColorDialog.Color = ControlledRobot.Paint;
             Form.MaxBackpackSizeInput.Value = ControlledRobot.MaxBackpackSize;
             Form.BrickCountInput.Value = ControlledRobot.BricksInBackpack;
-            Form.Text = $"Karol Controller - Robot {ControlledRobot.Number}";
+            Form.Text = $"Karol Controller - Robot {ControlledRobot.Identifier}";
 
             ActiveControllers.Add(this);
             InputMap = new Dictionary<Keys, Action>()
@@ -220,6 +220,30 @@ namespace Karol
                 RobotAction(() =>
                 {
                     ControlledRobot.MaxBackpackSize = (int)Form.MaxBackpackSizeInput.Value;
+                });
+            };
+
+            Form.PlaceCubeButton.Click += (e, args) =>
+            {
+                RobotAction(() =>
+                {
+                    ControlledRobot.PlaceCube();
+                });
+            };
+
+            Form.PickUpCubeButton.Click += (e, args) =>
+            {
+                RobotAction(() =>
+                {
+                    ControlledRobot.PickUpCube();
+                });
+            };
+
+            Form.IsVisibleCheckbox.Click += (e, args) =>
+            {
+                RobotAction(() =>
+                {
+                    ControlledRobot.IsVisible = Form.IsVisibleCheckbox.Checked;
                 });
             };
 

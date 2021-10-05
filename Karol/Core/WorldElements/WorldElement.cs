@@ -12,17 +12,27 @@ namespace Karol.Core.WorldElements
     /// </summary>
     public abstract class WorldElement
     {
+        #region Properties & Felder
         private static Type[] ElementTypes { get; set; }
 
         private bool _canStackOnTop = true;
         private bool _isObstacle = true;
         private bool _canPickUp = true;
         private Position _position;
+        private World _world;
 
         /// <summary>
         /// Die Welt in der sich dieses Objekt befindet.
         /// </summary>
-        public World World { get; internal set; }
+        public World World
+        {
+            get => _world;
+            set
+            {
+                _world = value;
+                OnWorldSet();
+            }
+        }
 
         /// <summary>
         /// Bild das Gerendert werden soll.
@@ -84,14 +94,18 @@ namespace Karol.Core.WorldElements
             get => _position;
             set => _position = value;
         }
+        #endregion
 
+        #region Konstruktoren
         public WorldElement(Bitmap bitMap)
         {
             BitMap = bitMap;
         }
 
         public WorldElement() : this(null) { }
+        #endregion
 
+        #region Methoden
         internal WorldElementInfoAttribute GetInfo()
         {
             return GetType()
@@ -100,11 +114,11 @@ namespace Karol.Core.WorldElements
         }
 
         /// <summary>
-        /// Gibt das zu der ID gehörende World Element zurück. Funktioniert nicht für Roboter!
+        /// Gibt das zu der ID gehörende World Element zurück. Funktioniert für Roboter nur mit Parametern!
         /// </summary>
         /// <param name="id">ID des World Elements</param>
         /// <returns>World Element</returns>
-        internal static WorldElement ForID(char id)
+        internal static WorldElement ForID(char id, params object[] parameter)
         {
             if(ElementTypes == null)
             {
@@ -121,7 +135,10 @@ namespace Karol.Core.WorldElements
             if (type == default)
                 return null;
 
-            return (WorldElement)Activator.CreateInstance(type);
+            return (WorldElement)Activator.CreateInstance(type, parameter);
         }
+
+        internal virtual void OnWorldSet() { }
+        #endregion
     }
 }

@@ -8,6 +8,8 @@ namespace Karol.Extensions
 {
     internal static class ImageExtension
     {
+        public static Bitmap EmptyBitmap => new Bitmap(1, 1);
+
         #region Draw Line / Path
         public static void DrawLine(this Bitmap img, int x1, int y1, int x2, int y2, Color color)
         {

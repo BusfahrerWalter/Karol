@@ -20,6 +20,7 @@ namespace Karol
         private System.ComponentModel.IContainer components;
         private ToolStripMenuItem SaveImageButton;
         private ToolStripMenuItem SaveButton;
+        public ProgressBar ProgressBar;
         private ToolStripMenuItem SaveScreenshotButton;
 
         public void SetUp(Image image)
@@ -52,6 +53,7 @@ namespace Karol
             this.SaveButton = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveScreenshotButton = new System.Windows.Forms.ToolStripMenuItem();
             this.RobotsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ProgressBar = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.GridPicture)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -103,11 +105,25 @@ namespace Karol
             this.RobotsMenuItem.Size = new System.Drawing.Size(159, 22);
             this.RobotsMenuItem.Text = "Take Control";
             // 
+            // ProgressBar
+            // 
+            this.ProgressBar.BackColor = System.Drawing.SystemColors.Control;
+            this.ProgressBar.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            this.ProgressBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ProgressBar.Location = new System.Drawing.Point(0, 0);
+            this.ProgressBar.Name = "ProgressBar";
+            this.ProgressBar.Size = new System.Drawing.Size(133, 5);
+            this.ProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.ProgressBar.TabIndex = 1;
+            this.ProgressBar.UseWaitCursor = true;
+            this.ProgressBar.Value = 1;
+            // 
             // KarolForm
             // 
             this.AutoScroll = true;
             this.AutoScrollMargin = new System.Drawing.Size(10, 10);
             this.ClientSize = new System.Drawing.Size(133, 103);
+            this.Controls.Add(this.ProgressBar);
             this.Controls.Add(this.GridPicture);
             this.HelpButton = true;
             this.MaximumSize = new System.Drawing.Size(1920, 1080);

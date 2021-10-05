@@ -41,7 +41,11 @@ namespace Karol.Core
             this.PickUpMarkButton = new System.Windows.Forms.Button();
             this.PickUpBrickButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.PickUpCubeButton = new System.Windows.Forms.Button();
+            this.PlaceCubeButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.IsVisibleCheckbox = new System.Windows.Forms.CheckBox();
+            this.GetPaintButton = new System.Windows.Forms.Button();
             this.BrickCountInput = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.MaxBackpackSizeInput = new System.Windows.Forms.NumericUpDown();
@@ -53,7 +57,7 @@ namespace Karol.Core
             this.DelayInput = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
-            this.GetPaintButton = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BrickCountInput)).BeginInit();
@@ -124,9 +128,9 @@ namespace Karol.Core
             this.PlaceMarkButton.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.PlaceMarkButton.Image = global::Karol.Properties.Resources.MarkDown;
             this.PlaceMarkButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.PlaceMarkButton.Location = new System.Drawing.Point(77, 111);
+            this.PlaceMarkButton.Location = new System.Drawing.Point(10, 157);
             this.PlaceMarkButton.Name = "PlaceMarkButton";
-            this.PlaceMarkButton.Size = new System.Drawing.Size(63, 40);
+            this.PlaceMarkButton.Size = new System.Drawing.Size(62, 40);
             this.PlaceMarkButton.TabIndex = 5;
             this.PlaceMarkButton.UseVisualStyleBackColor = true;
             // 
@@ -159,7 +163,7 @@ namespace Karol.Core
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LogListBox.FormattingEnabled = true;
             this.LogListBox.ItemHeight = 15;
-            this.LogListBox.Location = new System.Drawing.Point(9, 230);
+            this.LogListBox.Location = new System.Drawing.Point(9, 268);
             this.LogListBox.Name = "LogListBox";
             this.LogListBox.Size = new System.Drawing.Size(348, 139);
             this.LogListBox.TabIndex = 8;
@@ -170,9 +174,9 @@ namespace Karol.Core
             this.PickUpMarkButton.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.PickUpMarkButton.Image = global::Karol.Properties.Resources.MarkUp;
             this.PickUpMarkButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.PickUpMarkButton.Location = new System.Drawing.Point(77, 157);
+            this.PickUpMarkButton.Location = new System.Drawing.Point(78, 157);
             this.PickUpMarkButton.Name = "PickUpMarkButton";
-            this.PickUpMarkButton.Size = new System.Drawing.Size(63, 40);
+            this.PickUpMarkButton.Size = new System.Drawing.Size(62, 40);
             this.PickUpMarkButton.TabIndex = 10;
             this.PickUpMarkButton.UseVisualStyleBackColor = true;
             // 
@@ -182,7 +186,7 @@ namespace Karol.Core
             this.PickUpBrickButton.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.PickUpBrickButton.Image = global::Karol.Properties.Resources.BrickUp;
             this.PickUpBrickButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.PickUpBrickButton.Location = new System.Drawing.Point(10, 157);
+            this.PickUpBrickButton.Location = new System.Drawing.Point(78, 111);
             this.PickUpBrickButton.Name = "PickUpBrickButton";
             this.PickUpBrickButton.Size = new System.Drawing.Size(62, 40);
             this.PickUpBrickButton.TabIndex = 9;
@@ -190,6 +194,8 @@ namespace Karol.Core
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.PickUpCubeButton);
+            this.groupBox1.Controls.Add(this.PlaceCubeButton);
             this.groupBox1.Controls.Add(this.ButtonRight);
             this.groupBox1.Controls.Add(this.PickUpMarkButton);
             this.groupBox1.Controls.Add(this.ButtonLeft);
@@ -202,15 +208,41 @@ namespace Karol.Core
             this.groupBox1.Controls.Add(this.PlaceMarkButton);
             this.groupBox1.Location = new System.Drawing.Point(9, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(150, 212);
+            this.groupBox1.Size = new System.Drawing.Size(150, 251);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Actions";
+            // 
+            // PickUpCubeButton
+            // 
+            this.PickUpCubeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PickUpCubeButton.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.PickUpCubeButton.Image = global::Karol.Properties.Resources.MarkUp;
+            this.PickUpCubeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.PickUpCubeButton.Location = new System.Drawing.Point(78, 203);
+            this.PickUpCubeButton.Name = "PickUpCubeButton";
+            this.PickUpCubeButton.Size = new System.Drawing.Size(62, 40);
+            this.PickUpCubeButton.TabIndex = 12;
+            this.PickUpCubeButton.UseVisualStyleBackColor = true;
+            // 
+            // PlaceCubeButton
+            // 
+            this.PlaceCubeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PlaceCubeButton.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.PlaceCubeButton.Image = global::Karol.Properties.Resources.MarkDown;
+            this.PlaceCubeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.PlaceCubeButton.Location = new System.Drawing.Point(10, 203);
+            this.PlaceCubeButton.Name = "PlaceCubeButton";
+            this.PlaceCubeButton.Size = new System.Drawing.Size(62, 40);
+            this.PlaceCubeButton.TabIndex = 11;
+            this.PlaceCubeButton.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.button1);
+            this.groupBox2.Controls.Add(this.IsVisibleCheckbox);
             this.groupBox2.Controls.Add(this.GetPaintButton);
             this.groupBox2.Controls.Add(this.BrickCountInput);
             this.groupBox2.Controls.Add(this.label5);
@@ -224,15 +256,39 @@ namespace Karol.Core
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Location = new System.Drawing.Point(165, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(192, 212);
+            this.groupBox2.Size = new System.Drawing.Size(192, 251);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Settings";
             // 
+            // IsVisibleCheckbox
+            // 
+            this.IsVisibleCheckbox.AutoSize = true;
+            this.IsVisibleCheckbox.Checked = true;
+            this.IsVisibleCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.IsVisibleCheckbox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.IsVisibleCheckbox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.IsVisibleCheckbox.Location = new System.Drawing.Point(6, 196);
+            this.IsVisibleCheckbox.Name = "IsVisibleCheckbox";
+            this.IsVisibleCheckbox.Size = new System.Drawing.Size(113, 19);
+            this.IsVisibleCheckbox.TabIndex = 12;
+            this.IsVisibleCheckbox.Text = "Is Roboter Visible";
+            this.IsVisibleCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // GetPaintButton
+            // 
+            this.GetPaintButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.GetPaintButton.Location = new System.Drawing.Point(96, 109);
+            this.GetPaintButton.Name = "GetPaintButton";
+            this.GetPaintButton.Size = new System.Drawing.Size(84, 23);
+            this.GetPaintButton.TabIndex = 11;
+            this.GetPaintButton.Text = "Get Paint";
+            this.GetPaintButton.UseVisualStyleBackColor = true;
+            // 
             // BrickCountInput
             // 
             this.BrickCountInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.BrickCountInput.Location = new System.Drawing.Point(96, 177);
+            this.BrickCountInput.Location = new System.Drawing.Point(96, 167);
             this.BrickCountInput.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -250,7 +306,7 @@ namespace Karol.Core
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 179);
+            this.label5.Location = new System.Drawing.Point(6, 169);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(69, 15);
             this.label5.TabIndex = 9;
@@ -259,7 +315,7 @@ namespace Karol.Core
             // MaxBackpackSizeInput
             // 
             this.MaxBackpackSizeInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MaxBackpackSizeInput.Location = new System.Drawing.Point(96, 148);
+            this.MaxBackpackSizeInput.Location = new System.Drawing.Point(96, 138);
             this.MaxBackpackSizeInput.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -277,7 +333,7 @@ namespace Karol.Core
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 150);
+            this.label4.Location = new System.Drawing.Point(6, 140);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(84, 15);
             this.label4.TabIndex = 7;
@@ -347,21 +403,21 @@ namespace Karol.Core
             this.label1.TabIndex = 0;
             this.label1.Text = "Delay";
             // 
-            // GetPaintButton
+            // button1
             // 
-            this.GetPaintButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.GetPaintButton.Location = new System.Drawing.Point(96, 109);
-            this.GetPaintButton.Name = "GetPaintButton";
-            this.GetPaintButton.Size = new System.Drawing.Size(84, 23);
-            this.GetPaintButton.TabIndex = 11;
-            this.GetPaintButton.Text = "Get Paint";
-            this.GetPaintButton.UseVisualStyleBackColor = true;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Location = new System.Drawing.Point(96, 222);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(84, 23);
+            this.button1.TabIndex = 13;
+            this.button1.Text = "Suicide";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // ControllerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(369, 381);
+            this.ClientSize = new System.Drawing.Size(369, 419);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.LogListBox);
@@ -409,5 +465,9 @@ namespace Karol.Core
         private System.Windows.Forms.Label label4;
         public System.Windows.Forms.Button GetPaintButton;
         public System.Windows.Forms.Button SelectColorButton;
+        public System.Windows.Forms.Button PickUpCubeButton;
+        public System.Windows.Forms.Button PlaceCubeButton;
+        public System.Windows.Forms.CheckBox IsVisibleCheckbox;
+        public System.Windows.Forms.Button button1;
     }
 }

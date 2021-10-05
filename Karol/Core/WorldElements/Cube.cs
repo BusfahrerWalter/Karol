@@ -14,5 +14,14 @@ namespace Karol.Core.WorldElements
             CanPickUp = false;
             CanStackOnTop = true;
         }
+
+        internal override void OnWorldSet()
+        {
+            var pos = new Position(Position.X, Position.Y + 1, Position.Z);
+            if (!World.IsPositionValid(pos))
+                return;
+
+            World.SetCell(pos, new Dummy(false, true), false);
+        }
     }
 }
