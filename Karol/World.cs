@@ -536,6 +536,16 @@ namespace Karol
 
         #region Zellen ändern
         /// <summary>
+        /// Fügt einen Ziegel zu einem Stapel hinzu
+        /// </summary>
+        /// <returns>Ziegel der hinzugefügt wurde</returns>
+        internal WorldElement AddToStack(int xPos, int zPos)
+        {
+            var element = new Brick();
+            return AddToStack(xPos, zPos, element);
+        }
+
+        /// <summary>
         /// Fügt einen Block zu einem Stapel hinzu
         /// </summary>
         /// <returns>Block der hinzugefügt wurde</returns>
@@ -548,21 +558,8 @@ namespace Karol
             if (HasCellAt(xPos, Math.Max(stackSize - 1, 0), zPos, out WorldElement e) && !e.CanStackOnTop)
                 return null;
 
-            Grid[xPos, zPos, stackSize] = element;
-            element.Position = new Position(xPos, stackSize, zPos);
-            element.World = this;
-
+            SetGridElement(xPos, stackSize, zPos, element);
             return element;
-        }
-
-        /// <summary>
-        /// Fügt einen Ziegel zu einem Stapel hinzu
-        /// </summary>
-        /// <returns>Ziegel der hinzugefügt wurde</returns>
-        internal WorldElement AddToStack(int xPos, int zPos)
-        {
-            var element = new Brick();
-            return AddToStack(xPos, zPos, element);
         }
 
         /// <summary>
@@ -571,7 +568,7 @@ namespace Karol
         /// <param name="xPos">X Position des Blocks</param>
         /// <param name="zPos">Z Position des Blocks</param>
         /// <param name="updateView">Soll das View neu Gerendert werden</param>
-        public void SetCell(int xPos, int zPos, bool updateView = true)
+        internal void SetCell(int xPos, int zPos, bool updateView = true)
         {
             SetCell(xPos, zPos, new Brick(), updateView);
         }
@@ -609,15 +606,23 @@ namespace Karol
         /// <param name="updateView">Soll das View neu Gerendert werden</param>
         internal void SetCell(int xPos, int yPos, int zPos, WorldElement element, bool updateView = true)
         {
+            SetGridElement(xPos, yPos, zPos, element);
+
+            if (updateView)
+                Update(xPos, zPos, element);
+        }
+
+        private void SetGridElement(int xPos, int yPos, int zPos, WorldElement element)
+        {
+            if (Grid[xPos, zPos, yPos] != null)
+                Grid[xPos, zPos, yPos].OnDestroy();
+
             Grid[xPos, zPos, yPos] = element;
-            if(element != null)
+            if (element != null)
             {
                 element.Position = new Position(xPos, yPos, zPos);
                 element.World = this;
             }
-
-            if (updateView)
-                Update(xPos, zPos, element);
         }
 
         /// <summary>
@@ -742,12 +747,12 @@ namespace Karol
         /// </summary>
         /// <param name="filePath">Ort an dem die Datei liegt.</param>
         /// <returns></returns>
-        public static World Load(string filePath)
+        public static World Load(string filePath, KarolWorldFormat format = KarolWorldFormat.Auto)
         {
             try
             {
                 WorldParser parser = new WorldParser();
-                World world = parser.Load(filePath);
+                World world = parser.Load(filePath, format);
                 world.Redraw();
                 return world;
             }

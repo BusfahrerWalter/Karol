@@ -12,9 +12,7 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            World w1 = new World(5, 5, 10);
-            Robot r1 = new Robot(0, 0, w1);
-            Controller.Create(r1);
+            World w1 = World.Load(@"C:\Users\damuelle\Desktop\map.cskw");
         }
     }
 }

@@ -15,15 +15,36 @@ namespace Karol.Core.WorldElements
     public class Brick : WorldElement
     {
         private static readonly Bitmap BrickBitmap = Resources.Ziegel;
+        private Color _paint;
 
-        public Color Paint { get; set; }
+        public Color Paint
+        {
+            get => _paint;
+            set
+            {
+                _paint = value;
+                BitMap = new Bitmap(BrickBitmap);
+                BitMap.MultiplyColor(value);
+            }
+        }
+
+        internal override string Metadata
+        {
+            get => $"{Paint.R},{Paint.G},{Paint.B}";
+            set
+            {
+                string[] arr = value.Split(",");
+                if (arr.Length < 3)
+                    return;
+
+                if (int.TryParse(arr[0], out int r) && int.TryParse(arr[1], out int g) && int.TryParse(arr[2], out int b))
+                    Paint = Color.FromArgb(255, r, g, b);
+            }
+        }
 
         public Brick(Color paint)
         {
             Paint = paint;
-
-            BitMap = new Bitmap(BrickBitmap);
-            BitMap.MultiplyColor(paint);
         }
 
         public Brick() : this(Color.Red) { }

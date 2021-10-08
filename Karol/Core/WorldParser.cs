@@ -6,10 +6,17 @@ using System.Text;
 
 namespace Karol.Core
 {
+    /// <summary>
+    /// Dateiformat in dem die Karol Welt gespeichert ist.
+    /// </summary>
     public enum KarolWorldFormat
     {
-        CSKW,
-        KDW
+        CSharp,
+        Java,
+        /// <summary>
+        /// Automatisches erkennen des Formats. (Kann unter umständen nicht bei jeder Welt funktionieren)
+        /// </summary>
+        Auto
     }
 
     internal class WorldParser
@@ -18,6 +25,9 @@ namespace Karol.Core
         private const string LayerSeperator = "---";
         private const char EmptyCellID = '_';
 
+        private int CurrentLine { get; set; }
+
+        #region Public
         public void Save(World world, string filePath)
         {
             using StreamWriter writer = new StreamWriter(filePath);
@@ -33,11 +43,12 @@ namespace Karol.Core
                     {
                         if (!world.HasCellAt(x, y, z, out WorldElement cell))
                         {
-                            layer.Append(EmptyCellID);
+                            layer.Append($"{EmptyCellID} ");
                             continue;
                         }
 
-                        layer.Append(cell.ID);
+                        string metaData = $"({cell.Metadata})";
+                        layer.Append($"{cell.ID}{(cell.Metadata != string.Empty ? metaData : string.Empty)} ");
                     }
 
                     layer.AppendLine();
@@ -50,18 +61,27 @@ namespace Karol.Core
 
         public World Load(string filePath)
         {
-            return Load(filePath, KarolWorldFormat.CSKW);
+            return Load(filePath, KarolWorldFormat.Auto);
         }
 
         public World Load(string filePath, KarolWorldFormat format)
         {
-            int currentLine = 0;
+            return format switch
+            {
+                KarolWorldFormat.CSharp => LoadCSharp(filePath),
+                KarolWorldFormat.Java => LoadJava(filePath),
+                KarolWorldFormat.Auto => filePath.EndsWith(".cskw") ? LoadCSharp(filePath) : LoadJava(filePath),
+                _ => throw new NotImplementedException(),
+            };
+        }
 
+        private World LoadCSharp(string filePath)
+        {
             using StreamReader reader = new StreamReader(filePath);
-            if (NextLine(reader, ref currentLine) != FirstLine)
+            if (NextLine(reader) != FirstLine)
                 Console.WriteLine("Header nicht gefunden. Welt kann möglicherweise nicht geladen werden.");
 
-            string sizeLine = NextLine(reader, ref currentLine);
+            string sizeLine = NextLine(reader);
             var dimension = sizeLine.Trim().Replace(" ", "")[5..].Split(',');
 
             int xSize = int.Parse(dimension[0]);
@@ -74,42 +94,131 @@ namespace Karol.Core
             {            
                 for (int y = 0; y < ySize; y++)
                 {
-                    NextLine(reader, ref currentLine);
+                    NextLine(reader);
                     for (int z = zSize - 1; z >= 0; z--)
                     {
-                        string line = NextLine(reader, ref currentLine);
+                        string line = NextLine(reader);
                         if (line != null && line.StartsWith(LayerSeperator))
-                            line = NextLine(reader, ref currentLine);
+                            line = NextLine(reader);
 
                         if (line == null)
                             return world;
 
-                        int xCount = Math.Min(xSize, line.Length);
+                        string[] arr = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                        int xCount = Math.Min(xSize, arr.Length);
                         for (int x = 0; x < xCount; x++)
                         {
-                            if (line[x] == EmptyCellID || line[x] == 'D')
+                            if (IsPlaceholder(arr[x]))
                                 continue;
 
                             if (world.HasCellAt(x, y, z, out WorldElement e))
                             {
                                 reader.Close();
-                                throw new InvalidDataException($"Map Datei ist fehlerhaft! Fehler in Zeile: {currentLine}");
+                                Kill();
                             }
 
-                            WorldElement cell = line[x] == 'R' ? WorldElement.ForID(line[x], x, z, world) : WorldElement.ForID(line[x]);
+                            char id = arr[x][0];
+                            WorldElement cell = id == 'R' ? 
+                                WorldElement.ForID(id, x, z, world) : 
+                                WorldElement.ForID(id);
+
+                            if(cell == null)
+                            {
+                                reader.Close();
+                                Kill();
+                            }
+
+                            if (GetMetaData(arr[x], out string metadata))
+                                cell.Metadata = metadata;
+
                             world.SetCell(x, y, z, cell, false);
                         }
                     }
                 }
             }
 
+            world.Redraw();
+            reader.Close();
             return world;
         }
 
-        private string NextLine(StreamReader reader, ref int currentLine)
+        private World LoadJava(string filePath)
         {
-            currentLine++;
+            using StreamReader reader = new StreamReader(filePath);
+            string[] arr = NextLine(reader).Split(" ");
+
+            int xSize = int.Parse(arr[1]);
+            int ySize = int.Parse(arr[2]);
+            int zSize = int.Parse(arr[3]);
+
+            World world = new World(xSize, ySize, zSize);
+            Dictionary<char, char> IDMap = new Dictionary<char, char>()
+            {
+                { 'n', EmptyCellID },
+                { 'o', 'B' }
+            };
+
+            int x = xSize - 1;
+            int z = 0;
+
+            for(int i = 6; i < arr.Length; i++)
+            {
+                char c = Translate(arr[i][0]);
+                WorldElement cell = WorldElement.ForID(c);
+
+                world.SetCell(x, z, cell, false);
+
+                z++;
+                if (z == zSize - 1)
+                {
+                    x--;
+                    z = 0;
+                }
+                    
+            }
+
+            world.Redraw();
+            reader.Close();
+            return world;
+
+            char Translate(char c)
+            {
+                if(IDMap.ContainsKey(c))
+                    return IDMap[c];
+
+                return char.ToUpper(c);
+            }
+        }
+        #endregion
+
+        #region Privat
+        private void Kill()
+        {
+            throw new InvalidDataException($"Map Datei ist fehlerhaft! Fehler in Zeile: {CurrentLine}");
+        }
+
+        private string NextLine(StreamReader reader)
+        {
+            CurrentLine++;
             return reader.ReadLine();
         }
+
+        private bool IsPlaceholder(string str)
+        {
+            return str.StartsWith(EmptyCellID) || str.StartsWith("D");
+        }
+
+        private bool GetMetaData(string str, out string metadata)
+        {
+            if(str.Length == 1)
+            {
+                metadata = string.Empty;
+                return false;
+            }
+
+            metadata = str[2..^1];
+            return true;
+        }
+        #endregion
     }
 }

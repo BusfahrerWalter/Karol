@@ -44,6 +44,7 @@ namespace Karol.Core
             this.PickUpCubeButton = new System.Windows.Forms.Button();
             this.PlaceCubeButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.KillButton = new System.Windows.Forms.Button();
             this.IsVisibleCheckbox = new System.Windows.Forms.CheckBox();
             this.GetPaintButton = new System.Windows.Forms.Button();
             this.BrickCountInput = new System.Windows.Forms.NumericUpDown();
@@ -57,7 +58,6 @@ namespace Karol.Core
             this.DelayInput = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
-            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BrickCountInput)).BeginInit();
@@ -241,7 +241,7 @@ namespace Karol.Core
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.button1);
+            this.groupBox2.Controls.Add(this.KillButton);
             this.groupBox2.Controls.Add(this.IsVisibleCheckbox);
             this.groupBox2.Controls.Add(this.GetPaintButton);
             this.groupBox2.Controls.Add(this.BrickCountInput);
@@ -260,6 +260,17 @@ namespace Karol.Core
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Settings";
+            // 
+            // KillButton
+            // 
+            this.KillButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.KillButton.Location = new System.Drawing.Point(96, 222);
+            this.KillButton.Name = "KillButton";
+            this.KillButton.Size = new System.Drawing.Size(84, 23);
+            this.KillButton.TabIndex = 13;
+            this.KillButton.Text = "Suicide";
+            this.KillButton.UseVisualStyleBackColor = true;
+            this.KillButton.Visible = false;
             // 
             // IsVisibleCheckbox
             // 
@@ -403,16 +414,6 @@ namespace Karol.Core
             this.label1.TabIndex = 0;
             this.label1.Text = "Delay";
             // 
-            // button1
-            // 
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(96, 222);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(84, 23);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "Suicide";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // ControllerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -468,6 +469,6 @@ namespace Karol.Core
         public System.Windows.Forms.Button PickUpCubeButton;
         public System.Windows.Forms.Button PlaceCubeButton;
         public System.Windows.Forms.CheckBox IsVisibleCheckbox;
-        public System.Windows.Forms.Button button1;
+        public System.Windows.Forms.Button KillButton;
     }
 }

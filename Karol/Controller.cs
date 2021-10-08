@@ -52,6 +52,8 @@ namespace Karol
             Form.ColorDialog.Color = ControlledRobot.Paint;
             Form.MaxBackpackSizeInput.Value = ControlledRobot.MaxBackpackSize;
             Form.BrickCountInput.Value = ControlledRobot.BricksInBackpack;
+            Form.PickUpMarkButton.Enabled = ControlledRobot.HasMark;
+            Form.PlaceMarkButton.Enabled = !ControlledRobot.HasMark;
             Form.Text = $"Karol Controller - Robot {ControlledRobot.Identifier}";
 
             ActiveControllers.Add(this);

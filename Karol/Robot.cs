@@ -27,6 +27,15 @@ namespace Karol
         private Bitmap[] RoboterBitmaps { get; set; }
         private DateTime WaitStartTime { get; set; }
         internal Marker Mark { get; set; }
+        internal override string Metadata
+        {
+            get => $"{FaceDirection.Offset}";
+            set
+            {
+                if (int.TryParse(value, out int offset))
+                    FaceDirection += offset;
+            }
+        }
 
         public event EventHandler onEnterMark;
         public event EventHandler onLeaveMark;
@@ -359,6 +368,25 @@ namespace Karol
 
             return World.HasCellAt(pos, out WorldElement cell) && cell is Brick;
         }
+
+        private void CheckFacePos(out Position facePos)
+        {
+            facePos = FaceDirection.OffsetPosition(Position);
+            if (!World.IsPositionValid(facePos))
+            {
+                facePos.Y = 0;
+                throw new InvalidActionException($"An der Position {facePos} kann kein Block platziert werden!");
+            }
+
+            int stackSize = World.GetStackSize(facePos.X, facePos.Z);
+            var cell = World.GetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z);
+
+            if (stackSize >= World.SizeY || (cell != null && !cell.CanStackOnTop))
+            {
+                facePos.Y = stackSize;
+                throw new InvalidActionException($"An der Position {facePos} kann kein Block platziert werden!");
+            }
+        }
         #endregion
 
         #region Public
@@ -454,21 +482,7 @@ namespace Karol
             if (MaxBackpackSize != -1 && BricksInBackpack <= 0)
                 throw new InvalidActionException($"Kann keine Ziegel mehr platzieren. Rucksack ist leer!");
 
-            Position facePos = FaceDirection.OffsetPosition(Position);
-            if (!World.IsPositionValid(facePos))
-            {
-                facePos.Y = 0;
-                throw new InvalidActionException($"An der Position {facePos} kann kein Ziegel platziert werden!");
-            }
-
-            int stackSize = World.GetStackSize(facePos.X, facePos.Z);
-            var cell = World.GetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z);
-
-            if (stackSize >= World.SizeY || (cell != null && !cell.CanStackOnTop))
-            {
-                facePos.Y = stackSize;
-                throw new InvalidActionException($"An der Position {facePos} kann kein Ziegel platziert werden!");
-            }
+            CheckFacePos(out Position facePos);
 
             var newCell = World.AddToStack(facePos.X, facePos.Z, new Brick(paintOverride));
             BricksInBackpack--;
@@ -550,14 +564,49 @@ namespace Karol
             Wait();
         }
 
+        /// <summary>
+        /// Platziert einen Quader vor dem Roboter
+        /// </summary>
         public void PlaceCube()
         {
+            PrepareWait();
+            CheckFacePos(out Position facePos);
 
+            var newCell = World.AddToStack(facePos.X, facePos.Z, new Cube());
+            World.Update(facePos.X, facePos.Y, newCell);
+
+            Wait();
         }
 
+        /// <summary>
+        /// Hebt einen Quader vor dem Roboter auf
+        /// </summary>
         public void PickUpCube()
         {
+            PrepareWait();
 
+            var facePos = FaceDirection.OffsetPosition(Position);
+            if (!World.IsPositionValid(facePos))
+                throw new InvalidActionException($"An der Position {facePos} kann kein Quader aufgehogen werden!");
+
+            int stackSize = World.GetStackSize(facePos.X, facePos.Z);
+            int y = Math.Max(stackSize - 1, 0);
+            var cell = World.GetCell(facePos.X, y, facePos.Z);
+
+            if(cell is Dummy)
+            {
+                y--;
+                cell = World.GetCell(facePos.X, y, facePos.Z);
+            }
+
+            if (!(cell is Cube))
+            {
+                Wait();
+                return;
+            }
+
+            World.SetCell(facePos.X, y, facePos.Z, null, true);
+            Wait();
         }
 
         /// <summary>

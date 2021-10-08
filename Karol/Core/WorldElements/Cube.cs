@@ -11,7 +11,7 @@ namespace Karol.Core.WorldElements
     {
         public Cube() : base(Resources.Quader)
         {
-            CanPickUp = false;
+            CanPickUp = true;
             CanStackOnTop = true;
         }
 
@@ -22,6 +22,15 @@ namespace Karol.Core.WorldElements
                 return;
 
             World.SetCell(pos, new Dummy(false, true), false);
+        }
+
+        internal override void OnDestroy()
+        {
+            var topPos = new Position(Position.X, Position.Y + 1, Position.Z);
+            if (!World.IsPositionValid(topPos))
+                return;
+
+            World.SetCell(topPos, null);
         }
     }
 }

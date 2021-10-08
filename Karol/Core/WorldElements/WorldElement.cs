@@ -86,6 +86,12 @@ namespace Karol.Core.WorldElements
 
         internal char ID => GetInfo().ID;
 
+        internal virtual string Metadata
+        {
+            get => string.Empty;
+            set { }
+        }
+
         /// <summary>
         /// Aktuelle Position
         /// </summary>
@@ -139,6 +145,8 @@ namespace Karol.Core.WorldElements
         }
 
         internal virtual void OnWorldSet() { }
+
+        internal virtual void OnDestroy() { }
         #endregion
     }
 }
