@@ -23,14 +23,13 @@ namespace Karol
     public class World
     {
         #region Properties & Felder
+        #region Hilfs zeug
         private const int MaxRoboterCount = 9;
         private const int PixelWidth = 30;
         private const int PixelHeight = 15;
-        private Bounds Padding = new Bounds(30, 0, 50, 0);
+        private readonly Bounds Padding = new Bounds(30, 0, 50, 0);
 
         private int _robotCount;
-
-        public event EventHandler<WorldChangedEventArgs> onRobotAdded;
 
         /// <summary>
         /// Versatz von zeile zu zeile in Pixeln
@@ -52,19 +51,41 @@ namespace Karol
         /// Untere Rechte ecke der Grundfläche
         /// </summary>
         private Point BottomRight { get; set; }
+        #endregion
 
+        #region Events
+        public event EventHandler<WorldChangedEventArgs> onRobotAdded;
+        #endregion
+
+        #region Welt Größe
         /// <summary>
         /// Breite der Welt
         /// </summary>
-        public int SizeX { get; private set; }
+        internal int SizeX { get; set; }
         /// <summary>
         /// Höhe der Welt
         /// </summary>
-        public int SizeY { get; private set; }
+        internal int SizeY { get; set; }
         /// <summary>
         /// Länge/Tiefe der Welt
         /// </summary>
-        public int SizeZ { get; private set; }
+        internal int SizeZ { get; set; }
+
+        /// <summary>
+        /// Breite der Welt
+        /// </summary>   
+        public int Width => SizeX;
+        /// <summary>
+        /// Höhe der Welt
+        /// </summary>
+        public int Height => SizeY;
+        /// <summary>
+        /// Länge/Tiefe der Welt
+        /// </summary>
+        public int Depth => SizeZ;
+        #endregion
+
+        #region Public zeug
         /// <summary>
         /// Anzahl der Zellen die in der Welt zur Verfügung stehen. <br></br>
         /// Immer gleich (SizeX * SizeY * SizeZ)
@@ -84,13 +105,16 @@ namespace Karol
                 _robotCount = value;
             }
         }
+        #endregion
 
+        #region Privat
         internal List<Robot> Robots { get; set; }
         private WorldElement[,,] Grid { get; set; }
 
         private KarolForm WorldForm { get; set; }
         private Thread UIThread { get; set; }
         private PictureBox BlockMap => WorldForm.BlockMap;
+        #endregion
         #endregion
 
         #region Konstruktoren
@@ -421,8 +445,27 @@ namespace Karol
         /// <param name="newCell">Neu hinzugefügtes Element</param>
         internal void Update(int xPos, int zPos, WorldElement newCell) // TODO: Besser machen...
         {
-            //Point pos = CellToPixelPos(xPos, 0, zPos, newCell);
+            //if (newCell == null)
+            //{
+            //    Redraw();
+            //    return;
+            //}
+
+            //Point pos = CellToPixelPos(newCell.Position, newCell);
             //var rect = new Rectangle(pos, newCell.BitMap.Size);
+
+            //Funktioniert gut..ist aber unfassbar langsam...
+            Redraw();
+
+            //InvokeFormMethod(() =>
+            //{
+            //    var map = (Bitmap)BlockMap.Image;
+            //    map.DrawImage(pos, newCell.GetDifferenceMask());
+
+            //    BlockMap.Invalidate(rect);
+            //    BlockMap.Update();
+            //});
+
 
             #region 1 Ist gut... Layert Blöcke aber falsch
             //InvokeFormMethod(() =>
@@ -452,9 +495,6 @@ namespace Karol
             //Console.WriteLine(pos);
             //BlockMap.Controls.SetChildIndex() // vllt. was
             #endregion
-
-            // Funktioniert gut.. ist aber unfassbar langsam...
-            Redraw();
 
             #region AAAAAAAAAAA
             //TODO: AAAAAAA
@@ -568,7 +608,7 @@ namespace Karol
         /// <param name="xPos">X Position des Blocks</param>
         /// <param name="zPos">Z Position des Blocks</param>
         /// <param name="updateView">Soll das View neu Gerendert werden</param>
-        internal void SetCell(int xPos, int zPos, bool updateView = true)
+        public void SetCell(int xPos, int zPos, bool updateView = true)
         {
             SetCell(xPos, zPos, new Brick(), updateView);
         }

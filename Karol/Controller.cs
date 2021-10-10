@@ -17,7 +17,7 @@ namespace Karol
     {
         private static List<Controller> ActiveControllers = new List<Controller>();
 
-        public Robot ControlledRobot { get; set; }
+        public Robot ControlledRobot { get; private set; }
         private ControllerForm Form { get; set; }
         private Dictionary<Keys, Action> InputMap { get; set; }
 
@@ -28,7 +28,8 @@ namespace Karol
         }
 
         /// <summary>
-        /// Erzeugt einen Controller der einen Roboter steuert.
+        /// Erzeugt einen Controller der einen Roboter steuert. <br></br>
+        /// Gibt null zurück wenn bereits ein Controller für diesen Roboter existiert.
         /// </summary>
         /// <param name="robo">Roboter der gesteuert werden soll.</param>
         /// <returns>Controller instantz die mit dem Roboter verknüpft ist.</returns>

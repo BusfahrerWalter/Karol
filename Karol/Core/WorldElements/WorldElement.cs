@@ -1,5 +1,6 @@
 ﻿using Karol.Core.Annotations;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -112,6 +113,10 @@ namespace Karol.Core.WorldElements
         #endregion
 
         #region Methoden
+        internal virtual void OnWorldSet() { }
+
+        internal virtual void OnDestroy() { }
+
         internal WorldElementInfoAttribute GetInfo()
         {
             return GetType()
@@ -144,9 +149,100 @@ namespace Karol.Core.WorldElements
             return (WorldElement)Activator.CreateInstance(type, parameter);
         }
 
-        internal virtual void OnWorldSet() { }
+        /// <summary>
+        /// Gibt zurück ob sich der Pixel im bereich dieses Elements befindet.
+        /// </summary>
+        /// <param name="pixelWorldPos">Globale Position des Pixels</param>
+        /// <returns>True wenn sich der Pixel im bereich des Elements befindet und nicht Transparent ist. Ansonsten False</returns>
+        internal bool HasPixel(Point pixelWorldPos)
+        {
+            var pos = World.CellToPixelPos(Position, this);
+            int x = Math.Abs(pixelWorldPos.X - pos.X);
+            int y = Math.Abs(pixelWorldPos.Y - pos.Y);
 
-        internal virtual void OnDestroy() { }
+            if (x >= BitMap.Width || y >= BitMap.Height)
+                return false;
+
+            return BitMap.GetPixel(x, y).A == 255;
+        }
+
+        internal Bitmap GetDifferenceMask()
+        {
+            var cells = GetObstructingCells();
+            if (cells.Count == 0)
+                return BitMap;
+
+            var pixelPos = World.CellToPixelPos(Position, this);
+            var newMap = new Bitmap(BitMap);
+
+            for(int x = 0; x < BitMap.Width; x++)
+            {
+                for(int y = 0; y < BitMap.Height; y++)
+                {
+                    foreach(var cell in cells)
+                    {
+                        Point pixel = new Point(pixelPos.X + x, pixelPos.Y + y);
+                        if (!cell.HasPixel(pixel))
+                            continue;
+
+                        newMap.SetPixel(x, y, Color.Transparent);
+                        break;
+                    }
+                }
+            }
+
+            return newMap;
+        }
+
+        private IList<WorldElement> GetObstructingCells()
+        {
+            var list = new List<WorldElement>();
+
+            AddNotNull(GetNeighbor(new Position(1, 0, 0)));
+            AddNotNull(GetNeighbor(new Position(0, 0, -1)));
+            AddNotNull(GetNeighbor(new Position(0, 1, 0)));
+            AddNotNull(GetNeighbor(new Position(1, 0, -1)));
+            AddNotNull(GetNeighbor(new Position(0, -1, -1)));
+
+            //AddPath(new Position(Position.X + 1, Position.Y, Position.Z));
+            //AddPath(new Position(Position.X, Position.Y, Position.Z - 1));
+            //AddPath(new Position(Position.X + 1, Position.Y, Position.Z - 1));
+
+            foreach (var r in World.Robots.Where(r => r != this && (r.Position.Z < Position.Z || r.Position.X > Position.X)))
+            {
+                AddNotNull(r);
+            }
+
+            return list;
+
+            void AddPath(Position start)
+            {
+                while (World.IsPositionValid(start))
+                {
+                    WorldElement cell = World.GetCell(start);
+                    AddNotNull(cell);
+
+                    start.X += 1;
+                    start.Y += 1;
+                    start.Z -= 1;
+                }
+            }
+
+            void AddNotNull(WorldElement e)
+            {
+                if (e != null)
+                    list.Add(e);
+            }
+        }
+
+        internal WorldElement GetNeighbor(Position offset)
+        {
+            Position newPos = Position + offset;
+            if (!World.IsPositionValid(newPos))
+                return null;
+
+            return World.GetCell(newPos);
+        }
         #endregion
     }
 }

@@ -22,6 +22,7 @@ namespace Karol.Core
     internal class WorldParser
     {
         private const string FirstLine = "C_Gartenzaun_Karol_World";
+        private const string FileExtension = ".cskw";
         private const string LayerSeperator = "---";
         private const char EmptyCellID = '_';
 
@@ -37,6 +38,8 @@ namespace Karol.Core
             for (int y = 0; y < world.SizeY; y++)
             {
                 StringBuilder layer = new StringBuilder();
+                bool isLayerEmpty = true;
+
                 for (int z = world.SizeZ - 1; z >= 0; z--)
                 {
                     for (int x = 0; x < world.SizeX; x++)
@@ -49,10 +52,14 @@ namespace Karol.Core
 
                         string metaData = $"({cell.Metadata})";
                         layer.Append($"{cell.ID}{(cell.Metadata != string.Empty ? metaData : string.Empty)} ");
+                        isLayerEmpty = false;
                     }
 
                     layer.AppendLine();
                 }
+
+                if (isLayerEmpty)
+                    break;
 
                 writer.WriteLine(LayerSeperator);
                 writer.Write(layer);
@@ -70,7 +77,7 @@ namespace Karol.Core
             {
                 KarolWorldFormat.CSharp => LoadCSharp(filePath),
                 KarolWorldFormat.Java => LoadJava(filePath),
-                KarolWorldFormat.Auto => filePath.EndsWith(".cskw") ? LoadCSharp(filePath) : LoadJava(filePath),
+                KarolWorldFormat.Auto => filePath.EndsWith(FileExtension) ? LoadCSharp(filePath) : LoadJava(filePath),
                 _ => throw new NotImplementedException(),
             };
         }

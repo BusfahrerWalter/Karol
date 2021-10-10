@@ -202,7 +202,7 @@ namespace Karol
         /// <summary>
         /// Gibt die anzahl der Ziegel vor dem Roboter zurück.
         /// </summary>
-        public int BricksInFront
+        public int FrontBrickCount
         {
             get
             {

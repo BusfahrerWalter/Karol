@@ -30,7 +30,13 @@ namespace Karol.Core.WorldElements
 
         internal override string Metadata
         {
-            get => $"{Paint.R},{Paint.G},{Paint.B}";
+            get
+            {
+                if (Paint.R == 255 && Paint.G == 0 && Paint.B == 0)
+                    return string.Empty;
+
+                return $"{Paint.R},{Paint.G},{Paint.B}";
+            }
             set
             {
                 string[] arr = value.Split(",");
