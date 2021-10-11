@@ -384,6 +384,12 @@ namespace Karol
             yPos = Math.Max(yPos, 0);
             zPos = Math.Max(zPos, 0);
 
+            if (!IsPositionValid(xPos, yPos, zPos))
+            {
+                cell = null;
+                return false;
+            }
+
             cell = Grid[xPos, zPos, yPos];
             return cell != null;
         }
@@ -593,7 +599,7 @@ namespace Karol
         {
             int stackSize = GetStackSize(xPos, zPos);
             if (stackSize == SizeY)
-                throw new IndexOutOfRangeException();
+                throw new InvalidOperationException($"Kann an der Position ({xPos}, {stackSize}, {zPos}) keinen Block platzieren!");
 
             if (HasCellAt(xPos, Math.Max(stackSize - 1, 0), zPos, out WorldElement e) && !e.CanStackOnTop)
                 return null;

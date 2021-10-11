@@ -12,36 +12,8 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            //World W = World.Load(@"C:\Users\danie\Desktop\KarolMap - 5.cskw");
-
-            World W = new World(10, 5, 7);
-            Robot R1 = new Robot(7, 4, W);
-            R1.Delay = 1000;
-            R1.BricksInBackpack = 5;
-            R1.MaxBackpackSize = 10;
-            R1.Move();
-            R1.TurnLeft();
-            for (int i = 0; i < 3; i++)
-            {
-                R1.Move();
-            }
-            R1.TurnRight();
-            for (int i = 0; i < 2; i++)
-            {
-                R1.TurnRight();    
-            }
-            for (int i = 0; i < 2; i++)
-            {
-                R1.Place(Color.Blue);
-            }
-                R1.TurnLeft();
-                R1.Move();
-                R1.TurnRight();
-                R1.Place(Color.Green);
-                R1.Move();
-                R1.TurnRight();
-                R1.Move();
-            
+            World w1 = World.Load(@"C:\Users\damuelle\Desktop\map2.cskw");
+            World w2 = World.Load(@"H:\Daten\Fächer\java\lib\karol\labs\lab0.kdw");
         }
     }
 }

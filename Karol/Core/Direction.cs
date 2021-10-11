@@ -14,14 +14,14 @@ namespace Karol.Core
         private static readonly Direction[] Directions;
 
         public static readonly Direction North;
-        public static readonly Direction Ost;
-        public static readonly Direction South;
         public static readonly Direction East;
+        public static readonly Direction South;
+        public static readonly Direction West;
 
         internal const char NorthChar = 'N';
-        internal const char OstChar = 'O';
-        internal const char SouthChar = 'S';
         internal const char EastChar = 'E';
+        internal const char SouthChar = 'S';
+        internal const char WestChar = 'W';
 
         public char DirectionChar { get; private set; }
         public string Name { get; private set; }
@@ -30,10 +30,10 @@ namespace Karol.Core
         static Direction()
         {
             North = new Direction(NorthChar, "North", 0);
-            Ost = new Direction(OstChar, "Ost", 1);
+            East = new Direction(EastChar, "East", 1);
             South = new Direction(SouthChar, "South", 2);
-            East = new Direction(EastChar, "East", 3);
-            Directions = new Direction[] { North, Ost, South, East };
+            West = new Direction(WestChar, "West", 3);
+            Directions = new Direction[] { North, East, South, West };
         }
 
         private Direction(char dir, string name, int offset)
@@ -56,9 +56,9 @@ namespace Karol.Core
             switch (DirectionChar)
             {
                 case NorthChar: newPos.Z += offset; break;
-                case OstChar: newPos.X += offset; break;
+                case WestChar: newPos.X -= offset; break;
                 case SouthChar: newPos.Z -= offset; break;
-                case EastChar: newPos.X -= offset; break;
+                case EastChar: newPos.X += offset; break;
             }
 
             return newPos;

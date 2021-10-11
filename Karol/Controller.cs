@@ -113,7 +113,7 @@ namespace Karol
             {
                 RobotAction(() =>
                 {
-                    MoveTo(Direction.East);
+                    MoveTo(Direction.West);
                 });
             };
 
@@ -121,7 +121,7 @@ namespace Karol
             {
                 RobotAction(() =>
                 {
-                    MoveTo(Direction.Ost);
+                    MoveTo(Direction.East);
                 });
             };
 

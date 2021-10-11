@@ -217,7 +217,7 @@ namespace Karol.Core
             // 
             this.PickUpCubeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PickUpCubeButton.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.PickUpCubeButton.Image = global::Karol.Properties.Resources.MarkUp;
+            this.PickUpCubeButton.Image = global::Karol.Properties.Resources.CubeUp;
             this.PickUpCubeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.PickUpCubeButton.Location = new System.Drawing.Point(78, 203);
             this.PickUpCubeButton.Name = "PickUpCubeButton";
@@ -229,7 +229,7 @@ namespace Karol.Core
             // 
             this.PlaceCubeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PlaceCubeButton.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.PlaceCubeButton.Image = global::Karol.Properties.Resources.MarkDown;
+            this.PlaceCubeButton.Image = global::Karol.Properties.Resources.CubeDown;
             this.PlaceCubeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.PlaceCubeButton.Location = new System.Drawing.Point(10, 203);
             this.PlaceCubeButton.Name = "PlaceCubeButton";

@@ -264,7 +264,7 @@ namespace Karol
         /// <summary>
         /// Schaut der Roboter gerade nach Osten
         /// </summary>
-        public bool IsFacingOst => FaceDirection == Direction.Ost;
+        public bool IsFacingOst => FaceDirection == Direction.East;
         /// <summary>
         /// Schaut der Roboter gerade nach Süden
         /// </summary>
@@ -272,7 +272,7 @@ namespace Karol
         /// <summary>
         /// Schaut der Roboter gerade nach Westen
         /// </summary>
-        public bool IsFacingEast => FaceDirection == Direction.East;
+        public bool IsFacingEast => FaceDirection == Direction.West;
         /// <summary>
         /// Aktuelle Blickrichtung des Roboters
         /// </summary>
@@ -291,13 +291,9 @@ namespace Karol
 
         #region Konstruktoren
         /// <summary>
-        /// Erstellt einen neuen Roboter.
+        /// Erstellt einen neuen Roboter
         /// </summary>
-        /// <param name="xStart">Start X Position des Roboters</param>
-        /// <param name="zStart">Start Z Position des Roboters</param>
-        /// <param name="world">Welt in der der Roboter leben soll</param>
-        /// <exception cref="InvalidActionException"></exception>
-        public Robot(int xStart, int zStart, World world) 
+        internal Robot(int xStart, int zStart, World world, Direction initDir, bool updateView)
         {
             Position = new Position(xStart, world.GetStackSize(xStart, zStart), zStart);
             World = world;
@@ -321,9 +317,18 @@ namespace Karol
             BitMap = RoboterBitmaps[FaceDirection.Offset];
             Identifier = world.RoboterCount;
 
-            world.SetCell(xStart, zStart, this);
+            world.SetCell(xStart, zStart, this, updateView);
             world.OnRobotAdded(this);
         }
+
+        /// <summary>
+        /// Erstellt einen neuen Roboter.
+        /// </summary>
+        /// <param name="xStart">Start X Position des Roboters</param>
+        /// <param name="zStart">Start Z Position des Roboters</param>
+        /// <param name="world">Welt in der der Roboter leben soll</param>
+        /// <exception cref="InvalidActionException"></exception>
+        public Robot(int xStart, int zStart, World world) : this(xStart, zStart, world, Direction.North, true) { }
 
         /// <summary>
         /// Erstellt einen neuen Roboter.
@@ -337,6 +342,19 @@ namespace Karol
         {
             FaceDirection = initialDirection;
         }
+
+        /// <summary>
+        /// Erstellt einen neuen Roboter. An der Position 0, 0
+        /// </summary>
+        /// <param name="world">Welt in der der Roboter leben soll</param>
+        public Robot(World world) : this(0, 0, world) { }
+
+        /// <summary>
+        /// Erstellt einen neuen Roboter. An der Position 0, 0
+        /// </summary>
+        /// <param name="world">Welt in der der Roboter leben soll</param>
+        /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North
+        public Robot(World world, Direction initialDirection) : this(0, 0, world, initialDirection) { }
         #endregion
 
         #region Util

@@ -42,7 +42,17 @@ namespace Karol.Core
 
                 for (int z = world.SizeZ - 1; z >= 0; z--)
                 {
-                    for (int x = 0; x < world.SizeX; x++)
+                    int xCount = 1;
+                    for(int i = world.SizeX - 1; i >= 0; i--)
+                    {
+                        if(world.HasCellAt(i, y, z, out WorldElement _))
+                        {
+                            xCount = i + 1;
+                            break;
+                        }
+                    }
+                    
+                    for (int x = 0; x < xCount; x++)
                     {
                         if (!world.HasCellAt(x, y, z, out WorldElement cell))
                         {
@@ -124,9 +134,9 @@ namespace Karol.Core
                                 Kill();
                             }
 
-                            char id = arr[x][0];
+                            char id = char.ToUpper(arr[x][0]);
                             WorldElement cell = id == 'R' ? 
-                                WorldElement.ForID(id, x, z, world) : 
+                                new Robot(x, z, world, Direction.North, false) : 
                                 WorldElement.ForID(id);
 
                             if(cell == null)
@@ -155,33 +165,43 @@ namespace Karol.Core
             string[] arr = NextLine(reader).Split(" ");
 
             int xSize = int.Parse(arr[1]);
-            int ySize = int.Parse(arr[2]);
-            int zSize = int.Parse(arr[3]);
+            int zSize = int.Parse(arr[2]);
+            int ySize = int.Parse(arr[3]);
+
+            int rXpos = int.Parse(arr[4]);
+            int rZpos = zSize - 1 - int.Parse(arr[5]);
+            int rYpos = int.Parse(arr[6]);
 
             World world = new World(xSize, ySize, zSize);
             Dictionary<char, char> IDMap = new Dictionary<char, char>()
             {
                 { 'n', EmptyCellID },
-                { 'o', 'B' }
+                { 'o', 'Q' },
+                { 'm', 'M' }
             };
+            
+            Robot r = new Robot(rXpos, rZpos, world, Direction.South, false);
+            int x = 0;
+            int z = zSize - 1;
 
-            int x = xSize - 1;
-            int z = 0;
-
-            for(int i = 6; i < arr.Length; i++)
+            for(int i = 7; i < arr.Length; i++)
             {
-                char c = Translate(arr[i][0]);
-                WorldElement cell = WorldElement.ForID(c);
-
-                world.SetCell(x, z, cell, false);
-
-                z++;
-                if (z == zSize - 1)
+                for (int y = world.SizeY - 1; y >= 0; y--)
                 {
-                    x--;
-                    z = 0;
+                    char c = Translate(arr[i][0]);
+                    world.SetCell(x, z, WorldElement.ForID(c), false);
+                    i++;
                 }
-                    
+
+                z--;
+                if (z == -1)
+                {
+                    x++;
+                    z = zSize - 1;
+
+                    if (x == xSize)
+                        break;
+                }               
             }
 
             world.Redraw();
