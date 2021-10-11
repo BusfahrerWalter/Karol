@@ -46,6 +46,26 @@ namespace Karol.Core.WorldElements
 
         public bool IsEmpty => Content == null;
 
+        internal override string Metadata
+        {
+            get
+            {
+                if (IsEmpty)
+                    return string.Empty;
+                return Content is Robot r ? $"R{r.FaceDirection.Offset}" : Content.ID.ToString();
+            }
+            set
+            {
+                if (!value.StartsWith("R"))
+                    return;
+
+                int offset = int.Parse(value[1].ToString());
+                Robot r = new Robot(Position.X, Position.Z, World, Direction.FromOffset(offset), false);
+                World.SetCell(Position, this, false);
+                Content = r;
+            }
+        }
+
         public Marker() : base(new Bitmap(Resources.Marke))
         {
             CanStackOnTop = false;

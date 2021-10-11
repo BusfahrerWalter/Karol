@@ -317,6 +317,8 @@ namespace Karol
             BitMap = RoboterBitmaps[FaceDirection.Offset];
             Identifier = world.RoboterCount;
 
+            FaceDirection = initDir;
+
             world.SetCell(xStart, zStart, this, updateView);
             world.OnRobotAdded(this);
         }
@@ -327,8 +329,10 @@ namespace Karol
         /// <param name="xStart">Start X Position des Roboters</param>
         /// <param name="zStart">Start Z Position des Roboters</param>
         /// <param name="world">Welt in der der Roboter leben soll</param>
-        /// <exception cref="InvalidActionException"></exception>
-        public Robot(int xStart, int zStart, World world) : this(xStart, zStart, world, Direction.North, true) { }
+        /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North
+        /// </param>
+        public Robot(int xStart, int zStart, World world, Direction initialDirection) 
+            : this(xStart, zStart, world, initialDirection, true) { }
 
         /// <summary>
         /// Erstellt einen neuen Roboter.
@@ -336,25 +340,24 @@ namespace Karol
         /// <param name="xStart">Start X Position des Roboters</param>
         /// <param name="zStart">Start Z Position des Roboters</param>
         /// <param name="world">Welt in der der Roboter leben soll</param>
-        /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North
-        /// </param>
-        public Robot(int xStart, int zStart, World world, Direction initialDirection) : this(xStart, zStart, world)
-        {
-            FaceDirection = initialDirection;
-        }
+        /// <exception cref="InvalidActionException"></exception>
+        public Robot(int xStart, int zStart, World world)
+            : this(xStart, zStart, world, Direction.North) { }
 
         /// <summary>
         /// Erstellt einen neuen Roboter. An der Position 0, 0
         /// </summary>
         /// <param name="world">Welt in der der Roboter leben soll</param>
-        public Robot(World world) : this(0, 0, world) { }
+        public Robot(World world) 
+            : this(0, 0, world) { }
 
         /// <summary>
         /// Erstellt einen neuen Roboter. An der Position 0, 0
         /// </summary>
         /// <param name="world">Welt in der der Roboter leben soll</param>
         /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North
-        public Robot(World world, Direction initialDirection) : this(0, 0, world, initialDirection) { }
+        public Robot(World world, Direction initialDirection) 
+            : this(0, 0, world, initialDirection) { }
         #endregion
 
         #region Util

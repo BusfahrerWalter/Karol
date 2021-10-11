@@ -19,6 +19,10 @@ namespace Karol.Core
         Auto
     }
 
+    /// <summary>
+    /// Klasse zum Speichern und Laden von Karol welten. <br></br>
+    /// Kann C# und Java Welten Laden.
+    /// </summary>
     internal class WorldParser
     {
         private const string FirstLine = "C_Gartenzaun_Karol_World";
@@ -28,7 +32,7 @@ namespace Karol.Core
 
         private int CurrentLine { get; set; }
 
-        #region Public
+        #region Save / Load
         public void Save(World world, string filePath)
         {
             using StreamWriter writer = new StreamWriter(filePath);
@@ -176,20 +180,25 @@ namespace Karol.Core
             Dictionary<char, char> IDMap = new Dictionary<char, char>()
             {
                 { 'n', EmptyCellID },
-                { 'o', 'Q' },
+                { 'z', 'B' },
                 { 'm', 'M' }
             };
             
-            Robot r = new Robot(rXpos, rZpos, world, Direction.South, false);
             int x = 0;
             int z = zSize - 1;
+            bool hasPlacedCube = false;
 
             for(int i = 7; i < arr.Length; i++)
             {
-                for (int y = world.SizeY - 1; y >= 0; y--)
+                for (int y = 0; y < world.SizeY; y++)
                 {
                     char c = Translate(arr[i][0]);
-                    world.SetCell(x, z, WorldElement.ForID(c), false);
+                    if (!hasPlacedCube)
+                    {
+                        world.SetCell(x, y, z, WorldElement.ForID(c), false);
+                    }
+
+                    hasPlacedCube = !hasPlacedCube && c == 'Q';
                     i++;
                 }
 
@@ -203,6 +212,8 @@ namespace Karol.Core
                         break;
                 }               
             }
+
+            Robot r = new Robot(rXpos, rZpos, world, Direction.South, false);
 
             world.Redraw();
             reader.Close();
@@ -218,7 +229,7 @@ namespace Karol.Core
         }
         #endregion
 
-        #region Privat
+        #region Private
         private void Kill()
         {
             throw new InvalidDataException($"Map Datei ist fehlerhaft! Fehler in Zeile: {CurrentLine}");

@@ -64,6 +64,11 @@ namespace Karol.Core
             return newPos;
         }
 
+        public static Direction FromOffset(int offset)
+        {
+            return North + offset;
+        }
+
         public override string ToString()
         {
             return $"{Name} ({DirectionChar})";

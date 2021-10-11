@@ -55,6 +55,7 @@ namespace Karol
 
         #region Events
         public event EventHandler<WorldChangedEventArgs> onRobotAdded;
+        public event EventHandler onWorldClosed;
         #endregion
 
         #region Welt Größe
@@ -152,6 +153,11 @@ namespace Karol
             WorldForm.World = this;
             WorldForm.Text = $"Karol World - ({SizeX}, {SizeY}, {SizeZ})";
             WorldForm.SetUp(CreateGrid());
+
+            WorldForm.FormClosed += (e, args) =>
+            {
+                OnWorldClosed();
+            };
 
             await Task.Run(() =>
             {
@@ -867,6 +873,11 @@ namespace Karol
         {
             var args = new WorldChangedEventArgs(robo);
             onRobotAdded?.Invoke(this, args);
+        }
+
+        internal void OnWorldClosed()
+        {
+            onWorldClosed?.Invoke(this, EventArgs.Empty);
         }
         #endregion
     }

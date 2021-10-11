@@ -80,6 +80,17 @@ namespace Karol
                 Application.Run(Form);
             });
 
+            ControlledRobot.World.onWorldClosed += (e, args) =>
+            {
+                if (!Form.IsHandleCreated)
+                    return;
+
+                Form.Invoke((MethodInvoker)delegate
+                {
+                    Form.Close();
+                });
+            };
+
             Form.FormClosed += (e, args) =>
             {
                 ActiveControllers.Remove(this);
