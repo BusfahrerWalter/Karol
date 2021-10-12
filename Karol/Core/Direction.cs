@@ -13,9 +13,21 @@ namespace Karol.Core
     {
         private static readonly Direction[] Directions;
 
+        /// <summary>
+        /// Richtung Norden (Oben)
+        /// </summary>
         public static readonly Direction North;
+        /// <summary>
+        /// Richtung Osten (Rechts)
+        /// </summary>
         public static readonly Direction East;
+        /// <summary>
+        /// Richtung Süden (Unten)
+        /// </summary>
         public static readonly Direction South;
+        /// <summary>
+        /// Richtung Westen (Links)
+        /// </summary>
         public static readonly Direction West;
 
         internal const char NorthChar = 'N';
@@ -23,9 +35,18 @@ namespace Karol.Core
         internal const char SouthChar = 'S';
         internal const char WestChar = 'W';
 
+        /// <summary>
+        /// Character der die Richtung angibt.
+        /// </summary>
         public char DirectionChar { get; private set; }
+        /// <summary>
+        /// Name der Richtung
+        /// </summary>
         public string Name { get; private set; }
-        public int Offset { get; set; }
+        /// <summary>
+        /// Offset der Richtung. Norden = 0
+        /// </summary>
+        public int Offset { get; internal set; }
 
         static Direction()
         {
