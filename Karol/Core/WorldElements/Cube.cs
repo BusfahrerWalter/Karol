@@ -12,7 +12,7 @@ namespace Karol.Core.WorldElements
         public Cube() : base(Resources.Quader)
         {
             CanPickUp = true;
-            CanStackOnTop = true;
+            CanStackOnTop = false;
         }
 
         internal override void OnWorldSet()

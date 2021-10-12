@@ -64,6 +64,12 @@ namespace Karol.Core
             return newPos;
         }
 
+        /// <summary>
+        /// Gibt die zum Offset passende Richtung zurück. <br></br>
+        /// Offset 0 = Norden
+        /// </summary>
+        /// <param name="offset">Offset aus dem die Richtung besitmmt werden soll</param>
+        /// <returns>Zum Offset passende Richtung</returns>
         public static Direction FromOffset(int offset)
         {
             return North + offset;

@@ -18,7 +18,10 @@ namespace TestApp
             //    World w2 = World.Load(@$"H:\Daten\Fächer\java\lib\karol\labs\lab{i}.kdw");
             //}
 
-            World w2 = World.Load(@$"H:\Daten\Fächer\java\lib\karol\labs\lab10.kdw");
+            World w2 = World.Load(@$"H:\Daten\Fächer\java\lib\karol\labs\lab0.1.kdw");
+
+            World w1 = World.Load(@"C:\Users\damuelle\Desktop\KarolMap - 1.cskw");
+            //Robot r1 = new Robot(w1);
         }
     }
 }

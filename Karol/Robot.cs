@@ -293,7 +293,7 @@ namespace Karol
         /// <summary>
         /// Erstellt einen neuen Roboter
         /// </summary>
-        internal Robot(int xStart, int zStart, World world, Direction initDir, bool updateView)
+        internal Robot(int xStart, int zStart, World world, Direction initDir, bool updateView = true, bool placeInWorld = true)
         {
             Position = new Position(xStart, world.GetStackSize(xStart, zStart), zStart);
             World = world;
@@ -319,7 +319,9 @@ namespace Karol
 
             FaceDirection = initDir;
 
-            world.SetCell(xStart, zStart, this, updateView);
+            if (placeInWorld)
+                world.SetCell(xStart, zStart, this, updateView);
+
             world.OnRobotAdded(this);
         }
 

@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Karol.Core
 {
@@ -166,41 +168,45 @@ namespace Karol.Core
         private World LoadJava(string filePath)
         {
             using StreamReader reader = new StreamReader(filePath);
-            string[] arr = NextLine(reader).Split(" ");
+            string line = NextLine(reader);
+            int startIndex = StartIndex(line);
+            string[] arr = Regex.Split(line[startIndex..], @"(?<=[om])");
+            string[] posArr = line[..startIndex].Split(' ');
 
-            int xSize = int.Parse(arr[1]);
-            int zSize = int.Parse(arr[2]);
-            int ySize = int.Parse(arr[3]);
+            int xSize = int.Parse(posArr[1]);
+            int zSize = int.Parse(posArr[2]);
+            int ySize = int.Parse(posArr[3]);
 
-            int rXpos = int.Parse(arr[4]);
-            int rZpos = zSize - 1 - int.Parse(arr[5]);
-            int rYpos = int.Parse(arr[6]);
+            int rXpos = int.Parse(posArr[4]);
+            int rZpos = zSize - 1 - int.Parse(posArr[5]);
+            int rYpos = int.Parse(posArr[6]);
 
             World world = new World(xSize, ySize, zSize);
             Dictionary<char, char> IDMap = new Dictionary<char, char>()
             {
                 { 'n', EmptyCellID },
-                { 'z', 'B' },
-                { 'm', 'M' }
+                { 'z', 'B' }
             };
             
             int x = 0;
             int z = zSize - 1;
             bool hasPlacedCube = false;
 
-            for(int i = 7; i < arr.Length; i++)
+            for (int i = 0; i < arr.Length; i++)
             {
-                for (int y = 0; y < world.SizeY; y++)
+                string[] blocks = arr[i].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                foreach(var block in blocks)
                 {
-                    char c = Translate(arr[i][0]);
-                    if (!hasPlacedCube)
-                    {
-                        world.SetCell(x, y, z, WorldElement.ForID(c), false);
-                    }
+                    if (block[0] == 'o')
+                        break;
+
+                    char c = Translate(block[0]);
+                    if(!hasPlacedCube)
+                        world.SetCell(x, z, WorldElement.ForID(c), false);
 
                     hasPlacedCube = !hasPlacedCube && c == 'Q';
-                    i++;
                 }
+
 
                 z--;
                 if (z == -1)
@@ -210,7 +216,7 @@ namespace Karol.Core
 
                     if (x == xSize)
                         break;
-                }               
+                }          
             }
 
             Robot r = new Robot(rXpos, rZpos, world, Direction.South, false);
@@ -225,6 +231,22 @@ namespace Karol.Core
                     return IDMap[c];
 
                 return char.ToUpper(c);
+            }
+
+            int StartIndex(string str)
+            {
+                int remainingBlanks = 7;
+                for(int i = 0; i < str.Length; i++)
+                {
+                    if(str[i] == ' ')
+                    {
+                        remainingBlanks--;
+                        if (remainingBlanks == 0)
+                            return i;
+                    }
+                }
+
+                return 32;
             }
         }
         #endregion

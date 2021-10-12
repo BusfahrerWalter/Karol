@@ -12,6 +12,7 @@ namespace Karol.Core.WorldElements
     public class Marker : WorldElement, IContainer
     {
         private WorldElement _content;
+        private event EventHandler onWorldSet;
 
         /// <summary>
         /// Roboter der auf der Marke steht
@@ -60,9 +61,12 @@ namespace Karol.Core.WorldElements
                     return;
 
                 int offset = int.Parse(value[1].ToString());
-                Robot r = new Robot(Position.X, Position.Z, World, Direction.FromOffset(offset), false);
-                World.SetCell(Position, this, false);
-                Content = r;
+                onWorldSet += (s, args) =>
+                {
+                    Robot r = new Robot(Position.X, Position.Z, World, Direction.FromOffset(offset), false, false);
+                    r.Mark = this;
+                    Content = r;
+                };
             }
         }
 
@@ -82,6 +86,11 @@ namespace Karol.Core.WorldElements
         public void Reset()
         {
             Content = null;
+        }
+
+        internal override void OnWorldSet()
+        {
+            onWorldSet?.Invoke(this, EventArgs.Empty);
         }
     }
 }
