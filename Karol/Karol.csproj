@@ -5,6 +5,10 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>H:\Daten\Fächer_12\TrFi\Karol_C_Gartenzaun\Karol\Karol\Karol.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Resources\Images\Marke.gif" />
     <None Remove="Resources\Images\Quader.gif" />
@@ -113,6 +117,13 @@
 
   <ItemGroup>
     <Folder Include="Resources\UI\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="docfx.console" Version="2.58.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

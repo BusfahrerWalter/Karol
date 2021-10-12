@@ -801,12 +801,12 @@ namespace Karol
         /// <returns></returns>
         public static World Load(string filePath, KarolWorldFormat format = KarolWorldFormat.Auto)
         {
+            try
+            {
                 WorldParser parser = new WorldParser();
                 World world = parser.Load(filePath, format);
                 world.Redraw();
-                return world;
-            try
-            {
+                return world;  
             }
             catch (InvalidDataException e)
             {

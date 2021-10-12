@@ -10,11 +10,8 @@
 
 namespace Karol.Properties {
     using System;
-    
-    
-    /// <summary>
-    ///   Eine stark typisierte Ressourcenklasse zum Suchen von lokalisierten Zeichenfolgen usw.
-    /// </summary>
+    using System.Diagnostics.CodeAnalysis;
+
     // Diese Klasse wurde von der StronglyTypedResourceBuilder automatisch generiert
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
@@ -32,9 +29,7 @@ namespace Karol.Properties {
         internal Resources() {
         }
         
-        /// <summary>
-        ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
-        /// </summary>
+
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
@@ -45,11 +40,7 @@ namespace Karol.Properties {
                 return resourceMan;
             }
         }
-        
-        /// <summary>
-        ///   Überschreibt die CurrentUICulture-Eigenschaft des aktuellen Threads für alle
-        ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
-        /// </summary>
+
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static global::System.Globalization.CultureInfo Culture {
             get {
@@ -60,9 +51,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap BrickDown {
             get {
                 object obj = ResourceManager.GetObject("BrickDown", resourceCulture);
@@ -70,9 +61,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap BrickUp {
             get {
                 object obj = ResourceManager.GetObject("BrickUp", resourceCulture);
@@ -80,9 +71,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap CubeDown {
             get {
                 object obj = ResourceManager.GetObject("CubeDown", resourceCulture);
@@ -90,9 +81,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap CubeUp {
             get {
                 object obj = ResourceManager.GetObject("CubeUp", resourceCulture);
@@ -100,9 +91,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap MarkDown {
             get {
                 object obj = ResourceManager.GetObject("MarkDown", resourceCulture);
@@ -110,9 +101,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap Marke {
             get {
                 object obj = ResourceManager.GetObject("Marke", resourceCulture);
@@ -120,9 +111,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap MarkUp {
             get {
                 object obj = ResourceManager.GetObject("MarkUp", resourceCulture);
@@ -130,9 +121,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap MoveDown {
             get {
                 object obj = ResourceManager.GetObject("MoveDown", resourceCulture);
@@ -140,9 +131,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap MoveLeft {
             get {
                 object obj = ResourceManager.GetObject("MoveLeft", resourceCulture);
@@ -150,9 +141,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap MoveRight {
             get {
                 object obj = ResourceManager.GetObject("MoveRight", resourceCulture);
@@ -160,9 +151,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap MoveUp {
             get {
                 object obj = ResourceManager.GetObject("MoveUp", resourceCulture);
@@ -170,9 +161,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap Quader {
             get {
                 object obj = ResourceManager.GetObject("Quader", resourceCulture);
@@ -180,9 +171,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robot0 {
             get {
                 object obj = ResourceManager.GetObject("robot0", resourceCulture);
@@ -190,9 +181,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robot1 {
             get {
                 object obj = ResourceManager.GetObject("robot1", resourceCulture);
@@ -200,9 +191,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robot2 {
             get {
                 object obj = ResourceManager.GetObject("robot2", resourceCulture);
@@ -210,9 +201,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robot3 {
             get {
                 object obj = ResourceManager.GetObject("robot3", resourceCulture);
@@ -220,9 +211,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotN1 {
             get {
                 object obj = ResourceManager.GetObject("robotN1", resourceCulture);
@@ -230,9 +221,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotN2 {
             get {
                 object obj = ResourceManager.GetObject("robotN2", resourceCulture);
@@ -240,9 +231,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotN3 {
             get {
                 object obj = ResourceManager.GetObject("robotN3", resourceCulture);
@@ -250,9 +241,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotN4 {
             get {
                 object obj = ResourceManager.GetObject("robotN4", resourceCulture);
@@ -260,9 +251,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotN5 {
             get {
                 object obj = ResourceManager.GetObject("robotN5", resourceCulture);
@@ -270,9 +261,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotN6 {
             get {
                 object obj = ResourceManager.GetObject("robotN6", resourceCulture);
@@ -280,9 +271,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotN7 {
             get {
                 object obj = ResourceManager.GetObject("robotN7", resourceCulture);
@@ -290,9 +281,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotN8 {
             get {
                 object obj = ResourceManager.GetObject("robotN8", resourceCulture);
@@ -300,9 +291,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotN9 {
             get {
                 object obj = ResourceManager.GetObject("robotN9", resourceCulture);
@@ -310,9 +301,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotO1 {
             get {
                 object obj = ResourceManager.GetObject("robotO1", resourceCulture);
@@ -320,9 +311,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotO2 {
             get {
                 object obj = ResourceManager.GetObject("robotO2", resourceCulture);
@@ -330,9 +321,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotO3 {
             get {
                 object obj = ResourceManager.GetObject("robotO3", resourceCulture);
@@ -340,9 +331,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotO4 {
             get {
                 object obj = ResourceManager.GetObject("robotO4", resourceCulture);
@@ -350,9 +341,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotO5 {
             get {
                 object obj = ResourceManager.GetObject("robotO5", resourceCulture);
@@ -360,9 +351,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotO6 {
             get {
                 object obj = ResourceManager.GetObject("robotO6", resourceCulture);
@@ -370,9 +361,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotO7 {
             get {
                 object obj = ResourceManager.GetObject("robotO7", resourceCulture);
@@ -380,9 +371,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotO8 {
             get {
                 object obj = ResourceManager.GetObject("robotO8", resourceCulture);
@@ -390,9 +381,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotO9 {
             get {
                 object obj = ResourceManager.GetObject("robotO9", resourceCulture);
@@ -400,9 +391,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotS1 {
             get {
                 object obj = ResourceManager.GetObject("robotS1", resourceCulture);
@@ -410,9 +401,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotS2 {
             get {
                 object obj = ResourceManager.GetObject("robotS2", resourceCulture);
@@ -420,9 +411,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotS3 {
             get {
                 object obj = ResourceManager.GetObject("robotS3", resourceCulture);
@@ -430,9 +421,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotS4 {
             get {
                 object obj = ResourceManager.GetObject("robotS4", resourceCulture);
@@ -440,9 +431,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotS5 {
             get {
                 object obj = ResourceManager.GetObject("robotS5", resourceCulture);
@@ -450,9 +441,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotS6 {
             get {
                 object obj = ResourceManager.GetObject("robotS6", resourceCulture);
@@ -460,9 +451,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotS7 {
             get {
                 object obj = ResourceManager.GetObject("robotS7", resourceCulture);
@@ -470,9 +461,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotS8 {
             get {
                 object obj = ResourceManager.GetObject("robotS8", resourceCulture);
@@ -480,9 +471,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotS9 {
             get {
                 object obj = ResourceManager.GetObject("robotS9", resourceCulture);
@@ -490,9 +481,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotW1 {
             get {
                 object obj = ResourceManager.GetObject("robotW1", resourceCulture);
@@ -500,9 +491,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotW2 {
             get {
                 object obj = ResourceManager.GetObject("robotW2", resourceCulture);
@@ -510,9 +501,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotW3 {
             get {
                 object obj = ResourceManager.GetObject("robotW3", resourceCulture);
@@ -520,9 +511,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotW4 {
             get {
                 object obj = ResourceManager.GetObject("robotW4", resourceCulture);
@@ -530,9 +521,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotW5 {
             get {
                 object obj = ResourceManager.GetObject("robotW5", resourceCulture);
@@ -540,9 +531,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotW6 {
             get {
                 object obj = ResourceManager.GetObject("robotW6", resourceCulture);
@@ -550,9 +541,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotW7 {
             get {
                 object obj = ResourceManager.GetObject("robotW7", resourceCulture);
@@ -560,9 +551,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotW8 {
             get {
                 object obj = ResourceManager.GetObject("robotW8", resourceCulture);
@@ -570,9 +561,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap robotW9 {
             get {
                 object obj = ResourceManager.GetObject("robotW9", resourceCulture);
@@ -580,9 +571,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap RotateLeft {
             get {
                 object obj = ResourceManager.GetObject("RotateLeft", resourceCulture);
@@ -590,9 +581,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap RotateRight {
             get {
                 object obj = ResourceManager.GetObject("RotateRight", resourceCulture);
@@ -600,9 +591,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap Ziegel {
             get {
                 object obj = ResourceManager.GetObject("Ziegel", resourceCulture);
@@ -610,9 +601,9 @@ namespace Karol.Properties {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
+         
+         
+         
         internal static System.Drawing.Bitmap ZiegelRed {
             get {
                 object obj = ResourceManager.GetObject("ZiegelRed", resourceCulture);
