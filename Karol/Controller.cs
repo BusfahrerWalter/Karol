@@ -261,24 +261,24 @@ namespace Karol
                 });
             };
 
-            ControlledRobot.onEnterMark += (e, args) =>
+            ControlledRobot.onEnterMarkPreview += (e, args) =>
             {
                 Form.PlaceMarkButton.Enabled = false;
                 Form.PickUpMarkButton.Enabled = true;
             };
 
-            ControlledRobot.onLeaveMark += (e, args) =>
+            ControlledRobot.onLeaveMarkPreview += (e, args) =>
             {
                 Form.PlaceMarkButton.Enabled = true;
                 Form.PickUpMarkButton.Enabled = false;
             };
 
-            ControlledRobot.onPlaceBrick += (e, args) =>
+            ControlledRobot.onPlaceBrickPreview += (e, args) =>
             {
                 Form.BrickCountInput.Value = ControlledRobot.BricksInBackpack;
             };
 
-            ControlledRobot.onPickUpBrick += (e, args) =>
+            ControlledRobot.onPickUpBrickPreview += (e, args) =>
             {
                 Form.BrickCountInput.Value = ControlledRobot.BricksInBackpack;
             };

@@ -1,0 +1,21 @@
+apiRules:
+- include:
+    uidRegex: ^Karol\.Core\.Direction$
+    type: Struct
+- include:
+    uidRegex: ^Karol\.Core\.Position$
+    type: Struct
+- include:
+    uidRegex: ^Karol\.Robot
+    type: Class
+- include:
+    uidRegex: ^Karol\.World
+    type: Class
+- include:
+    uidRegex: ^Karol\.Controller
+    type: Class
+
+- exclude:
+    uidRegex: ^Karol\.Core
+    accessModifier: internal
+    type: Class

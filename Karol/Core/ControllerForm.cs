@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Karol.Core
 {
-    public partial class ControllerForm : Form
+    internal partial class ControllerForm : Form
     {
         public event EventHandler onColorChanged;
 

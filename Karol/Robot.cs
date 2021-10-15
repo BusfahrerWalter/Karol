@@ -37,10 +37,22 @@ namespace Karol
             }
         }
 
-        public event EventHandler onEnterMark;
-        public event EventHandler onLeaveMark;
-        public event EventHandler onPlaceBrick;
-        public event EventHandler onPickUpBrick;
+        /// <summary>
+        /// Event wird ausgelöst wenn der Roboter eine Marke betritt.
+        /// </summary>
+        internal event EventHandler onEnterMarkPreview;
+        /// <summary>
+        /// Event wird ausgelöst wenn der Roboter eine Marke verlässt.
+        /// </summary>
+        internal event EventHandler onLeaveMarkPreview;
+        /// <summary>
+        /// Event wird ausgelöst wenn der Roboter einen Ziegel platziert.
+        /// </summary>
+        internal event EventHandler onPlaceBrickPreview;
+        /// <summary>
+        /// Event wird ausgelöst wenn der Roboter einen Ziegel aufhebt.
+        /// </summary>
+        internal event EventHandler onPickUpBrickPreview;
 
         #region Anderes Public
         /// <summary>
@@ -123,7 +135,7 @@ namespace Karol
         /// <summary>
         /// Gibt zurück ob der Roboter einen Schritt nach vorne machen kann oder nicht.
         /// </summary>
-        public bool CanMove
+        private bool CanMove
         {
             get
             {
@@ -333,6 +345,7 @@ namespace Karol
         /// <param name="world">Welt in der der Roboter leben soll</param>
         /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North
         /// </param>
+        /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         public Robot(int xStart, int zStart, World world, Direction initialDirection) 
             : this(xStart, zStart, world, initialDirection, true) { }
 
@@ -342,7 +355,7 @@ namespace Karol
         /// <param name="xStart">Start X Position des Roboters</param>
         /// <param name="zStart">Start Z Position des Roboters</param>
         /// <param name="world">Welt in der der Roboter leben soll</param>
-        /// <exception cref="InvalidActionException"></exception>
+        /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         public Robot(int xStart, int zStart, World world)
             : this(xStart, zStart, world, Direction.North) { }
 
@@ -350,6 +363,7 @@ namespace Karol
         /// Erstellt einen neuen Roboter. An der Position 0, 0
         /// </summary>
         /// <param name="world">Welt in der der Roboter leben soll</param>
+        /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         public Robot(World world) 
             : this(0, 0, world) { }
 
@@ -357,7 +371,8 @@ namespace Karol
         /// Erstellt einen neuen Roboter. An der Position 0, 0
         /// </summary>
         /// <param name="world">Welt in der der Roboter leben soll</param>
-        /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North
+        /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North</param>
+        /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         public Robot(World world, Direction initialDirection) 
             : this(0, 0, world, initialDirection) { }
         #endregion
@@ -436,7 +451,7 @@ namespace Karol
         /// <summary>
         /// Lässt den Roboter einen Schritt nach vorne Machen
         /// </summary>
-        /// <exception cref="InvalidMoveException"></exception>
+        /// <exception cref="InvalidMoveException">Wird geworfen wenn beim bewegen nach vorne ein Fehler auftritt</exception>
         public void Move()
         {
             PrepareWait();
@@ -497,7 +512,7 @@ namespace Karol
         /// Platziert einen Ziegel vor dem Roboter.
         /// </summary>
         /// <param name="paintOverride">Überschreibung der Standard Farbe für diesen Roboter.</param>
-        /// <exception cref="InvalidActionException"></exception>
+        /// <exception cref="InvalidActionException">Wird geworfen wenn kein Ziegel platziert werden kann</exception>
         public void Place(Color paintOverride)
         {
             PrepareWait();
@@ -518,7 +533,7 @@ namespace Karol
         /// <summary>
         /// Platziert einen Ziegel vor dem Roboter.
         /// </summary>
-        /// <exception cref="InvalidActionException"></exception>
+        /// <exception cref="InvalidActionException">Wird geworfen wenn kein Ziegel platziert werden kann</exception>
         public void Place()
         {
             Place(Paint);
@@ -527,7 +542,7 @@ namespace Karol
         /// <summary>
         /// Hebt den Ziegel vor dem Roboter auf.
         /// </summary>
-        /// <exception cref="InvalidActionException"></exception>
+        /// <exception cref="InvalidActionException">Wird geworfen wenn kein Ziegel aufgehoben werden kann</exception>
         public void PickUp()
         {
             PrepareWait();
@@ -558,7 +573,7 @@ namespace Karol
         /// <summary>
         /// Platziert eine Marke unter dem Roboter.
         /// </summary>
-        /// <exception cref="InvalidActionException"></exception>
+        /// <exception cref="InvalidActionException">Wird geworfen wenn keine Marke platziert werden kann</exception>
         public void PlaceMark()
         {
             PrepareWait();
@@ -574,7 +589,7 @@ namespace Karol
         /// <summary>
         /// Hebt eine Marke unter dem Roboter auf.
         /// </summary>
-        /// <exception cref="InvalidActionException"></exception>
+        /// <exception cref="InvalidActionException">Wird geworfen wenn keine Marke aufgehoben werden kann</exception>
         public void PickUpMark()
         {
             PrepareWait();
@@ -590,6 +605,7 @@ namespace Karol
         /// <summary>
         /// Platziert einen Quader vor dem Roboter
         /// </summary>
+        /// <exception cref="InvalidActionException">Wird geworfen wenn kein Quader platziert werden kann</exception>
         public void PlaceCube()
         {
             PrepareWait();
@@ -604,6 +620,7 @@ namespace Karol
         /// <summary>
         /// Hebt einen Quader vor dem Roboter auf
         /// </summary>
+        /// <exception cref="InvalidActionException">Wird geworfen wenn kein Quader aufgehoben werden kann</exception>
         public void PickUpCube()
         {
             PrepareWait();
@@ -669,22 +686,22 @@ namespace Karol
         #region Events
         internal void OnEnterMark()
         {
-            onEnterMark?.Invoke(this, EventArgs.Empty);
+            onEnterMarkPreview?.Invoke(this, EventArgs.Empty);
         }
 
         internal void OnLeaveMark()
         {
-            onLeaveMark?.Invoke(this, EventArgs.Empty);
+            onLeaveMarkPreview?.Invoke(this, EventArgs.Empty);
         }
 
         internal void OnPlaceBrick()
         {
-            onPlaceBrick?.Invoke(this, EventArgs.Empty);
+            onPlaceBrickPreview?.Invoke(this, EventArgs.Empty);
         }
 
         internal void OnPickUpBrick()
         {
-            onPickUpBrick?.Invoke(this, EventArgs.Empty);
+            onPickUpBrickPreview?.Invoke(this, EventArgs.Empty);
         }
         #endregion
     }

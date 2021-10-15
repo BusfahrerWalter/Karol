@@ -7,7 +7,7 @@ using Karol.Properties;
 namespace Karol.Core.WorldElements
 {
     [WorldElementInfo('Q')]
-    public class Cube : WorldElement
+    internal class Cube : WorldElement
     {
         public Cube() : base(Resources.Quader)
         {

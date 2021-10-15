@@ -155,13 +155,16 @@ namespace Karol
         #region Events
         private void World_onRobotAdded(object sender, WorldChangedEventArgs args)
         {
-            var robo = args.NewElement as Robot;
-            var item = RobotsMenuItem.DropDownItems.Add($"Robot {World.RoboterCount}", World.Robots[World.Robots.Count - 1].BitMap);
-
-            item.Click += (s, args) =>
+            Invoke((MethodInvoker)delegate
             {
-                Controller.Create(robo);
-            };
+                var robo = args.NewElement as Robot;
+                var item = RobotsMenuItem.DropDownItems.Add($"Robot {World.RoboterCount}", World.Robots[World.Robots.Count - 1].BitMap);
+
+                item.Click += (s, args) =>
+                {
+                    Controller.Create(robo);
+                };
+            });
         }
 
         private void Map_Click(object sender, EventArgs e)

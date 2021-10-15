@@ -1,6 +1,6 @@
 ﻿namespace Karol.Core.WorldElements
 {
-    public interface IContainer
+    internal interface IContainer
     {
         WorldElement Content { get; set; }
         bool IsEmpty { get; }

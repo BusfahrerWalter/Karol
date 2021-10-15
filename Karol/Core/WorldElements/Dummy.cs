@@ -4,7 +4,7 @@ using Karol.Extensions;
 namespace Karol.Core.WorldElements
 {
     [WorldElementInfo('D')]
-    public class Dummy : WorldElement
+    internal class Dummy : WorldElement
     {
         public Dummy(bool canPickUp, bool canStackOnTop) : base(ImageExtension.EmptyBitmap) 
         {

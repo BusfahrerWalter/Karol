@@ -9,7 +9,7 @@ using Karol.Core.Annotations;
 namespace Karol.Core.WorldElements
 {
     [WorldElementInfo('M')]
-    public class Marker : WorldElement, IContainer
+    internal class Marker : WorldElement, IContainer
     {
         private WorldElement _content;
         private event EventHandler onWorldSet;

@@ -96,11 +96,20 @@ namespace Karol.Core
             return North + offset;
         }
 
+        /// <summary>
+        /// Wandelt die Direction in einen String um
+        /// </summary>
+        /// <returns>Direction als String</returns>
         public override string ToString()
         {
             return $"{Name} ({DirectionChar})";
         }
 
+        /// <summary>
+        /// Vergleicht diese Direction mit einem anderen Objekt.
+        /// </summary>
+        /// <param name="obj">Anderes Objekt</param>
+        /// <returns>True wenn sie gleich sind. Ansonsten False</returns>
         public override bool Equals(object obj)
         {
             return obj is Direction direction &&
@@ -112,22 +121,46 @@ namespace Karol.Core
             return HashCode.Combine(DirectionChar);
         }
 
+        /// <summary>
+        /// Addiert ein bestimmtes Offset zu dieser Direction
+        /// </summary>
+        /// <param name="dir">Direction die geändert werden soll</param>
+        /// <param name="offset">Offset</param>
+        /// <returns>Dem neuen Offset entsprechende Direction</returns>
         public static Direction operator +(Direction dir, int offset)
         {
             int newDir = (offset + dir.Offset) % Directions.Length;
             return Directions[newDir];
         }
 
+        /// <summary>
+        /// Subtrahiert ein bestimmtes Offset von dieser Direction
+        /// </summary>
+        /// <param name="dir">Direction die geändert werden soll</param>
+        /// <param name="offset">Offset</param>
+        /// <returns>Dem neuen Offset entsprechende Direction</returns>
         public static Direction operator -(Direction dir, int offset)
         {
             return dir + (Directions.Length - offset);
         }
 
+        /// <summary>
+        /// Vergleicht die Direction mit einem anderen Objekt
+        /// </summary>
+        /// <param name="dir">Direction 1</param>
+        /// <param name="obj">Anderes Objekt</param>
+        /// <returns>True wenn sie gleich sind. Ansonsten False</returns>
         public static bool operator ==(Direction dir, object obj)
         {
             return dir.Equals(obj);
         }
 
+        /// <summary>
+        /// Vergleicht die Direction mit einem anderen Objekt
+        /// </summary>
+        /// <param name="dir">Direction 1</param>
+        /// <param name="obj">Anderes Objekt</param>
+        /// <returns>True wenn sie ungleich sind. Ansonsten False</returns>
         public static bool operator !=(Direction dir, object obj)
         {
             return !dir.Equals(obj);

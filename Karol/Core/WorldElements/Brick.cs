@@ -12,7 +12,7 @@ namespace Karol.Core.WorldElements
     /// Stellt einen Ziegel in der Welt dar.
     /// </summary>
     [WorldElementInfo('B')]
-    public class Brick : WorldElement
+    internal class Brick : WorldElement
     {
         private static readonly Bitmap BrickBitmap = Resources.Ziegel;
         private Color _paint;
