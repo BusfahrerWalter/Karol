@@ -74,6 +74,7 @@ namespace Karol.Core.WorldElements
         {
             CanStackOnTop = false;
             CanPickUp = false;
+            ViewColor2D = Color.Yellow;
         }
 
         public Marker(Robot robot) 
@@ -81,6 +82,7 @@ namespace Karol.Core.WorldElements
             CanStackOnTop = false;
             CanPickUp = false;
             Content = robot;
+            ViewColor2D = Color.Yellow;
         }
 
         public void Reset()

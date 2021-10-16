@@ -6,6 +6,9 @@ using System.Text;
 
 namespace Karol.Extensions
 {
+    /// <summary>
+    /// Erweiterungsklasse für Bitmaps
+    /// </summary>
     internal static class ImageExtension
     {
         public static Bitmap EmptyBitmap => new Bitmap(1, 1);
@@ -140,6 +143,19 @@ namespace Karol.Extensions
         public static void DrawImage(this Bitmap img, Point position, Bitmap image)
         {
             DrawImage(img, position.X, position.Y, image);
+        }
+        #endregion
+
+        #region Draw Rect
+        public static void DrawRect(this Bitmap img, Rectangle rect, Color fillColor)
+        {
+            for(int x = 0; x < rect.Width; x++)
+            {
+                for(int y = 0; y < rect.Height; y++)
+                {
+                    img.SetPixel(rect.X + x, rect.Y + y, fillColor);
+                }
+            }
         }
         #endregion
 

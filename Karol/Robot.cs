@@ -154,19 +154,36 @@ namespace Karol
             }
         }
         /// <summary>
-        /// Gibt zurück ob sich der Roboter vor einer Wand bzw. ein Quader befindet.
+        /// Gibt zurück ob sich vor dem Roboter eine Wand bzw. ein Quader befindet.
         /// </summary>
         public bool HasWall
         {
             get
             {
-                Position facePos = FaceDirection.OffsetPosition(Position);
-                if (!World.IsPositionValid(facePos))
-                    return true;
-
-                return World.HasCellAt(facePos.X, facePos.Y, facePos.Z, out WorldElement e) && e is Cube;
+                return HasWallInDirection(FaceDirection);
             }
         }
+        /// <summary>
+        /// Gibt zurück ob sich rechts neben dem Roboter eine Wand bzw. ein Quader befindet.
+        /// </summary>
+        public bool HasWallRight
+        {
+            get
+            {
+                return HasWallInDirection(FaceDirection + 1);
+            }
+        }
+        /// <summary>
+        /// Gibt zurück ob sich links neben dem Roboter eine Wand bzw. ein Quader befindet.
+        /// </summary>
+        public bool HasWallLeft
+        {
+            get
+            {
+                return HasWallInDirection(FaceDirection - 1);
+            }
+        }
+
         /// <summary>
         /// Gibt zurück ob sich vor dem Roboter ein anderer Roboter befindet.
         /// </summary>
@@ -222,7 +239,11 @@ namespace Karol
                 if (!World.IsPositionValid(facePos))
                     return 0;
 
-                return World.GetStackSize(facePos.X, facePos.Z);
+                int stackSize = World.GetStackSize(facePos.X, facePos.Z);
+                if (World.GetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z) is Marker)
+                    stackSize--;
+
+                return stackSize;
             }
         }
         /// <summary>
@@ -295,7 +316,6 @@ namespace Karol
             {
                 _faceDirection = value;
                 BitMap = IsVisible ? RoboterBitmaps[FaceDirection.Offset] : ImageExtension.EmptyBitmap;
-                World.Update(Position.X, Position.Z, this);
             }
         }
         #endregion
@@ -319,6 +339,7 @@ namespace Karol
 
             CanStackOnTop = false;
             CanPickUp = false;
+            ViewColor2D = Color.Black;
             XOffset = -2;
             YOffset = -2;
 
@@ -407,6 +428,18 @@ namespace Karol
             return World.HasCellAt(pos, out WorldElement cell) && cell is Brick;
         }
 
+        private bool HasWallInDirection(Direction dir)
+        {
+            Position facePos = dir.OffsetPosition(Position);
+            if (!World.IsPositionValid(facePos))
+                return true;
+
+            int stackSize = World.GetStackSize(facePos.X, facePos.Z);
+            int y = Math.Max(stackSize - 2, 0);
+
+            return World.HasCellAt(facePos.X, y, facePos.Z, out WorldElement e) && e is Cube;
+        }
+
         private void CheckFacePos(out Position facePos)
         {
             facePos = FaceDirection.OffsetPosition(Position);
@@ -435,6 +468,7 @@ namespace Karol
         {
             PrepareWait();
             FaceDirection -= 1;
+            World.Update(Position.X, Position.Z, this);
             Wait();
         }
 
@@ -445,6 +479,7 @@ namespace Karol
         {
             PrepareWait();
             FaceDirection += 1;
+            World.Update(Position.X, Position.Z, this);
             Wait();
         }
 
@@ -477,7 +512,7 @@ namespace Karol
                 }
                 else
                 {
-                    World.SetCell(Position, null, false);               
+                    World.SetCell(Position, null);               
                 }
 
                 Mark = mark;
@@ -499,7 +534,7 @@ namespace Karol
                 }
                 else
                 {
-                    World.SetCell(Position, null, false);
+                    World.SetCell(Position, null);
                     World.SetCell(newPos, this);
                     Position = newPos;
                 }

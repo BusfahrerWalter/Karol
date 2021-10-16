@@ -21,6 +21,7 @@ namespace Karol.Core.WorldElements
         private bool _canPickUp = true;
         private Position _position;
         private World _world;
+        private Point _pixelPosition = new Point(-1, -1);
 
         /// <summary>
         /// Die Welt in der sich dieses Objekt befindet.
@@ -43,7 +44,26 @@ namespace Karol.Core.WorldElements
         /// <summary>
         /// Rechteck das Position und Größe der Bitmap angibt.
         /// </summary>
-        internal Rectangle Rect => new Rectangle(World.CellToPixelPos(Position, this), new Size(BitMap.Width, BitMap.Height));
+        internal Rectangle Rect => new Rectangle(PixelPosition, new Size(BitMap.Width, BitMap.Height));
+
+        /// <summary>
+        /// Pixel Position dieses Elements
+        /// </summary>
+        internal Point PixelPosition
+        {
+            get
+            {
+                if (_pixelPosition.X == -1)
+                    _pixelPosition = World.CellToPixelPos(Position, this);
+                
+                return _pixelPosition;
+            }
+        }
+
+        /// <summary>
+        /// Farbe in der dieses Element in 2D Dargestellt werden soll
+        /// </summary>
+        internal Color ViewColor2D { get; set; }
 
         /// <summary>
         /// X Offset für das Bild
@@ -85,8 +105,14 @@ namespace Karol.Core.WorldElements
             set => _canPickUp = value;
         }
 
+        /// <summary>
+        /// ID zum Speichern und Laden
+        /// </summary>
         internal char ID => GetInfo().ID;
 
+        /// <summary>
+        /// Metadaten zum Speichern und Laden
+        /// </summary>
         internal virtual string Metadata
         {
             get => string.Empty;
@@ -156,7 +182,7 @@ namespace Karol.Core.WorldElements
         /// <returns>True wenn sich der Pixel im bereich des Elements befindet und nicht Transparent ist. Ansonsten False</returns>
         internal bool HasPixel(Point pixelWorldPos)
         {
-            var pos = World.CellToPixelPos(Position, this);
+            var pos = PixelPosition;
             int x = Math.Abs(pixelWorldPos.X - pos.X);
             int y = Math.Abs(pixelWorldPos.Y - pos.Y);
 
@@ -172,7 +198,7 @@ namespace Karol.Core.WorldElements
             if (cells.Count == 0)
                 return BitMap;
 
-            var pixelPos = World.CellToPixelPos(Position, this);
+            var pixelPos = PixelPosition;
             var newMap = new Bitmap(BitMap);
 
             for(int x = 0; x < BitMap.Width; x++)

@@ -1,4 +1,5 @@
 ﻿using Karol.Core;
+using Karol.Core.Rendering;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -21,27 +22,45 @@ namespace Karol
         private ToolStripMenuItem SaveImageButton;
         private ToolStripMenuItem SaveButton;
         public ProgressBar ProgressBar;
+        private ToolStripSeparator toolStripSeparator2;
+        public ToolStripMenuItem View2DButton;
+        private ToolStripSeparator toolStripSeparator1;
+        public ToolStripMenuItem EditorButton;
         private ToolStripMenuItem SaveScreenshotButton;
 
-        public void SetUp(Image image)
+        public KarolForm(World world, string title)
         {
-            InitializeComponent();
+            World = world;
+            Text = title;
+            
+        }
+
+        public void SetUp(Image image, bool init = true)
+        {
+            if (init)
+            {
+                InitializeComponent();
+
+                BlockMap = new PictureBox();
+                GridPicture.Controls.Add(BlockMap);
+                GridPicture.BackColor = Color.Transparent;
+
+                BlockMap.Location = Point.Empty;
+                BlockMap.BackColor = Color.Transparent;
+
+                BlockMap.Click += Map_Click;
+                World.onRobotAdded += World_onRobotAdded;
+                Focus();
+            }
+
             GridPicture.Size = image.Size;
             GridPicture.Image = image;
-
-            BlockMap = new PictureBox();
-            GridPicture.Controls.Add(BlockMap);
-            GridPicture.BackColor = Color.Transparent;
-
             BlockMap.Size = image.Size;
-            BlockMap.Location = Point.Empty;
-            BlockMap.BackColor = Color.Transparent;
             BlockMap.Image = new Bitmap(image.Size.Width, image.Size.Height);
-            BlockMap.Click += Map_Click;
-
             Size = new Size(image.Width + 40, image.Height + 60);
-
-            World.onRobotAdded += World_onRobotAdded;
+            
+            World.WorldRenderer.GridMap = GridPicture;
+            World.WorldRenderer.BlockMap = BlockMap;
         }
 
         private void InitializeComponent()
@@ -52,6 +71,10 @@ namespace Karol
             this.SaveImageButton = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveButton = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveScreenshotButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.View2DButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.EditorButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.RobotsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ProgressBar = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.GridPicture)).BeginInit();
@@ -74,9 +97,13 @@ namespace Karol
             this.SaveImageButton,
             this.SaveButton,
             this.SaveScreenshotButton,
+            this.toolStripSeparator2,
+            this.View2DButton,
+            this.EditorButton,
+            this.toolStripSeparator1,
             this.RobotsMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(160, 92);
+            this.contextMenuStrip.Size = new System.Drawing.Size(160, 148);
             // 
             // SaveImageButton
             // 
@@ -98,6 +125,33 @@ namespace Karol
             this.SaveScreenshotButton.Size = new System.Drawing.Size(159, 22);
             this.SaveScreenshotButton.Text = "Save Screenshot";
             this.SaveScreenshotButton.Click += new System.EventHandler(this.SaveScreenshotButton_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(156, 6);
+            // 
+            // View2DButton
+            // 
+            this.View2DButton.CheckOnClick = true;
+            this.View2DButton.Name = "View2DButton";
+            this.View2DButton.Size = new System.Drawing.Size(159, 22);
+            this.View2DButton.Text = "2D View";
+            this.View2DButton.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.View2DButton.Click += new System.EventHandler(this.View2DButton_Click);
+            // 
+            // EditorButton
+            // 
+            this.EditorButton.Enabled = false;
+            this.EditorButton.Name = "EditorButton";
+            this.EditorButton.Size = new System.Drawing.Size(159, 22);
+            this.EditorButton.Text = "Open Editor";
+            this.EditorButton.Click += new System.EventHandler(this.EditorButton_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(156, 6);
             // 
             // RobotsMenuItem
             // 
@@ -129,7 +183,6 @@ namespace Karol
             this.MaximumSize = new System.Drawing.Size(1920, 1080);
             this.Name = "KarolForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "Karol World";
             ((System.ComponentModel.ISupportInitialize)(this.GridPicture)).EndInit();
             this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -174,6 +227,17 @@ namespace Karol
             {
                 contextMenuStrip.Show(BlockMap, me.Location);
             }
+        }
+
+        private void View2DButton_Click(object sender, EventArgs e)
+        {
+            World.SetRenderingMode(View2DButton.Checked ? WorldRenderingMode.Render2D : WorldRenderingMode.Render3D);
+        }
+
+        private void EditorButton_Click(object sender, EventArgs e)
+        {
+            EditorForm editor = new EditorForm();
+            editor.Show();
         }
 
         private void SaveImageButton_Click(object sender, EventArgs e)

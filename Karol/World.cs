@@ -14,6 +14,7 @@ using System.Linq;
 using Karol.Core.WorldElements;
 using System.IO;
 using System.Text;
+using Karol.Core.Rendering;
 
 namespace Karol
 {
@@ -25,32 +26,7 @@ namespace Karol
         #region Properties & Felder
         #region Hilfs zeug
         private const int MaxRoboterCount = 9;
-        private const int PixelWidth = 30;
-        private const int PixelHeight = 15;
-        private readonly Bounds Padding = new Bounds(30, 0, 50, 0);
-
         private int _robotCount;
-
-        /// <summary>
-        /// Versatz von zeile zu zeile in Pixeln
-        /// </summary>
-        private int LineOffset => PixelWidth / 2;
-        /// <summary>
-        /// Obere Linke ecke der Grundfläche
-        /// </summary>
-        private Point TopLeft { get; set; }
-        /// <summary>
-        /// Untere Linke ecke der Grundfläche
-        /// </summary>
-        private Point BottomLeft { get; set; }
-        /// <summary>
-        /// Obere Rechte ecke der Grundfläche
-        /// </summary>
-        private Point TopRight { get; set; }
-        /// <summary>
-        /// Untere Rechte ecke der Grundfläche
-        /// </summary>
-        private Point BottomRight { get; set; }
         #endregion
 
         #region Events
@@ -109,12 +85,12 @@ namespace Karol
         #endregion
 
         #region Privat
-        internal List<Robot> Robots { get; set; }
+        public List<Robot> Robots { get; set; }
         private WorldElement[,,] Grid { get; set; }
 
-        private KarolForm WorldForm { get; set; }
+        internal KarolForm WorldForm { get; set; }
         private Thread UIThread { get; set; }
-        private PictureBox BlockMap => WorldForm.BlockMap;
+        internal Renderer WorldRenderer { get; set; }
         #endregion
         #endregion
 
@@ -149,11 +125,10 @@ namespace Karol
         /// </summary>
         private async void OpenWindow()
         {
-            WorldForm = new KarolForm();
-            WorldForm.World = this;
-            WorldForm.Text = $"Karol World - ({SizeX}, {SizeY}, {SizeZ})";
-            WorldForm.SetUp(CreateGrid());
+            WorldForm = new KarolForm(this, $"Karol World - ({SizeX}, {SizeY}, {SizeZ})");
+            WorldRenderer = new WorldRenderer3D(this);
 
+            WorldForm.SetUp(WorldRenderer.DrawGrid());
             WorldForm.FormClosed += (e, args) =>
             {
                 OnWorldClosed();
@@ -166,76 +141,6 @@ namespace Karol
             });
         }
 
-        /// <summary>
-        /// Erstellt das Hintergrund Grid
-        /// </summary>
-        /// <returns>Bitmap auf der das Grid gemalt ist.</returns>
-        private Image CreateGrid()
-        {
-            int topPadding = PixelHeight * SizeY;           // Abstand von oben damit die Vertikalen Striche passen
-            int height = SizeY * PixelHeight;               // Höhe in Pixeln
-            int width = SizeX * PixelWidth;                 // Breite in Pixeln
-            
-            BottomLeft = new Point(Padding.Left, Padding.Top + topPadding + SizeZ * PixelHeight);
-            BottomRight = new Point(BottomLeft.X + width, BottomLeft.Y);
-            TopLeft = new Point(SizeZ * LineOffset + Padding.Left, Padding.Top + topPadding);
-            TopRight = new Point(TopLeft.X + width, TopLeft.Y);
-
-            Bitmap map = new Bitmap(TopRight.X + 5, BottomRight.Y + 5);
-
-            for (int i = SizeZ; i >= 0; i--)
-            {
-                int x1 = BottomLeft.X + LineOffset * i;
-                int y = BottomLeft.Y - PixelHeight * i;
-                map.DrawLine(x1, y, x1 + width, y, Color.Blue);
-            }
-
-            for (int i = SizeX; i >= 0; i--)
-            {
-                int x1 = BottomLeft.X + PixelWidth * i;
-                int x2 = TopLeft.X + PixelWidth * i;
-                map.DrawLine(x1, BottomLeft.Y, x2, TopLeft.Y, Color.Blue);
-            }
-
-            for (int i = SizeZ; i >= 0; i--)
-            {
-                int x = BottomLeft.X + LineOffset * i;                
-                for(int j = 0; j < SizeY; j++)
-                {
-                    int y1 = BottomLeft.Y - PixelHeight * j - PixelHeight * i;
-                    int y2 = y1 - PixelHeight;
-                    map.DrawSplitLine(x, y1, x, y2, Color.Blue);
-                }
-            }
-
-            for (int i = SizeX; i >= 0; i--)
-            {
-                int x = TopLeft.X + PixelWidth * i;
-                for (int j = 0; j < SizeY; j++)
-                {
-                    int y1 = TopLeft.Y - PixelHeight * j;
-                    int y2 = y1 - PixelHeight;
-                    map.DrawSplitLine(x, y1, x, y2, Color.Blue);
-                }
-            }
-
-            map.DrawLine(BottomLeft.X, BottomLeft.Y - height, TopLeft.X, TopLeft.Y - height, Color.Blue);
-            map.DrawLine(TopLeft.X, TopLeft.Y - height, TopRight.X, TopRight.Y - height, Color.Blue);
-
-            Point arrow = new Point(BottomLeft.X + 20, BottomLeft.Y - height - 50);
-            map.DrawLine(arrow, new Point(arrow.X - 40, arrow.Y + 40), Color.Blue);
-            map.DrawLine(arrow, new Point(arrow.X - 10, arrow.Y), Color.Blue);
-            map.DrawLine(arrow, new Point(arrow.X, arrow.Y + 10), Color.Blue);
-
-            Point nStart = new Point(arrow.X - 40, arrow.Y + 20);
-            map.DrawPath(Color.Blue, false, nStart,
-                new Point(nStart.X, nStart.Y - 15),
-                new Point(nStart.X + 8, nStart.Y),
-                new Point(nStart.X + 8, nStart.Y - 15));
-
-            return map;
-        }
-        
         /// <summary>
         /// Sorgt dafür das sich das Fenster nach ablauf aller anweisungen nicht schließt
         /// </summary>
@@ -287,21 +192,7 @@ namespace Karol
         /// <returns>Pixel-Koordinate</returns>
         internal Point CellToPixelPos(Position pos, WorldElement element)
         {
-            return CellToPixelPos(pos.X, pos.Y, pos.Z, element);
-        }
-
-        /// <summary>
-        /// Übersetzt eine Grid-Koordinate in eine Pixel-Koordinate um einen Block an der gegebenen Stelle 
-        /// zeichnen zu können.
-        /// </summary>
-        /// <param name="xPos">X Grid-Koordinate</param>
-        /// <param name="zPos">Z Grid-Koordinate</param>
-        /// <param name="map">Bild das gezeichnet werden soll</param>
-        /// <returns>Pixel-Koordinate</returns>
-        internal Point CellToPixelPos(int xPos, int zPos, WorldElement element)
-        {
-            int stackSize = GetStackSize(xPos, zPos);
-            return CellToPixelPos(xPos, stackSize, zPos, element);
+            return WorldRenderer.CellToPixelPos(pos, element);
         }
 
         /// <summary>
@@ -315,9 +206,7 @@ namespace Karol
         /// <returns>Pixel-Koordinate</returns>
         internal Point CellToPixelPos(int xPos, int yPos, int zPos, WorldElement element)
         {
-            int x = BottomLeft.X + zPos * LineOffset + xPos * PixelWidth;
-            int y = BottomLeft.Y - element.BitMap.Height - (zPos + yPos) * PixelHeight + 1;
-            return new Point(x + element.XOffset, y + element.YOffset);
+            return WorldRenderer.CellToPixelPos(xPos, yPos, zPos, element);
         }
 
         /// <summary>
@@ -412,40 +301,13 @@ namespace Karol
 
         #region Grid Rendern
         /// <summary>
-        /// Zeichnet das gesammte Grid neu (Langsam)
+        /// Zeichnet das Grid in dem angegebenen Bereich neu (auch Langsam)
         /// </summary>
         internal void Redraw()
         {
-            Redraw(BlockMap.ClientRectangle);
-        }
-
-        /// <summary>
-        /// Zeichnet das Grid in dem angegebenen Bereich neu (auch Langsam)
-        /// </summary>
-        internal void Redraw(Rectangle rect)
-        {
             InvokeFormMethod(() =>
             {
-                var map = (Bitmap)BlockMap.Image;
-                map.Clear(rect);
-
-                for (int x = 0; x < SizeX; x++)
-                {
-                    for (int z = SizeZ - 1; z >= 0; z--)
-                    {
-                        for (int y = 0; y < SizeY; y++)
-                        {
-                            if (!HasCellAt(x, y, z, out WorldElement cell))
-                                continue;
-
-                            var pos = CellToPixelPos(x, y, z, cell);
-                            map.DrawImage(pos, cell.BitMap);
-                        }
-                    }
-                }
-
-                BlockMap.Invalidate(rect);
-                BlockMap.Update();
+                WorldRenderer.Redraw();
             });
         }
 
@@ -455,134 +317,12 @@ namespace Karol
         /// <param name="xPos">X Position des sich geänderten Blocks</param>
         /// <param name="zPos">Z Position des sich geänderten Blocks</param>
         /// <param name="newCell">Neu hinzugefügtes Element</param>
-        internal void Update(int xPos, int zPos, WorldElement newCell) // TODO: Besser machen...
+        internal void Update(int xPos, int zPos, WorldElement newCell) 
         {
-            //if (newCell == null)
-            //{
-            //    Redraw();
-            //    return;
-            //}
-
-            //Point pos = CellToPixelPos(newCell.Position, newCell);
-            //var rect = new Rectangle(pos, newCell.BitMap.Size);
-
-            //Funktioniert gut..ist aber unfassbar langsam...
-            Redraw();
-
-            //InvokeFormMethod(() =>
-            //{
-            //    var map = (Bitmap)BlockMap.Image;
-            //    map.DrawImage(pos, newCell.GetDifferenceMask());
-
-            //    BlockMap.Invalidate(rect);
-            //    BlockMap.Update();
-            //});
-
-
-            #region 1 Ist gut... Layert Blöcke aber falsch
-            //InvokeFormMethod(() =>
-            //{
-            //    var map = ((Bitmap)BlockMap.Image);
-            //    map.Clear(rect);
-            //    map.DrawImage(pos, newCell.BitMap);
-            //    BlockMap.Invalidate(rect);
-            //    BlockMap.Update();
-            //});
-            #endregion
-
-            #region 2 Geht noch nich
-            //var box = new PictureBox();
-            //var map = new Bitmap(BrickBitmap.Width, BrickBitmap.Height);
-
-            //map.DrawImage(0, 0, BrickBitmap);
-            //box.BackColor = Color.Transparent;
-            //box.Image = map;
-            //box.Location = pos;
-
-            //BlockMap.Controls.Add(box);
-            //BlockMap.Controls.SetChildIndex(box, zPos);
-            //BlockMap.Invalidate(rect);
-            //BlockMap.Update();
-
-            //Console.WriteLine(pos);
-            //BlockMap.Controls.SetChildIndex() // vllt. was
-            #endregion
-
-            #region AAAAAAAAAAA
-            //TODO: AAAAAAA
-            //var blocks = new List<WorldElement>();
-            //AddBlock(newCell.Position);
-            //AddBlock(newCell.Position + new Position(1, 0, 0));
-            //AddBlock(newCell.Position + new Position(0, 0, -1));
-            //AddBlock(newCell.Position + new Position(1, 0, -1));
-
-            //var rect = GetRect();
-            //var map = (Bitmap)BlockMap.Image;
-            ////map.Clear(rect);
-            //Console.WriteLine(rect);
-            //foreach(var e in blocks)
-            //{
-            //    if (e == null)
-            //        continue;
-
-            //    var pos = CellToPixelPos(e.Position, e);
-            //    map.DrawImage(pos, e.BitMap);
-            //}
-
-            //InvokeFormMethod(() =>
-            //{
-            //    BlockMap.Invalidate(rect);
-            //    BlockMap.Update();
-            //});
-
-            //void AddBlock(Position pos)
-            //{
-            //    if (IsPositionValid(pos))
-            //    {
-            //        var cell = GetCell(pos);
-            //        blocks.Add(cell);
-            //    }
-            //}
-
-            //Rectangle GetRect()
-            //{
-            //    var first = blocks.FirstOrDefault(bl => bl != null);
-            //    if (first == null)
-            //        return new Rectangle();
-
-            //    if (blocks.Count(b => b != null) == 1)
-            //        return first.Rect;
-
-            //    int minX = first.Rect.X;
-            //    int maxX = 0;
-            //    int minY = first.Rect.Y;
-            //    int maxY = 0;
-            //    foreach(var b in blocks.Where(bl => bl != null))
-            //    {
-            //        var rect = b.Rect;
-            //        if (rect.X < minX)
-            //            minX = rect.X;
-            //        if (rect.X > maxX)
-            //            maxX = rect.X;
-
-            //        if (rect.Y < minY)
-            //            minY = rect.Y;
-            //        if (rect.Y > maxY)
-            //            maxY = rect.Y;
-            //    }
-
-            //    int height = maxY - minY;
-            //    int widht = maxX - minX;
-
-            //    if (minX == maxX)
-            //        widht = first.Rect.Width;
-
-            //    if (minY == maxY)
-            //        height = first.Rect.Height;
-
-            //    return new Rectangle(minX, minY, widht, height);
-            //}
-            #endregion
+            InvokeFormMethod(() =>
+            {
+                WorldRenderer.Update(xPos, zPos, newCell);
+            });
         }
         #endregion
 
@@ -620,7 +360,7 @@ namespace Karol
         /// <param name="xPos">X Position des Blocks</param>
         /// <param name="zPos">Z Position des Blocks</param>
         /// <param name="updateView">Soll das View neu Gerendert werden</param>
-        public void SetCell(int xPos, int zPos, bool updateView = true)
+        internal void SetCell(int xPos, int zPos, bool updateView = true)
         {
             SetCell(xPos, zPos, new Brick(), updateView);
         }
@@ -805,7 +545,6 @@ namespace Karol
             {
                 WorldParser parser = new WorldParser();
                 World world = parser.Load(filePath, format);
-                world.Redraw();
                 return world;  
             }
             catch (InvalidDataException e)
@@ -824,8 +563,7 @@ namespace Karol
         /// <param name="filePath">Pfad wo das Bild gespeichert werden soll.</param>
         public void SaveScreenshot(string filePath)
         {
-            Bitmap map = new Bitmap(WorldForm.GridPicture.Image);
-            map.DrawImage(0, 0, (Bitmap)BlockMap.Image);
+            Bitmap map = WorldRenderer.GetScreenshot();
             map.Save(filePath);
         }
 
@@ -865,6 +603,21 @@ namespace Karol
         {
             WorldParser parser = new WorldParser();
             parser.Save(this, filePath);
+        }
+
+        public void SetRenderingMode(WorldRenderingMode mode)
+        {
+            InvokeFormMethod(() =>
+            {
+                Renderer rend;
+                if (mode == WorldRenderingMode.Render2D) rend = new WorldRenderer2D(this);
+                else rend = new WorldRenderer3D(this);
+
+                WorldForm.EditorButton.Enabled = mode == WorldRenderingMode.Render2D;
+                WorldRenderer = rend;
+                WorldForm.SetUp(rend.DrawGrid(), false);
+                Redraw();
+            });
         }
         #endregion
 

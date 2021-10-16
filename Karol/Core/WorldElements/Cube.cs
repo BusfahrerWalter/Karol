@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using Karol.Core.Annotations;
 using Karol.Properties;
@@ -13,6 +14,7 @@ namespace Karol.Core.WorldElements
         {
             CanPickUp = true;
             CanStackOnTop = false;
+            ViewColor2D = Color.DarkGray;
         }
 
         internal override void OnWorldSet()
@@ -21,7 +23,12 @@ namespace Karol.Core.WorldElements
             if (!World.IsPositionValid(pos))
                 return;
 
-            World.SetCell(pos, new Dummy(false, true), false);
+            var dummy = new Dummy(false, CanStackOnTop)
+            {
+                ViewColor2D = ViewColor2D
+            };
+
+            World.SetCell(pos, dummy, false);
         }
 
         internal override void OnDestroy()
