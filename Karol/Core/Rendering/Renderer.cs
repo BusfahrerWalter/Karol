@@ -3,15 +3,20 @@ using Karol.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
 namespace Karol.Core.Rendering
 {
-    public enum WorldRenderingMode
+    /// <summary>
+    /// Gibt an wie eine Welt gerendert werden soll.
+    /// </summary>
+    public enum WorldRenderingMode : int
     {
-        Render2D,
-        Render3D
+        Render2D = 2,
+        Render3D = 3
     }
 
     /// <summary>
@@ -125,6 +130,29 @@ namespace Karol.Core.Rendering
             Bitmap map = new Bitmap(GridMap.Image);
             map.DrawImage(0, 0, (Bitmap)BlockMap.Image);
             return map;
+        }
+
+        /// <summary>
+        /// Gibt den mit der übergebenen Rendering Methode assoziierten Renderer zurück.
+        /// </summary>
+        /// <param name="targetWorld">Zielwelt des Renderers</param>
+        /// <param name="mode">Rendering Methode</param>
+        /// <returns></returns>
+        public static Renderer ForRenderingMode(World targetWorld, WorldRenderingMode mode)
+        {
+            var list = typeof(Renderer).Assembly
+                .GetTypes()
+                .Where(t => t.IsSubclassOf(typeof(Renderer)))
+                .ToArray();
+
+            var erg = list
+                .Where(t => t.GetCustomAttribute<RendererInfoAttribute>().Mode == mode)
+                .FirstOrDefault();
+
+            if (erg == null)
+                throw new ArgumentException();
+
+            return (Renderer)Activator.CreateInstance(erg, targetWorld);
         }
     }
 }

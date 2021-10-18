@@ -7,6 +7,7 @@ using System.Text;
 
 namespace Karol.Core.Rendering
 {
+    [RendererInfo(WorldRenderingMode.Render2D)]
     internal class WorldRenderer2D : Renderer
     {
         private const int EdgeLength = 40;

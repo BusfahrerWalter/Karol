@@ -1,6 +1,7 @@
 ﻿using Karol.Core;
 using Karol.Core.Annotations;
 using Karol.Core.Exceptions;
+using Karol.Core.Rendering;
 using Karol.Core.WorldElements;
 using Karol.Extensions;
 using Karol.Properties;
@@ -534,7 +535,7 @@ namespace Karol
                 }
                 else
                 {
-                    World.SetCell(Position, null);
+                    World.SetCell(Position, null, World.RenderingMode == WorldRenderingMode.Render2D); //TODO:
                     World.SetCell(newPos, this);
                     Position = newPos;
                 }

@@ -5,10 +5,27 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Karol
 {
+    internal class SaveDialogResult
+    {
+        public bool IsValid { get; set; }
+        public string FileName { get; set; }
+
+        public SaveDialogResult(bool isValid, string fileName)
+        {
+            IsValid = isValid;
+            FileName = fileName;
+        }
+
+        public SaveDialogResult()
+        {
+        }
+    }
+
     internal class KarolForm : Form
     {      
         public World World { get; set; }
@@ -50,6 +67,7 @@ namespace Karol
 
                 BlockMap.Click += Map_Click;
                 World.onRobotAdded += World_onRobotAdded;
+                World.onRenderingModeChanged += World_onRenderingModeChanged;
                 Focus();
             }
 
@@ -189,23 +207,46 @@ namespace Karol
 
         }
 
-        private string DesktopPath(string fileName)
+        private void ShowSaveDialog(string filter, string defaultName, Action<SaveDialogResult> callback)
         {
-            int i = 0;
-            string ext = Path.GetExtension(fileName);
-            string name = Path.GetFileNameWithoutExtension(fileName);
-
-            while (true)
+            Thread t = new Thread(() =>
             {
-                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{name} - {i}{ext}");
-                if (!File.Exists(path))
-                    return path;
+                SaveFileDialog dialog = new SaveFileDialog()
+                {
+                    Filter = filter,
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                    FileName = defaultName
+                };
 
-                i++;
-            }
+                var erg = dialog.ShowDialog();
+                try
+                {
+                    callback.Invoke(new SaveDialogResult()
+                    {
+                        IsValid = erg == DialogResult.OK || erg == DialogResult.Yes,
+                        FileName = dialog.FileName
+                    });
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Beim speichern der Datei ist ein Fehler aufgetreten", "Oh NEIN!!!!");
+                }
+            });
+
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
         }
 
         #region Events
+        private void World_onRenderingModeChanged(object sender, WorldRenderingMode e)
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                View2DButton.Checked = e == WorldRenderingMode.Render2D;
+                EditorButton.Enabled = e == WorldRenderingMode.Render2D;
+            });
+        }
+
         private void World_onRobotAdded(object sender, WorldChangedEventArgs args)
         {
             Invoke((MethodInvoker)delegate
@@ -231,7 +272,7 @@ namespace Karol
 
         private void View2DButton_Click(object sender, EventArgs e)
         {
-            World.SetRenderingMode(View2DButton.Checked ? WorldRenderingMode.Render2D : WorldRenderingMode.Render3D);
+            World.RenderingMode = View2DButton.Checked ? WorldRenderingMode.Render2D : WorldRenderingMode.Render3D;
         }
 
         private void EditorButton_Click(object sender, EventArgs e)
@@ -242,50 +283,38 @@ namespace Karol
 
         private void SaveImageButton_Click(object sender, EventArgs e)
         {
-            string path = DesktopPath("KarolMap.png");
-            try
+            ShowSaveDialog("Bilder (*.png)|*.png", "KarolImage.png", e =>
             {
-                World.SaveImage(path);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, $"Datei {path} konnte nicht gespeichert werden.\n\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            MessageBox.Show(this, $"Datei wurde unter {path} gespeichert!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (e.IsValid)
+                {
+                    World.SaveImage(e.FileName);
+                    MessageBox.Show($"Datei wurde unter {e.FileName} gespeichert!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            });        
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            string path = DesktopPath("KarolMap.cskw");
-            try
+            ShowSaveDialog("C_Gartenzaun_Karol_World (*.cskw)|*.cskw", "KarolWorld.cskw", e =>
             {
-                World.Save(path);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, $"Datei {path} konnte nicht gespeichert werden.\n\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            MessageBox.Show(this, $"Datei wurde unter {path} gespeichert!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (e.IsValid)
+                {
+                    World.Save(e.FileName);
+                    MessageBox.Show($"Datei wurde unter {e.FileName} gespeichert!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            });
         }
 
         private void SaveScreenshotButton_Click(object sender, EventArgs e)
         {
-            string path = DesktopPath("WorldScreenshot.png");
-            try
+            ShowSaveDialog("Bilder (*.png)|*.png", "Screenshot.png", e =>
             {
-                World.SaveScreenshot(path);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(this, $"Datei {path} konnte nicht gespeichert werden.\n\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            MessageBox.Show(this, $"Datei wurde unter {path} gespeichert!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (e.IsValid)
+                {
+                    World.SaveScreenshot(e.FileName);
+                    MessageBox.Show($"Datei wurde unter {e.FileName} gespeichert!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            });
         }
         #endregion
     }
