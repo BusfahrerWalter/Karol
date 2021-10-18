@@ -27,11 +27,13 @@ namespace Karol
         #region Hilfs zeug
         private const int MaxRoboterCount = 9;
         private int _robotCount;
+        private WorldRenderingMode _renderingMode;
         #endregion
 
         #region Events
         public event EventHandler<WorldChangedEventArgs> onRobotAdded;
         public event EventHandler onWorldClosed;
+        internal event EventHandler<WorldRenderingMode> onRenderingModeChanged;
         #endregion
 
         #region Welt Größe
@@ -80,6 +82,28 @@ namespace Karol
                     throw new ArgumentOutOfRangeException($"In einer Welt können sich maximal {MaxRoboterCount} Roboter befinden!");
 
                 _robotCount = value;
+            }
+        }
+        /// <summary>
+        /// Der aktuelle Render Methode dieser Welt
+        /// </summary>
+        public WorldRenderingMode RenderingMode
+        {
+            get => _renderingMode;
+            set
+            {
+                InvokeFormMethod(() =>
+                {
+                    WorldRenderer = Renderer.ForRenderingMode(this, value);
+                    WorldForm.SetUp(WorldRenderer.DrawGrid(), false);
+                    Redraw();
+                });
+
+                if(value != _renderingMode)
+                {
+                    OnRenderingModeChanged(value);
+                    _renderingMode = value;
+                }
             }
         }
         #endregion
@@ -604,21 +628,6 @@ namespace Karol
             WorldParser parser = new WorldParser();
             parser.Save(this, filePath);
         }
-
-        public void SetRenderingMode(WorldRenderingMode mode)
-        {
-            InvokeFormMethod(() =>
-            {
-                Renderer rend;
-                if (mode == WorldRenderingMode.Render2D) rend = new WorldRenderer2D(this);
-                else rend = new WorldRenderer3D(this);
-
-                WorldForm.EditorButton.Enabled = mode == WorldRenderingMode.Render2D;
-                WorldRenderer = rend;
-                WorldForm.SetUp(rend.DrawGrid(), false);
-                Redraw();
-            });
-        }
         #endregion
 
         #region Events
@@ -631,6 +640,11 @@ namespace Karol
         internal void OnWorldClosed()
         {
             onWorldClosed?.Invoke(this, EventArgs.Empty);
+        }
+
+        internal void OnRenderingModeChanged(WorldRenderingMode mode)
+        {
+            onRenderingModeChanged?.Invoke(this, mode);
         }
         #endregion
     }

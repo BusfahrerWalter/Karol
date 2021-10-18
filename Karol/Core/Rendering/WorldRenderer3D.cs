@@ -7,6 +7,7 @@ using System.Text;
 
 namespace Karol.Core.Rendering
 {
+    [RendererInfo(WorldRenderingMode.Render3D)]
     internal class WorldRenderer3D : Renderer
     {
         private const int PixelWidth = 30;
@@ -224,7 +225,7 @@ namespace Karol.Core.Rendering
             map.DrawLine(BottomLeft.X, BottomLeft.Y - height, TopLeft.X, TopLeft.Y - height, Color.Blue);
             map.DrawLine(TopLeft.X, TopLeft.Y - height, TopRight.X, TopRight.Y - height, Color.Blue);
 
-            Bitmap cross = new Bitmap(@"C:\Users\danie\Pictures\KoordinatensystemKreuz.png");
+            Bitmap cross = new Bitmap(1, 1);// new Bitmap(@"C:\Users\danie\Pictures\KoordinatensystemKreuz.png");
             Point crossPos = new Point(Math.Max(BottomLeft.X - 20, 0), Math.Max(BottomLeft.Y - height - cross.Height - 50, 0));
             map.DrawImage(crossPos, cross);
 
