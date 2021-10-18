@@ -10,24 +10,24 @@ using System.Windows.Forms;
 
 namespace Karol
 {
-    internal class SaveDialogResult
-    {
-        public bool IsValid { get; set; }
-        public string FileName { get; set; }
-
-        public SaveDialogResult(bool isValid, string fileName)
-        {
-            IsValid = isValid;
-            FileName = fileName;
-        }
-
-        public SaveDialogResult()
-        {
-        }
-    }
-
     internal class KarolForm : Form
-    {      
+    {
+        internal class SaveDialogResult
+        {
+            public bool IsValid { get; set; }
+            public string FileName { get; set; }
+
+            public SaveDialogResult(bool isValid, string fileName)
+            {
+                IsValid = isValid;
+                FileName = fileName;
+            }
+
+            public SaveDialogResult()
+            {
+            }
+        }
+
         public World World { get; set; }
 
         public PictureBox GridPicture;
@@ -48,8 +48,7 @@ namespace Karol
         public KarolForm(World world, string title)
         {
             World = world;
-            Text = title;
-            
+            Text = title;        
         }
 
         public void SetUp(Image image, bool init = true)
@@ -277,7 +276,7 @@ namespace Karol
 
         private void EditorButton_Click(object sender, EventArgs e)
         {
-            EditorForm editor = new EditorForm();
+            EditorForm editor = new EditorForm(World);
             editor.Show();
         }
 

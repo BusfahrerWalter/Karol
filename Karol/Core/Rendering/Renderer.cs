@@ -137,8 +137,19 @@ namespace Karol.Core.Rendering
         /// </summary>
         /// <param name="targetWorld">Zielwelt des Renderers</param>
         /// <param name="mode">Rendering Methode</param>
-        /// <returns></returns>
+        /// <returns>Neue instanz des Renderers</returns>
         public static Renderer ForRenderingMode(World targetWorld, WorldRenderingMode mode)
+        {
+            return ForRenderingModeIndex(targetWorld, (int)mode);
+        }
+
+        /// <summary>
+        /// Gibt den mit der übergebenen Rendering Methode assoziierten Renderer zurück.
+        /// </summary>
+        /// <param name="targetWorld">Zielwelt des Renderers</param>
+        /// <param name="modeIndex">Index der Rendering Methode</param>
+        /// <returns>Neue instanz des Renderers</returns>
+        public static Renderer ForRenderingModeIndex(World targetWorld, int modeIndex)
         {
             var list = typeof(Renderer).Assembly
                 .GetTypes()
@@ -146,7 +157,7 @@ namespace Karol.Core.Rendering
                 .ToArray();
 
             var erg = list
-                .Where(t => t.GetCustomAttribute<RendererInfoAttribute>().Mode == mode)
+                .Where(t => t.GetCustomAttribute<RendererInfoAttribute>().ModeIndex == modeIndex)
                 .FirstOrDefault();
 
             if (erg == null)

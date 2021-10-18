@@ -29,104 +29,80 @@ namespace Karol.Core
         /// </summary>
         private void InitializeComponent()
         {
-            this.PlaceRobotButton = new System.Windows.Forms.RadioButton();
-            this.PlaceBrickButton = new System.Windows.Forms.RadioButton();
-            this.RemoveButton = new System.Windows.Forms.RadioButton();
-            this.PlaceCubeButton = new System.Windows.Forms.RadioButton();
-            this.PlaceMarkerButton = new System.Windows.Forms.RadioButton();
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditorForm));
             this.OkButton = new System.Windows.Forms.Button();
+            this.ImageList = new System.Windows.Forms.ImageList(this.components);
+            this.ActionListBox = new System.Windows.Forms.ListBox();
+            this.RemoveButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // PlaceRobotButton
-            // 
-            this.PlaceRobotButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.PlaceRobotButton.Image = global::Karol.Properties.Resources.robot0;
-            this.PlaceRobotButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.PlaceRobotButton.Location = new System.Drawing.Point(78, 77);
-            this.PlaceRobotButton.Name = "PlaceRobotButton";
-            this.PlaceRobotButton.Size = new System.Drawing.Size(60, 60);
-            this.PlaceRobotButton.TabIndex = 3;
-            this.PlaceRobotButton.UseVisualStyleBackColor = true;
-            // 
-            // PlaceBrickButton
-            // 
-            this.PlaceBrickButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.PlaceBrickButton.Image = global::Karol.Properties.Resources.ZiegelRed;
-            this.PlaceBrickButton.Location = new System.Drawing.Point(12, 11);
-            this.PlaceBrickButton.Name = "PlaceBrickButton";
-            this.PlaceBrickButton.Size = new System.Drawing.Size(60, 60);
-            this.PlaceBrickButton.TabIndex = 0;
-            this.PlaceBrickButton.UseVisualStyleBackColor = true;
-            // 
-            // RemoveButton
-            // 
-            this.RemoveButton.Appearance = System.Windows.Forms.Appearance.Button;
-            this.RemoveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.RemoveButton.Image = global::Karol.Properties.Resources.CancelButton;
-            this.RemoveButton.Location = new System.Drawing.Point(12, 143);
-            this.RemoveButton.Name = "RemoveButton";
-            this.RemoveButton.Size = new System.Drawing.Size(60, 60);
-            this.RemoveButton.TabIndex = 4;
-            this.RemoveButton.UseVisualStyleBackColor = true;
-            // 
-            // PlaceCubeButton
-            // 
-            this.PlaceCubeButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.PlaceCubeButton.Image = global::Karol.Properties.Resources.Quader;
-            this.PlaceCubeButton.Location = new System.Drawing.Point(78, 11);
-            this.PlaceCubeButton.Name = "PlaceCubeButton";
-            this.PlaceCubeButton.Size = new System.Drawing.Size(60, 60);
-            this.PlaceCubeButton.TabIndex = 1;
-            this.PlaceCubeButton.UseVisualStyleBackColor = true;
-            // 
-            // PlaceMarkerButton
-            // 
-            this.PlaceMarkerButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.PlaceMarkerButton.Image = global::Karol.Properties.Resources.Marke;
-            this.PlaceMarkerButton.Location = new System.Drawing.Point(12, 77);
-            this.PlaceMarkerButton.Name = "PlaceMarkerButton";
-            this.PlaceMarkerButton.Size = new System.Drawing.Size(60, 60);
-            this.PlaceMarkerButton.TabIndex = 2;
-            this.PlaceMarkerButton.UseVisualStyleBackColor = true;
             // 
             // OkButton
             // 
             this.OkButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.OkButton.Image = global::Karol.Properties.Resources.OkButton;
-            this.OkButton.Location = new System.Drawing.Point(78, 143);
+            this.OkButton.Location = new System.Drawing.Point(65, 106);
             this.OkButton.Name = "OkButton";
-            this.OkButton.Size = new System.Drawing.Size(60, 60);
+            this.OkButton.Size = new System.Drawing.Size(44, 34);
             this.OkButton.TabIndex = 5;
             this.OkButton.UseVisualStyleBackColor = true;
+            this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
+            // 
+            // ImageList
+            // 
+            this.ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.ImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ImageList.ImageStream")));
+            this.ImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.ImageList.Images.SetKeyName(0, "Marke.gif");
+            this.ImageList.Images.SetKeyName(1, "Quader.gif");
+            this.ImageList.Images.SetKeyName(2, "robot0.gif");
+            this.ImageList.Images.SetKeyName(3, "ZiegelRed.gif");
+            // 
+            // ActionListBox
+            // 
+            this.ActionListBox.FormattingEnabled = true;
+            this.ActionListBox.ItemHeight = 15;
+            this.ActionListBox.Location = new System.Drawing.Point(13, 6);
+            this.ActionListBox.Name = "ActionListBox";
+            this.ActionListBox.Size = new System.Drawing.Size(96, 94);
+            this.ActionListBox.TabIndex = 7;
+            this.ActionListBox.SelectedIndexChanged += new System.EventHandler(this.ActionListBox_SelectedIndexChanged);
+            // 
+            // RemoveButton
+            // 
+            this.RemoveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.RemoveButton.Image = global::Karol.Properties.Resources.CancelButton;
+            this.RemoveButton.Location = new System.Drawing.Point(13, 106);
+            this.RemoveButton.Name = "RemoveButton";
+            this.RemoveButton.Size = new System.Drawing.Size(44, 34);
+            this.RemoveButton.TabIndex = 9;
+            this.RemoveButton.UseVisualStyleBackColor = true;
+            this.RemoveButton.Click += new System.EventHandler(this.RemoveButton_Click);
             // 
             // EditorForm
             // 
             this.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(151, 215);
-            this.Controls.Add(this.OkButton);
-            this.Controls.Add(this.PlaceCubeButton);
-            this.Controls.Add(this.PlaceRobotButton);
+            this.ClientSize = new System.Drawing.Size(121, 153);
             this.Controls.Add(this.RemoveButton);
-            this.Controls.Add(this.PlaceBrickButton);
-            this.Controls.Add(this.PlaceMarkerButton);
+            this.Controls.Add(this.ActionListBox);
+            this.Controls.Add(this.OkButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "EditorForm";
             this.Text = "Editor";
+            this.TopMost = true;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EditorForm_FormClosed);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        public System.Windows.Forms.RadioButton PlaceBrickButton;
-        public System.Windows.Forms.RadioButton PlaceCubeButton;
-        public System.Windows.Forms.RadioButton PlaceMarkerButton;
-        public System.Windows.Forms.RadioButton PlaceRobotButton;
-        public System.Windows.Forms.RadioButton RemoveButton;
         public System.Windows.Forms.Button OkButton;
+        private System.Windows.Forms.ImageList ImageList;
+        public System.Windows.Forms.ListBox ActionListBox;
+        public System.Windows.Forms.Button RemoveButton;
     }
 }

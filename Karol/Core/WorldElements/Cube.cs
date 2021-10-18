@@ -10,6 +10,8 @@ namespace Karol.Core.WorldElements
     [WorldElementInfo('Q')]
     internal class Cube : WorldElement
     {
+        private bool isDummyDead;
+
         public Cube() : base(Resources.Quader)
         {
             CanPickUp = true;
@@ -23,7 +25,11 @@ namespace Karol.Core.WorldElements
             if (!World.IsPositionValid(pos))
                 return;
 
-            var dummy = new Dummy(false, CanStackOnTop)
+            var dummy = new Dummy(false, CanStackOnTop, () =>
+            {
+                isDummyDead = true;
+                Destroy(this);
+            })
             {
                 ViewColor2D = ViewColor2D
             };
@@ -33,6 +39,9 @@ namespace Karol.Core.WorldElements
 
         internal override void OnDestroy()
         {
+            if (isDummyDead)
+                return;
+
             var topPos = new Position(Position.X, Position.Y + 1, Position.Z);
             if (!World.IsPositionValid(topPos))
                 return;

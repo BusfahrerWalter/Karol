@@ -141,20 +141,17 @@ namespace Karol.Core
                             }
 
                             char id = char.ToUpper(arr[x][0]);
-                            WorldElement cell = id == 'R' ? 
-                                new Robot(x, z, world, Direction.North, false) : 
-                                WorldElement.ForID(id);
+                            WorldElement cell = WorldElement.ForID(id);
 
-                            if(cell == null)
+                            if (cell == null)
                             {
                                 reader.Close();
                                 Kill();
                             }
 
+                            world.SetCell(x, y, z, cell, false);
                             if (GetMetaData(arr[x], out string metadata))
                                 cell.Metadata = metadata;
-
-                            world.SetCell(x, y, z, cell, false);
                         }
                     }
                 }

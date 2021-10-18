@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Media;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 
@@ -24,6 +25,7 @@ namespace Karol
         private Direction _faceDirection = Direction.North;
         private bool _isVisible = true;
         private int _bricksInBackpack;
+        private bool reloadData = true;
 
         private Bitmap[] RoboterBitmaps { get; set; }
         private DateTime WaitStartTime { get; set; }
@@ -324,39 +326,28 @@ namespace Karol
 
         #region Konstruktoren
         /// <summary>
+        /// Parameterloser Konstruktor damit der Roboter automatisch erzeugt werden kann.
+        /// </summary>
+        internal Robot()
+        {
+
+        }
+
+        /// <summary>
         /// Erstellt einen neuen Roboter
         /// </summary>
         internal Robot(int xStart, int zStart, World world, Direction initDir, bool updateView = true, bool placeInWorld = true)
         {
             Position = new Position(xStart, world.GetStackSize(xStart, zStart), zStart);
             World = world;
-            Delay = 300;
-            JumpHeight = 1;
-            MaxBackpackSize = -1;
-            Paint = Color.Red;
 
             if (World.HasCellAt(Position, out WorldElement e) || (e != null && !e.CanStackOnTop))
                 throw new InvalidActionException($"An der gegebenen Position {Position} befindet sich bereits etwas!");
 
-            CanStackOnTop = false;
-            CanPickUp = false;
-            ViewColor2D = Color.Black;
-            XOffset = -2;
-            YOffset = -2;
-
-            world.RoboterCount++;
-            world.Robots.Add(this);
-
-            RoboterBitmaps = ResourcesLoader.LoadRobotBitmaps(world.RoboterCount - 1);
-            BitMap = RoboterBitmaps[FaceDirection.Offset];
-            Identifier = world.RoboterCount;
-
-            FaceDirection = initDir;
+            _faceDirection = initDir;
 
             if (placeInWorld)
                 world.SetCell(xStart, zStart, this, updateView);
-
-            world.OnRobotAdded(this);
         }
 
         /// <summary>
@@ -458,6 +449,34 @@ namespace Karol
                 facePos.Y = stackSize;
                 throw new InvalidActionException($"An der Position {facePos} kann kein Block platziert werden!");
             }
+        }
+
+        internal override void OnWorldSet()
+        {
+            if (!reloadData)
+                return;
+
+            Delay = 300;
+            JumpHeight = 1;
+            MaxBackpackSize = -1;
+            Paint = Color.Red;
+
+            CanStackOnTop = false;
+            CanPickUp = false;
+            ViewColor2D = Color.Black;
+            XOffset = -2;
+            YOffset = -2;
+
+            World.RoboterCount++;
+            World.Robots.Add(this);
+
+            RoboterBitmaps = ResourcesLoader.LoadRobotBitmaps(World.RoboterCount - 1);
+            BitMap = RoboterBitmaps[FaceDirection.Offset];
+            Identifier = World.RoboterCount;
+            FaceDirection = _faceDirection;
+
+            World.OnRobotAdded(this);
+            reloadData = false;
         }
         #endregion
 

@@ -14,10 +14,13 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            for (int i = 0; i < 10; i++)
-            {
-                Solve(i);
-            }
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    Solve(i);
+            //}
+
+            World w1 = World.Load(@"C:\Users\danie\Desktop\KarolWorld.cskw");
+            Robot r1 = new Robot(1, 1, w1);
         }
 
         private static void Solve(int i)

@@ -10,8 +10,8 @@ namespace Karol.Core.Rendering
     [RendererInfo(WorldRenderingMode.Render2D)]
     internal class WorldRenderer2D : Renderer
     {
-        private const int EdgeLength = 40;
-        private Size CellSize = new Size(EdgeLength - 1, EdgeLength - 1);
+        public const int EdgeLength = 40;
+        public static Size CellSize = new Size(EdgeLength - 1, EdgeLength - 1);
 
         private int Height => EdgeLength * SizeZ;
         private int Width => EdgeLength * SizeX;

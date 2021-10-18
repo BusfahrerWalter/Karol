@@ -28,6 +28,8 @@ namespace Karol
         /// </summary>
         public event EventHandler onPickUpBrick;
 
+        internal SuperRobot() : base() { }
+
         internal SuperRobot(int xStart, int zStart, World world, Direction initDir, bool updateView = true, bool placeInWorld = true)
             : base(xStart, zStart, world, initDir, updateView, placeInWorld) 
         {

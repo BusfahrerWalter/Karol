@@ -155,7 +155,7 @@ namespace Karol.Core.WorldElements
         /// </summary>
         /// <param name="id">ID des World Elements</param>
         /// <returns>World Element</returns>
-        internal static WorldElement ForID(char id, params object[] parameter)
+        internal static WorldElement ForID(char id)
         {
             if(ElementTypes == null)
             {
@@ -172,7 +172,12 @@ namespace Karol.Core.WorldElements
             if (type == default)
                 return null;
 
-            return (WorldElement)Activator.CreateInstance(type, parameter);
+            return (WorldElement)Activator.CreateInstance(type, true);
+        }
+
+        internal static void Destroy(WorldElement element)
+        {
+            element.World.SetCell(element.Position, null);
         }
 
         /// <summary>
