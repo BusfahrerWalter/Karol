@@ -49,6 +49,11 @@ namespace Karol.Core
             }
         }
 
+        public bool Contains(Robot robo)
+        {
+            return Robots.Contains(robo);
+        }
+
         public Robot[] ToArray()
         {
             return Robots.ToArray();

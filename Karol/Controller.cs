@@ -47,6 +47,20 @@ namespace Karol
             return new Controller(robo);
         }
 
+        /// <summary>
+        /// Schließt alle offenen Controller
+        /// </summary>
+        public static void CloseAll()
+        {
+            for(int i = ActiveControllers.Count - 1; i >= 0; i--)
+            {
+                ActiveControllers[i].Form.Invoke((MethodInvoker)delegate
+                {
+                    ActiveControllers[i].Form.Close();
+                });
+            }
+        }
+
         #region Zeug
         private void OpenWindow()
         {

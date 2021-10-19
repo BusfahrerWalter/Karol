@@ -22,9 +22,24 @@
             <param name="robo">Roboter der gesteuert werden soll.</param>
             <returns>Controller instantz die mit dem Roboter verknüpft ist.</returns>
         </member>
+        <member name="M:Karol.Controller.CloseAll">
+            <summary>
+            Schließt alle offenen Controller
+            </summary>
+        </member>
         <member name="T:Karol.Core.Rendering.WorldRenderingMode">
             <summary>
             Gibt an wie eine Welt gerendert werden soll.
+            </summary>
+        </member>
+        <member name="F:Karol.Core.Rendering.WorldRenderingMode.Render2D">
+            <summary>
+            Rendern der Welt in 2D
+            </summary>
+        </member>
+        <member name="F:Karol.Core.Rendering.WorldRenderingMode.Render3D">
+            <summary>
+            Rendern der Welt in 3D
             </summary>
         </member>
         <member name="T:Karol.Core.Rendering.Renderer">
@@ -264,6 +279,12 @@
             <param name="obj">Anderes Objekt</param>
             <returns>True wenn sie ungleich sind. Ansonsten False</returns>
         </member>
+        <member name="M:Karol.Core.EditorForm.#ctor(Karol.World)">
+            <summary>
+            Erstellt eine neue Editor Form
+            </summary>
+            <param name="targetWorld">Welt für die der Editor da sein soll</param>
+        </member>
         <member name="F:Karol.Core.EditorForm.components">
             <summary>
             Required designer variable.
@@ -457,6 +478,16 @@
             Start Z Position des Roboters
             </summary>
         </member>
+        <member name="P:Karol.Core.RobotOptions.OffsetX">
+            <summary>
+            X Offset um das die Bitmap beim Rendern der Welt verschoben wird.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.RobotOptions.OffsetY">
+            <summary>
+            Y Offset um das die Bitmap beim Rendern der Welt verschoben wird.
+            </summary>
+        </member>
         <member name="M:Karol.Core.RobotOptions.#ctor(Karol.World)">
             <summary>
             Erzeugt eine neue Instantz der RobotOptions Klasse
@@ -625,6 +656,11 @@
             </summary>
         </member>
         <member name="P:Karol.Properties.Resources.CubeUp">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.KoordinatensystemKreuz">
             <summary>
               Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
             </summary>
@@ -827,6 +863,11 @@
         <member name="P:Karol.Properties.Resources.robotS9">
             <summary>
               Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.RobotSound">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
             </summary>
         </member>
         <member name="P:Karol.Properties.Resources.robotW1">
@@ -1105,7 +1146,7 @@
         </member>
         <member name="M:Karol.Robot.#ctor(Karol.Core.RobotOptions)">
             <summary>
-            Erzeugt einen neuen Roboter anhand der übergebennen Optionen
+            Erstellt einen neuen Roboter anhand der übergebennen Optionen
             </summary>
             <param name="options">Roboter Optionen</param>
         </member>
@@ -1192,6 +1233,12 @@
             <param name="obj">Anderes Objekt</param>
             <returns>True wenn sie gleich sind. Ansonsten False</returns>
         </member>
+        <member name="M:Karol.Robot.GetHashCode">
+            <summary>
+            Gibt den Hashcode für dieses Objekt zurück
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Karol.SuperRobot">
             <summary>
             Eine erweiterung des normalen Roboters
@@ -1236,7 +1283,14 @@
             <param name="world">Welt in der der Roboter leben soll</param>
             <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Karol.SuperRobot.#ctor(Karol.World,Karol.Core.Direction)" -->
+        <member name="M:Karol.SuperRobot.#ctor(Karol.World,Karol.Core.Direction)">
+            <summary>
+            Erstellt einen neuen Roboter. An der Position 0, 0
+            </summary>
+            <param name="world">Welt in der der Roboter leben soll</param>
+            <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North</param>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
+        </member>
         <member name="M:Karol.SuperRobot.#ctor(Karol.World)">
             <summary>
             Erstellt einen neuen Roboter. An der Position 0, 0
@@ -1244,9 +1298,30 @@
             <param name="world">Welt in der der Roboter leben soll</param>
             <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         </member>
+        <member name="M:Karol.SuperRobot.#ctor(Karol.Core.RobotOptions)">
+            <summary>
+            Erstellt einen neuen Roboter anhand der übergebennen Optionen
+            </summary>
+            <param name="options">Roboter Optionen</param>
+        </member>
         <member name="T:Karol.World">
             <summary>
             Eine Karol Welt in der Roboter, Ziegel, Marken, usw.. platziert werden können.
+            </summary>
+        </member>
+        <member name="E:Karol.World.onRobotAdded">
+            <summary>
+            Wirt aufgerufen wenn ein Roboter zu der Welt hinzugefügt wird.
+            </summary>
+        </member>
+        <member name="E:Karol.World.onWorldClosed">
+            <summary>
+            Wrid aufgerufen wenn die Welt geschlossen wird.
+            </summary>
+        </member>
+        <member name="E:Karol.World.onRenderingModeChanged">
+            <summary>
+            Wird aufgerufen wenn sich die Rendering Methode geändert hat.
             </summary>
         </member>
         <member name="P:Karol.World.SizeX">
@@ -1332,7 +1407,7 @@
             zeichnen zu können.
             </summary>
             <param name="pos">Grid-Koordinate</param>
-            <param name="map">Bild das gezeichnet werden soll</param>
+            <param name="element">Element an der Position</param>
             <returns>Pixel-Koordinate</returns>
         </member>
         <member name="M:Karol.World.CellToPixelPos(System.Int32,System.Int32,System.Int32,Karol.Core.WorldElements.WorldElement)">
@@ -1427,6 +1502,7 @@
             </summary>
             <param name="xPos">X Position des Blocks</param>
             <param name="zPos">Z Position des Blocks</param>
+            <param name="element">Element das Platziert werden soll</param>
             <param name="updateView">Soll das View neu Gerendert werden</param>
         </member>
         <member name="M:Karol.World.SetCell(Karol.Core.Position,Karol.Core.WorldElements.WorldElement,System.Boolean)">
@@ -1434,6 +1510,7 @@
             Setzt das definierte World Element in die entsprechende Zelle
             </summary>
             <param name="pos">Position des Blocks</param>
+            <param name="element">Element das Platziert werden soll</param>
             <param name="updateView">Soll das View neu Gerendert werden</param>
         </member>
         <member name="M:Karol.World.SetCell(System.Int32,System.Int32,System.Int32,Karol.Core.WorldElements.WorldElement,System.Boolean)">
@@ -1443,6 +1520,7 @@
             <param name="xPos">X Position des Blocks</param>
             <param name="yPos">Y Position des Blocks</param>
             <param name="zPos">Z Position des Blocks</param>
+            <param name="element">Element das Platziert werden soll</param>
             <param name="updateView">Soll das View neu Gerendert werden</param>
         </member>
         <member name="M:Karol.World.GetCell(Karol.Core.Position)">
@@ -1486,9 +1564,10 @@
         </member>
         <member name="M:Karol.World.Load(System.String,Karol.Core.KarolWorldFormat)">
             <summary>
-            Lädt eine Welt aus einer .cskw (C Sharp Karol World) Datei.
+            Lädt eine Welt aus einer .cskw (C Sharp Karol World) oder einer .kwd (Karol Welt Deutsch) Datei.
             </summary>
             <param name="filePath">Ort an dem die Datei liegt.</param>
+            <param name="format">Format der Datei die geladen werden soll</param>
             <returns></returns>
         </member>
         <member name="M:Karol.World.SaveScreenshot(System.String)">

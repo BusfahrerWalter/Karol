@@ -15,7 +15,13 @@ namespace Karol.Core.Rendering
     /// </summary>
     public enum WorldRenderingMode : int
     {
+        /// <summary>
+        /// Rendern der Welt in 2D
+        /// </summary>
         Render2D = 2,
+        /// <summary>
+        /// Rendern der Welt in 3D
+        /// </summary>
         Render3D = 3
     }
 

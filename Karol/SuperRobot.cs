@@ -64,7 +64,7 @@ namespace Karol
         /// Erstellt einen neuen Roboter. An der Position 0, 0
         /// </summary>
         /// <param name="world">Welt in der der Roboter leben soll</param>
-        /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North
+        /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North</param>
         /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         public SuperRobot(World world, Direction initialDirection)
             : this(0, 0, world, initialDirection) { }
@@ -76,5 +76,12 @@ namespace Karol
         /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         public SuperRobot(World world) 
             : this(0, 0, world, Direction.North) { }
+
+        /// <summary>
+        /// Erstellt einen neuen Roboter anhand der übergebennen Optionen
+        /// </summary>
+        /// <param name="options">Roboter Optionen</param>
+        public SuperRobot(RobotOptions options)
+            : base(options) { }
     }
 }

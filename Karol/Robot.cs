@@ -26,8 +26,10 @@ namespace Karol
         private bool _isVisible = true;
         private int _bricksInBackpack;
         private bool reloadData = true;
+        private bool isMoving = false;
+        private bool addToList = false;
 
-        private Bitmap[] RoboterBitmaps { get; set; }
+        private Bitmap[] RoboterBitmaps { get; set; } = new Bitmap[4];
         private DateTime WaitStartTime { get; set; }
         internal Marker Mark { get; set; }
         internal override string Metadata
@@ -330,7 +332,7 @@ namespace Karol
         /// </summary>
         internal Robot()
         {
-
+            addToList = true;
         }
 
         /// <summary>
@@ -347,6 +349,8 @@ namespace Karol
 
             if (placeInWorld)
                 world.SetCell(xStart, zStart, this, updateView);
+
+            World.RobotCollection.Add(this);
         }
 
         /// <summary>
@@ -389,12 +393,18 @@ namespace Karol
             : this(0, 0, world, initialDirection) { }
 
         /// <summary>
-        /// Erzeugt einen neuen Roboter anhand der übergebennen Optionen
+        /// Erstellt einen neuen Roboter anhand der übergebennen Optionen
         /// </summary>
         /// <param name="options">Roboter Optionen</param>
         public Robot(RobotOptions options) 
-            : this(options.StartX, options.StartZ, options.World, options.InitialDirection) 
         {
+            _faceDirection = options.InitialDirection;
+            Position = new Position(options.StartX, options.World.GetStackSize(options.StartX, options.StartZ), options.StartZ);
+            World = options.World;
+
+            if (World.HasCellAt(Position, out WorldElement e) || (e != null && !e.CanStackOnTop))
+                throw new InvalidActionException($"An der gegebenen Position {Position} befindet sich bereits etwas!");
+
             if (options.NorthImage != null)
                 RoboterBitmaps[0] = options.NorthImage;
 
@@ -407,7 +417,15 @@ namespace Karol
             if (options.WestImage != null)
                 RoboterBitmaps[3] = options.WestImage;
 
+            if (options.OffsetX != 0)
+                XOffset = options.OffsetX;
+
+            if (options.OffsetY != 0)
+                YOffset = options.OffsetY;
+
             BitMap = RoboterBitmaps[FaceDirection.Offset];
+            World.RobotCollection.Add(this);
+            World.SetCell(options.StartX, options.StartZ, this);
         }
         #endregion
 
@@ -474,7 +492,10 @@ namespace Karol
 
         internal override void OnDestroy()
         {
-            //World.RobotCollection.Remove(this);
+            if (isMoving)
+                return;
+
+            World.RobotCollection.Remove(this);
         }
 
         internal override void OnWorldSet()
@@ -493,13 +514,13 @@ namespace Karol
             XOffset = -2;
             YOffset = -2;
 
-            World.RobotCollection.Add(this);
-
-            RoboterBitmaps = ResourcesLoader.LoadRobotBitmaps(World.RoboterCount - 1);
-
+            RoboterBitmaps = ResourcesLoader.LoadRobotBitmaps(World.RoboterCount);
             FaceDirection = _faceDirection;
             BitMap = RoboterBitmaps[FaceDirection.Offset];
             Identifier = World.RoboterCount;
+
+            if(addToList)
+                World.RobotCollection.Add(this);
 
             reloadData = false;
         }
@@ -536,6 +557,7 @@ namespace Karol
         {
             PrepareWait();
 
+            isMoving = true;
             Position newPos = FaceDirection.OffsetPosition(Position);
             if (!World.IsPositionValid(newPos))
                 throw new InvalidMoveException(Position, newPos);
@@ -586,6 +608,7 @@ namespace Karol
             }
             
             Wait();
+            isMoving = false;
         }
 
         /// <summary>
@@ -734,7 +757,8 @@ namespace Karol
         /// </summary>
         public void MakeSound()
         {
-            SystemSounds.Beep.Play();
+            SoundPlayer player = new SoundPlayer(Resources.RobotSound);
+            player.Play();
         }
 
         /// <summary>
@@ -757,6 +781,10 @@ namespace Karol
                    Identifier == robot.Identifier;
         }
 
+        /// <summary>
+        /// Gibt den Hashcode für dieses Objekt zurück
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return HashCode.Combine(Identifier);

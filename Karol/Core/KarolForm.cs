@@ -29,6 +29,7 @@ namespace Karol
         }
 
         public World World { get; set; }
+        private EditorForm WorldEditor { get; set; }
 
         public PictureBox GridPicture;
         public PictureBox BlockMap;
@@ -240,6 +241,7 @@ namespace Karol
             Invoke((MethodInvoker)delegate
             {
                 var item = RobotsMenuItem.DropDownItems.Add($"Robot {World.RoboterCount}", World.RobotCollection.Last.BitMap);
+                item.Tag = robo;
 
                 item.Click += (s, args) =>
                 {
@@ -252,7 +254,20 @@ namespace Karol
         {
             Invoke((MethodInvoker)delegate
             {
-                RobotsMenuItem.DropDownItems.RemoveAt(robo.Identifier);
+                ToolStripItem item = null;
+                foreach(ToolStripMenuItem i in RobotsMenuItem.DropDownItems)
+                {
+                    if(i.Tag == robo)
+                    {
+                        item = i;
+                        break;
+                    }
+                }
+
+                if (item == null)
+                    return;
+
+                RobotsMenuItem.DropDownItems.Remove(item);
             });
         }
 
@@ -278,12 +293,19 @@ namespace Karol
         private void View2DButton_Click(object sender, EventArgs e)
         {
             World.RenderingMode = View2DButton.Checked ? WorldRenderingMode.Render2D : WorldRenderingMode.Render3D;
+            if (!View2DButton.Checked && WorldEditor != null)
+            {
+                WorldEditor.Close();
+            }
         }
 
         private void EditorButton_Click(object sender, EventArgs e)
         {
-            EditorForm editor = new EditorForm(World);
-            editor.Show();
+            if (WorldEditor != null && WorldEditor.Visible)
+                return;
+
+            WorldEditor = new EditorForm(World);
+            WorldEditor.Show();
         }
 
         private void SaveImageButton_Click(object sender, EventArgs e)

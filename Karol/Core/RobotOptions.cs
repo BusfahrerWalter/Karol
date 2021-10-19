@@ -47,6 +47,15 @@ namespace Karol.Core
         public int StartZ { get; set; }
 
         /// <summary>
+        /// X Offset um das die Bitmap beim Rendern der Welt verschoben wird.
+        /// </summary>
+        public int OffsetX { get; set; }
+        /// <summary>
+        /// Y Offset um das die Bitmap beim Rendern der Welt verschoben wird.
+        /// </summary>
+        public int OffsetY { get; set; }
+
+        /// <summary>
         /// Erzeugt eine neue Instantz der RobotOptions Klasse
         /// </summary>
         public RobotOptions(World world) 

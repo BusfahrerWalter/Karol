@@ -113,6 +113,16 @@ namespace Karol.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap KoordinatensystemKreuz {
+            get {
+                object obj = ResourceManager.GetObject("KoordinatensystemKreuz", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap MarkDown {
             get {
                 object obj = ResourceManager.GetObject("MarkDown", resourceCulture);
@@ -507,6 +517,15 @@ namespace Karol.Properties {
             get {
                 object obj = ResourceManager.GetObject("robotS9", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream RobotSound {
+            get {
+                return ResourceManager.GetStream("RobotSound", resourceCulture);
             }
         }
         

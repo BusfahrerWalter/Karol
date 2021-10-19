@@ -94,5 +94,10 @@ namespace Karol.Core.WorldElements
         {
             onWorldSet?.Invoke(this, EventArgs.Empty);
         }
+
+        internal override void OnDestroy()
+        {
+            Destroy(Content, false);
+        }
     }
 }

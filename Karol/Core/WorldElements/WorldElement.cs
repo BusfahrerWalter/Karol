@@ -175,9 +175,15 @@ namespace Karol.Core.WorldElements
             return (WorldElement)Activator.CreateInstance(type, true);
         }
 
-        internal static void Destroy(WorldElement element)
+        internal static void Destroy(WorldElement element, bool isTargetInGrid = true)
         {
-            element.World.SetCell(element.Position, null);
+            if (element == null)
+                return;
+
+            if (isTargetInGrid)
+                element.World.SetCell(element.Position, null);
+            else
+                element.OnDestroy();
         }
 
         /// <summary>

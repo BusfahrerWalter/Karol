@@ -1,5 +1,6 @@
 ﻿using Karol.Core.WorldElements;
 using Karol.Extensions;
+using Karol.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -24,8 +25,8 @@ namespace Karol.Core.Rendering
 
         public override void Redraw()
         {
-            var map = (Bitmap)BlockMap.Image;
-            map.Clear();
+            var g = Graphics.FromImage(BlockMap.Image);
+            g.Clear(Color.Transparent);
 
             for (int x = 0; x < SizeX; x++)
             {
@@ -37,11 +38,12 @@ namespace Karol.Core.Rendering
                             continue;
 
                         var pos = World.CellToPixelPos(x, y, z, cell);
-                        map.DrawImage(pos, cell.BitMap);
+                        g.DrawImage(cell.BitMap, pos);
                     }
                 }
             }
 
+            g.Flush();
             BlockMap.Invalidate();
             BlockMap.Update();
         }
@@ -225,7 +227,7 @@ namespace Karol.Core.Rendering
             map.DrawLine(BottomLeft.X, BottomLeft.Y - height, TopLeft.X, TopLeft.Y - height, Color.Blue);
             map.DrawLine(TopLeft.X, TopLeft.Y - height, TopRight.X, TopRight.Y - height, Color.Blue);
 
-            Bitmap cross = new Bitmap(1, 1);// new Bitmap(@"C:\Users\danie\Pictures\KoordinatensystemKreuz.png");
+            Bitmap cross = Resources.KoordinatensystemKreuz;
             Point crossPos = new Point(Math.Max(BottomLeft.X - 20, 0), Math.Max(BottomLeft.Y - height - cross.Height - 50, 0));
             map.DrawImage(crossPos, cross);
 

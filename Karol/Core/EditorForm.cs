@@ -2,13 +2,10 @@
 using Karol.Core.Rendering;
 using Karol.Core.WorldElements;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Karol.Core
@@ -39,14 +36,22 @@ namespace Karol.Core
 
         private World World { get; set; }
         private bool Remove { get; set; }
+        private Point LastPos { get; set; }
 
+        /// <summary>
+        /// Erstellt eine neue Editor Form
+        /// </summary>
+        /// <param name="targetWorld">Welt für die der Editor da sein soll</param>
         public EditorForm(World targetWorld)
         {
             World = targetWorld;
-            World.WorldForm.BlockMap.Click += BlockMap_Click;
+            Remove = true;
+            World.WorldForm.BlockMap.MouseMove += BlockMap_Click;
 
             InitializeComponent();
             InitializeListBox();
+
+            Controller.CloseAll();
         }
 
         private void InitializeListBox()
@@ -85,6 +90,8 @@ namespace Karol.Core
                 var newCell = World.AddToStack(pos.X, pos.Y, item.Get());
                 World.Update(pos.X, pos.Y, newCell);
             }
+
+            LastPos = pos;
         }
 
         private void BlockMap_Click(object sender, EventArgs e)
@@ -93,7 +100,13 @@ namespace Karol.Core
                 return;
 
             var args = e as MouseEventArgs;
+            if (args.Button != MouseButtons.Left)
+                return;
+
             var point = PixelToCellPos(args.X, args.Y);
+            if (point == LastPos)
+                return;
+
             PlaceBlock(point);
         }
 
@@ -115,7 +128,7 @@ namespace Karol.Core
 
         private void EditorForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            World.WorldForm.BlockMap.Click -= BlockMap_Click;
+            World.WorldForm.BlockMap.MouseMove -= BlockMap_Click;
         }
     }
 }

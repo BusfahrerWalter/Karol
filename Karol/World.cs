@@ -26,13 +26,21 @@ namespace Karol
         #region Properties & Felder
         #region Hilfs zeug
         private const int MaxRoboterCount = 9;
-        private int _robotCount;
         private WorldRenderingMode _renderingMode;
         #endregion
 
         #region Events
+        /// <summary>
+        /// Wirt aufgerufen wenn ein Roboter zu der Welt hinzugefügt wird.
+        /// </summary>
         public event EventHandler<WorldChangedEventArgs> onRobotAdded;
+        /// <summary>
+        /// Wrid aufgerufen wenn die Welt geschlossen wird.
+        /// </summary>
         public event EventHandler onWorldClosed;
+        /// <summary>
+        /// Wird aufgerufen wenn sich die Rendering Methode geändert hat.
+        /// </summary>
         internal event EventHandler<WorldRenderingMode> onRenderingModeChanged;
         #endregion
 
@@ -222,7 +230,7 @@ namespace Karol
         /// zeichnen zu können.
         /// </summary>
         /// <param name="pos">Grid-Koordinate</param>
-        /// <param name="map">Bild das gezeichnet werden soll</param>
+        /// <param name="element">Element an der Position</param>
         /// <returns>Pixel-Koordinate</returns>
         internal Point CellToPixelPos(Position pos, WorldElement element)
         {
@@ -404,6 +412,7 @@ namespace Karol
         /// </summary>
         /// <param name="xPos">X Position des Blocks</param>
         /// <param name="zPos">Z Position des Blocks</param>
+        /// <param name="element">Element das Platziert werden soll</param>
         /// <param name="updateView">Soll das View neu Gerendert werden</param>
         internal void SetCell(int xPos, int zPos, WorldElement element, bool updateView = true)
         {
@@ -417,6 +426,7 @@ namespace Karol
         /// Setzt das definierte World Element in die entsprechende Zelle
         /// </summary>
         /// <param name="pos">Position des Blocks</param>
+        /// <param name="element">Element das Platziert werden soll</param>
         /// <param name="updateView">Soll das View neu Gerendert werden</param>
         internal void SetCell(Position pos, WorldElement element, bool updateView = true)
         {
@@ -429,6 +439,7 @@ namespace Karol
         /// <param name="xPos">X Position des Blocks</param>
         /// <param name="yPos">Y Position des Blocks</param>
         /// <param name="zPos">Z Position des Blocks</param>
+        /// <param name="element">Element das Platziert werden soll</param>
         /// <param name="updateView">Soll das View neu Gerendert werden</param>
         internal void SetCell(int xPos, int yPos, int zPos, WorldElement element, bool updateView = true)
         {
@@ -569,9 +580,10 @@ namespace Karol
         }
 
         /// <summary>
-        /// Lädt eine Welt aus einer .cskw (C Sharp Karol World) Datei.
+        /// Lädt eine Welt aus einer .cskw (C Sharp Karol World) oder einer .kwd (Karol Welt Deutsch) Datei.
         /// </summary>
         /// <param name="filePath">Ort an dem die Datei liegt.</param>
+        /// <param name="format">Format der Datei die geladen werden soll</param>
         /// <returns></returns>
         public static World Load(string filePath, KarolWorldFormat format = KarolWorldFormat.Auto)
         {
