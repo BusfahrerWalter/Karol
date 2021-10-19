@@ -36,7 +36,7 @@ namespace Karol
             set
             {
                 if (int.TryParse(value, out int offset))
-                    FaceDirection += offset;
+                    _faceDirection = Direction.FromOffset(offset);
             }
         }
 
@@ -318,7 +318,7 @@ namespace Karol
             internal set
             {
                 _faceDirection = value;
-                BitMap = IsVisible ? RoboterBitmaps[FaceDirection.Offset] : ImageExtension.EmptyBitmap;
+                BitMap = IsVisible ? RoboterBitmaps[value.Offset] : ImageExtension.EmptyBitmap;
             }
         }
         #endregion
@@ -338,13 +338,12 @@ namespace Karol
         /// </summary>
         internal Robot(int xStart, int zStart, World world, Direction initDir, bool updateView = true, bool placeInWorld = true)
         {
+            _faceDirection = initDir;
             Position = new Position(xStart, world.GetStackSize(xStart, zStart), zStart);
             World = world;
 
             if (World.HasCellAt(Position, out WorldElement e) || (e != null && !e.CanStackOnTop))
                 throw new InvalidActionException($"An der gegebenen Position {Position} befindet sich bereits etwas!");
-
-            _faceDirection = initDir;
 
             if (placeInWorld)
                 world.SetCell(xStart, zStart, this, updateView);
@@ -388,6 +387,28 @@ namespace Karol
         /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         public Robot(World world, Direction initialDirection) 
             : this(0, 0, world, initialDirection) { }
+
+        /// <summary>
+        /// Erzeugt einen neuen Roboter anhand der übergebennen Optionen
+        /// </summary>
+        /// <param name="options">Roboter Optionen</param>
+        public Robot(RobotOptions options) 
+            : this(options.StartX, options.StartZ, options.World, options.InitialDirection) 
+        {
+            if (options.NorthImage != null)
+                RoboterBitmaps[0] = options.NorthImage;
+
+            if (options.EastImage != null)
+                RoboterBitmaps[1] = options.EastImage;
+
+            if (options.SouthImage != null)
+                RoboterBitmaps[2] = options.SouthImage;
+
+            if (options.WestImage != null)
+                RoboterBitmaps[3] = options.WestImage;
+
+            BitMap = RoboterBitmaps[FaceDirection.Offset];
+        }
         #endregion
 
         #region Util
@@ -451,6 +472,11 @@ namespace Karol
             }
         }
 
+        internal override void OnDestroy()
+        {
+            //World.RobotCollection.Remove(this);
+        }
+
         internal override void OnWorldSet()
         {
             if (!reloadData)
@@ -467,15 +493,14 @@ namespace Karol
             XOffset = -2;
             YOffset = -2;
 
-            World.RoboterCount++;
-            World.Robots.Add(this);
+            World.RobotCollection.Add(this);
 
             RoboterBitmaps = ResourcesLoader.LoadRobotBitmaps(World.RoboterCount - 1);
+
+            FaceDirection = _faceDirection;
             BitMap = RoboterBitmaps[FaceDirection.Offset];
             Identifier = World.RoboterCount;
-            FaceDirection = _faceDirection;
 
-            World.OnRobotAdded(this);
             reloadData = false;
         }
         #endregion

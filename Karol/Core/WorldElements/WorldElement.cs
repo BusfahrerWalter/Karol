@@ -239,7 +239,7 @@ namespace Karol.Core.WorldElements
             //AddPath(new Position(Position.X, Position.Y, Position.Z - 1));
             //AddPath(new Position(Position.X + 1, Position.Y, Position.Z - 1));
 
-            foreach (var r in World.Robots.Where(r => r != this && (r.Position.Z < Position.Z || r.Position.X > Position.X)))
+            foreach (var r in World.RobotCollection.Where(r => r != this && (r.Position.Z < Position.Z || r.Position.X > Position.X)))
             {
                 AddNotNull(r);
             }

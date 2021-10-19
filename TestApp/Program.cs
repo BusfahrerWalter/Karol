@@ -1,12 +1,7 @@
 ﻿using Karol;
 using Karol.Core;
 using System;
-using System.Diagnostics;
-using System.Threading;
-using System.Reflection;
 using System.Drawing;
-using Karol.Core.Rendering;
-using System.Threading.Tasks;
 
 namespace TestApp
 {
@@ -14,47 +9,21 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    Solve(i);
-            //}
+            World w1 = new World(15,5,15);
 
-            World w1 = World.Load(@"C:\Users\danie\Desktop\KarolWorld.cskw");
-            Robot r1 = new Robot(1, 1, w1);
-        }
-
-        private static void Solve(int i)
-        {
-            World w1 = World.Load(@$"H:\Daten\Fächer\java\lib\karol\labs\lab{i}.kdw");
-            if (w1 == null)
-                return;
-
-            w1.RenderingMode = WorldRenderingMode.Render2D;
-            Robot r1 = w1.Robots[0];
-            Random rand = new Random();
-            DateTime start = DateTime.Now;
-
-            r1.Delay = 0;
-
-            while (!r1.HasMark)
+            RobotOptions options = new RobotOptions(w1)
             {
-                if (!r1.HasWall)
-                {
-                    r1.Move();
-                }
+                StartX = 0,
+                StartZ = 0,
+                NorthImage = new Bitmap(@"O:\muster\_alt_aus_10b\Web\Praktikum\pics\steinhuber.png"),
+                EastImage = new Bitmap(@"O:\muster\_alt_aus_10b\Web\Praktikum\pics\steinmetz.png"),
+                SouthImage = new Bitmap(@"O:\muster\_alt_aus_10b\Web\Praktikum\pics\nissen.png"),
+                WestImage = new Bitmap(@"H:\Daten\sachen\fettekatz.jpg")
+            };
 
-                int a = rand.Next(100);
-                if (a < 33)
-                {
-                    r1.TurnRight();
-                }
-                else if(a >= 33 && a < 66)
-                {
-                    r1.TurnLeft();
-                }
-            }
+            Robot r1 = new Robot(options);
 
-            Console.WriteLine("JAAAAAAAA   " + (DateTime.Now - start).TotalSeconds);
+            r1.Wait(1000);
         }
     }
 }

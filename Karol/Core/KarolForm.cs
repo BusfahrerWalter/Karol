@@ -65,7 +65,6 @@ namespace Karol
                 BlockMap.BackColor = Color.Transparent;
 
                 BlockMap.Click += Map_Click;
-                World.onRobotAdded += World_onRobotAdded;
                 World.onRenderingModeChanged += World_onRenderingModeChanged;
                 Focus();
             }
@@ -236,6 +235,27 @@ namespace Karol
             t.Start();
         }
 
+        public void AddRobotToList(Robot robo)
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                var item = RobotsMenuItem.DropDownItems.Add($"Robot {World.RoboterCount}", World.RobotCollection.Last.BitMap);
+
+                item.Click += (s, args) =>
+                {
+                    Controller.Create(robo);
+                };
+            });
+        }
+
+        public void RemoveRobotFromList(Robot robo)
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                RobotsMenuItem.DropDownItems.RemoveAt(robo.Identifier);
+            });
+        }
+
         #region Events
         private void World_onRenderingModeChanged(object sender, WorldRenderingMode e)
         {
@@ -243,20 +263,6 @@ namespace Karol
             {
                 View2DButton.Checked = e == WorldRenderingMode.Render2D;
                 EditorButton.Enabled = e == WorldRenderingMode.Render2D;
-            });
-        }
-
-        private void World_onRobotAdded(object sender, WorldChangedEventArgs args)
-        {
-            Invoke((MethodInvoker)delegate
-            {
-                var robo = args.NewElement as Robot;
-                var item = RobotsMenuItem.DropDownItems.Add($"Robot {World.RoboterCount}", World.Robots[World.Robots.Count - 1].BitMap);
-
-                item.Click += (s, args) =>
-                {
-                    Controller.Create(robo);
-                };
             });
         }
 

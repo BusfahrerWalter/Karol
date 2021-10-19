@@ -75,14 +75,7 @@ namespace Karol
         /// </summary>
         public int RoboterCount
         {
-            get => _robotCount;
-            internal set
-            {
-                if (value > MaxRoboterCount)
-                    throw new ArgumentOutOfRangeException($"In einer Welt können sich maximal {MaxRoboterCount} Roboter befinden!");
-
-                _robotCount = value;
-            }
+            get => RobotCollection.Count;
         }
         /// <summary>
         /// Der aktuelle Render Methode dieser Welt
@@ -106,15 +99,21 @@ namespace Karol
                 }
             }
         }
+        /// <summary>
+        /// Liste aller Roboter in dieser Welt
+        /// </summary>
+        public Robot[] Robots
+        {
+            get => RobotCollection.ToArray();
+        }
         #endregion
 
         #region Privat
-        public List<Robot> Robots { get; set; }
-        private WorldElement[,,] Grid { get; set; }
-
+        internal RobotCollection RobotCollection { get; set; }
         internal KarolForm WorldForm { get; set; }
-        private Thread UIThread { get; set; }
         internal Renderer WorldRenderer { get; set; }
+        private WorldElement[,,] Grid { get; set; }
+        private Thread UIThread { get; set; }
         #endregion
         #endregion
 
@@ -135,7 +134,7 @@ namespace Karol
             SizeX = sizeX;
             SizeY = sizeY;
             SizeZ = sizeZ;
-            Robots = new List<Robot>();
+            RobotCollection = new RobotCollection(MaxRoboterCount);
             Grid = new WorldElement[sizeX, sizeZ, sizeY];
 
             OpenWindow();
@@ -156,6 +155,17 @@ namespace Karol
             WorldForm.FormClosed += (e, args) =>
             {
                 OnWorldClosed();
+            };
+
+            RobotCollection.onRobotAdded += (s, e) =>
+            {
+                WorldForm.AddRobotToList(e.NewElement as Robot);
+                OnRobotAdded(e.NewElement as Robot);
+            };
+
+            RobotCollection.onRobotRemoved += (s, e) =>
+            {
+                WorldForm.RemoveRobotFromList(e.NewElement as Robot);
             };
 
             await Task.Run(() =>

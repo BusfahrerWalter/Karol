@@ -17,6 +17,9 @@ namespace Karol
     {
         private static List<Controller> ActiveControllers = new List<Controller>();
 
+        /// <summary>
+        /// Roboter der von diesem Controller gesteuert wird.
+        /// </summary>
         public Robot ControlledRobot { get; private set; }
         private ControllerForm Form { get; set; }
         private Dictionary<Keys, Action> InputMap { get; set; }

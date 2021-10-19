@@ -1,0 +1,1516 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Karol</name>
+    </assembly>
+    <members>
+        <member name="T:Karol.Controller">
+            <summary>
+            Hilfsklasse um einen Roboter zu steuern.
+            </summary>
+        </member>
+        <member name="P:Karol.Controller.ControlledRobot">
+            <summary>
+            Roboter der von diesem Controller gesteuert wird.
+            </summary>
+        </member>
+        <member name="M:Karol.Controller.Create(Karol.Robot)">
+            <summary>
+            Erzeugt einen Controller der einen Roboter steuert. <br></br>
+            Gibt null zurück wenn bereits ein Controller für diesen Roboter existiert.
+            </summary>
+            <param name="robo">Roboter der gesteuert werden soll.</param>
+            <returns>Controller instantz die mit dem Roboter verknüpft ist.</returns>
+        </member>
+        <member name="T:Karol.Core.Rendering.WorldRenderingMode">
+            <summary>
+            Gibt an wie eine Welt gerendert werden soll.
+            </summary>
+        </member>
+        <member name="T:Karol.Core.Rendering.Renderer">
+            <summary>
+            Basisklasse für alle Welt Renderer
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Rendering.Renderer.World">
+            <summary>
+            Zielwelt
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Rendering.Renderer.GridMap">
+            <summary>
+            Hintergrund (Wird nur einmal am anfang gemalt)
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Rendering.Renderer.BlockMap">
+            <summary>
+            Vordergrund (Wird bei jedem Update / Redraw geändert)
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Rendering.Renderer.TopLeft">
+            <summary>
+            Obere Linke ecke der Grundfläche
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Rendering.Renderer.BottomLeft">
+            <summary>
+            Untere Linke ecke der Grundfläche
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Rendering.Renderer.TopRight">
+            <summary>
+            Obere Rechte ecke der Grundfläche
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Rendering.Renderer.BottomRight">
+            <summary>
+            Untere Rechte ecke der Grundfläche
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Rendering.Renderer.SizeX">
+            <summary>
+            X Größe der Welt
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Rendering.Renderer.SizeY">
+            <summary>
+            Y Größe der Welt
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Rendering.Renderer.SizeZ">
+            <summary>
+            Z Größe der Welt
+            </summary>
+        </member>
+        <member name="M:Karol.Core.Rendering.Renderer.Redraw">
+            <summary>
+            Zeichnet die gesammte Welt neu
+            </summary>
+        </member>
+        <member name="M:Karol.Core.Rendering.Renderer.Update(System.Int32,System.Int32,Karol.Core.WorldElements.WorldElement)">
+            <summary>
+            Updated die Welt um einen nuen Block Korrekt zu darzustellen
+            </summary>
+            <param name="newCell">Der neu platzierte Block. Oder null wenn ein Block entfernt wurde.</param>
+        </member>
+        <member name="M:Karol.Core.Rendering.Renderer.DrawGrid">
+            <summary>
+            Zeichnet den Hintergrund
+            </summary>
+        </member>
+        <member name="M:Karol.Core.Rendering.Renderer.CellToPixelPos(System.Int32,System.Int32,System.Int32,Karol.Core.WorldElements.WorldElement)">
+            <summary>
+            Übersetzt eine Grid-Koordinate in eine Pixel-Koordinate um einen Block an der gegebenen Stelle 
+            zeichnen zu können.
+            </summary>
+            <param name="xPos">X Grid-Koordinate</param>
+            <param name="yPos">Y Grid-Koordinate</param>
+            <param name="zPos">Z Grid-Koordinate</param>
+            <param name="element">Bild das gezeichnet werden soll</param>
+            <returns>Pixel-Koordinate</returns>
+        </member>
+        <member name="M:Karol.Core.Rendering.Renderer.CellToPixelPos(Karol.Core.Position,Karol.Core.WorldElements.WorldElement)">
+            <summary>
+            Übersetzt eine Grid-Koordinate in eine Pixel-Koordinate um einen Block an der gegebenen Stelle 
+            zeichnen zu können.
+            </summary>
+            <param name="pos">Grid-Koordinate</param>
+            <param name="map">Bild das gezeichnet werden soll</param>
+            <returns>Pixel-Koordinate</returns>
+        </member>
+        <member name="M:Karol.Core.Rendering.Renderer.GetScreenshot">
+            <summary>
+            Gibt ein Bild der Welt zurück.
+            </summary>
+        </member>
+        <member name="M:Karol.Core.Rendering.Renderer.ForRenderingMode(Karol.World,Karol.Core.Rendering.WorldRenderingMode)">
+            <summary>
+            Gibt den mit der übergebenen Rendering Methode assoziierten Renderer zurück.
+            </summary>
+            <param name="targetWorld">Zielwelt des Renderers</param>
+            <param name="mode">Rendering Methode</param>
+            <returns>Neue instanz des Renderers</returns>
+        </member>
+        <member name="M:Karol.Core.Rendering.Renderer.ForRenderingModeIndex(Karol.World,System.Int32)">
+            <summary>
+            Gibt den mit der übergebenen Rendering Methode assoziierten Renderer zurück.
+            </summary>
+            <param name="targetWorld">Zielwelt des Renderers</param>
+            <param name="modeIndex">Index der Rendering Methode</param>
+            <returns>Neue instanz des Renderers</returns>
+        </member>
+        <member name="P:Karol.Core.Rendering.WorldRenderer3D.LineOffset">
+            <summary>
+            Versatz von zeile zu zeile in Pixeln
+            </summary>
+        </member>
+        <member name="F:Karol.Core.ControllerForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Karol.Core.ControllerForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Karol.Core.ControllerForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Karol.Core.Direction">
+            <summary>
+            Gibt eine der folgenden Richtung an: <br></br>
+            Norden, Süden, Osten oder Westen
+            </summary>
+        </member>
+        <member name="F:Karol.Core.Direction.North">
+            <summary>
+            Richtung Norden (Oben)
+            </summary>
+        </member>
+        <member name="F:Karol.Core.Direction.East">
+            <summary>
+            Richtung Osten (Rechts)
+            </summary>
+        </member>
+        <member name="F:Karol.Core.Direction.South">
+            <summary>
+            Richtung Süden (Unten)
+            </summary>
+        </member>
+        <member name="F:Karol.Core.Direction.West">
+            <summary>
+            Richtung Westen (Links)
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Direction.DirectionChar">
+            <summary>
+            Character der die Richtung angibt.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Direction.Name">
+            <summary>
+            Name der Richtung
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Direction.Offset">
+            <summary>
+            Offset der Richtung. Norden = 0
+            </summary>
+        </member>
+        <member name="M:Karol.Core.Direction.OffsetPosition(Karol.Core.Position,System.Int32)">
+            <summary>
+            Verschiebt eine Position um das angegebene Offset in die aktuelle richtung.
+            Verändert die übergebene Position nicht.
+            </summary>
+            <param name="pos">Position die verschoben werden soll</param>
+            <param name="offset">Zahl um wie viel die Position verschoben werden soll</param>
+            <returns>Neue und verchobene Position</returns>
+        </member>
+        <member name="M:Karol.Core.Direction.FromOffset(System.Int32)">
+            <summary>
+            Gibt die zum Offset passende Richtung zurück. <br></br>
+            Offset 0 = Norden
+            </summary>
+            <param name="offset">Offset aus dem die Richtung besitmmt werden soll</param>
+            <returns>Zum Offset passende Richtung</returns>
+        </member>
+        <member name="M:Karol.Core.Direction.ToString">
+            <summary>
+            Wandelt die Direction in einen String um
+            </summary>
+            <returns>Direction als String</returns>
+        </member>
+        <member name="M:Karol.Core.Direction.Equals(System.Object)">
+            <summary>
+            Vergleicht diese Direction mit einem anderen Objekt.
+            </summary>
+            <param name="obj">Anderes Objekt</param>
+            <returns>True wenn sie gleich sind. Ansonsten False</returns>
+        </member>
+        <member name="M:Karol.Core.Direction.op_Addition(Karol.Core.Direction,System.Int32)">
+            <summary>
+            Addiert ein bestimmtes Offset zu dieser Direction
+            </summary>
+            <param name="dir">Direction die geändert werden soll</param>
+            <param name="offset">Offset</param>
+            <returns>Dem neuen Offset entsprechende Direction</returns>
+        </member>
+        <member name="M:Karol.Core.Direction.op_Subtraction(Karol.Core.Direction,System.Int32)">
+            <summary>
+            Subtrahiert ein bestimmtes Offset von dieser Direction
+            </summary>
+            <param name="dir">Direction die geändert werden soll</param>
+            <param name="offset">Offset</param>
+            <returns>Dem neuen Offset entsprechende Direction</returns>
+        </member>
+        <member name="M:Karol.Core.Direction.op_Equality(Karol.Core.Direction,System.Object)">
+            <summary>
+            Vergleicht die Direction mit einem anderen Objekt
+            </summary>
+            <param name="dir">Direction 1</param>
+            <param name="obj">Anderes Objekt</param>
+            <returns>True wenn sie gleich sind. Ansonsten False</returns>
+        </member>
+        <member name="M:Karol.Core.Direction.op_Inequality(Karol.Core.Direction,System.Object)">
+            <summary>
+            Vergleicht die Direction mit einem anderen Objekt
+            </summary>
+            <param name="dir">Direction 1</param>
+            <param name="obj">Anderes Objekt</param>
+            <returns>True wenn sie ungleich sind. Ansonsten False</returns>
+        </member>
+        <member name="F:Karol.Core.EditorForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Karol.Core.EditorForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Karol.Core.EditorForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Karol.Core.Exceptions.InvalidActionException">
+            <summary>
+            Wird geworfen wenn eine Ungültige aktion ausgeführt wird.
+            </summary>
+        </member>
+        <member name="T:Karol.Core.Exceptions.InvalidMoveException">
+            <summary>
+            Wird geworfen wenn ein Roboter eine Ungültige bewegung ausführt.
+            </summary>
+        </member>
+        <member name="T:Karol.Core.Exceptions.InvalidSizeException">
+            <summary>
+            Wird geworfen wenn die größe der Welt ungültig ist.
+            </summary>
+        </member>
+        <member name="T:Karol.Core.Exceptions.KarolException">
+            <summary>
+            Basisklasse für alle Karol Exceptions
+            </summary>
+        </member>
+        <member name="T:Karol.Core.Position">
+            <summary>
+            Gibt eine Position im 3D Raum an.
+            </summary>
+        </member>
+        <member name="F:Karol.Core.Position.Zero">
+            <summary>
+            Gleich (0, 0, 0)
+            </summary>
+        </member>
+        <member name="F:Karol.Core.Position.One">
+            <summary>
+            Gleich (1, 1, 1)
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Position.X">
+            <summary>
+            X Koordinate dieser Position
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Position.Y">
+            <summary>
+            Y Koordinate dieser Position
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Position.Z">
+            <summary>
+            Z Koordinate dieser Position
+            </summary>
+        </member>
+        <member name="M:Karol.Core.Position.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Erstellt eine neue Position.
+            </summary>
+            <param name="x">X Koordinate</param>
+            <param name="y">Y Koordinate</param>
+            <param name="z">Z Koordinate</param>
+        </member>
+        <member name="M:Karol.Core.Position.#ctor(Karol.Core.Position)">
+            <summary>
+            Erstellt eine neue Position anhand einer anderen.
+            </summary>
+            <param name="pos">Andere Position</param>
+        </member>
+        <member name="M:Karol.Core.Position.ToString">
+            <summary>
+            Wandelt die Position in einen String um
+            </summary>
+            <returns>Position als String</returns>
+        </member>
+        <member name="M:Karol.Core.Position.Equals(System.Object)">
+            <summary>
+            Vergleicht die Position mit einem anderen Objekt
+            </summary>
+            <param name="obj">Anderes Objekt</param>
+            <returns>True wenn sie gleich sind. Ansonsten False</returns>
+        </member>
+        <member name="M:Karol.Core.Position.op_Subtraction(Karol.Core.Position,Karol.Core.Position)">
+            <summary>
+            Subtrahiert zwei Positionen voneinander. 
+            </summary>
+            <param name="p1">Position 1</param>
+            <param name="p2">Position 2</param>
+            <returns>Position die sich aus der Subtraktion ergibt</returns>
+        </member>
+        <member name="M:Karol.Core.Position.op_Addition(Karol.Core.Position,Karol.Core.Position)">
+            <summary>
+            Addiert 2 Positionen zusammen
+            </summary>
+            <param name="p1">Position 1</param>
+            <param name="p2">Position 2</param>
+            <returns>Position die sich aus der Addition ergibt</returns>
+        </member>
+        <member name="M:Karol.Core.Position.op_Multiply(Karol.Core.Position,System.Int32)">
+            <summary>
+            Multipliziert eine Position mit einer ganzen Zahl
+            </summary>
+            <param name="p1">Zu Multiplizierende Position</param>
+            <param name="i">Multiplikator</param>
+            <returns>Position die sich aus der Multiplikation ergibt</returns>
+        </member>
+        <member name="M:Karol.Core.Position.op_Division(Karol.Core.Position,System.Int32)">
+            <summary>
+            Dividiert eine Position mit einer ganzen Zahl
+            </summary>
+            <param name="p1">Zu Dividierende Position</param>
+            <param name="i">Divisor</param>
+            <returns>Position die sich aus der Division ergibt</returns>
+        </member>
+        <member name="M:Karol.Core.Position.op_Equality(Karol.Core.Position,Karol.Core.Position)">
+            <summary>
+            Vergleicht 2 Positionen miteinander
+            </summary>
+            <param name="p1">Position 1</param>
+            <param name="p2">Position 2</param>
+            <returns>True wenn sie gleich sind. Ansonsten False</returns>
+        </member>
+        <member name="M:Karol.Core.Position.op_Inequality(Karol.Core.Position,Karol.Core.Position)">
+            <summary>
+            Vergleicht 2 Positionen miteinander
+            </summary>
+            <param name="p1">Position 1</param>
+            <param name="p2">Position 2</param>
+            <returns>True wenn sie ungleich sind. Ansonsten False</returns>
+        </member>
+        <member name="T:Karol.Core.ResourcesLoader">
+            <summary>
+            Hilfsklasse um Resourcen zu laden.
+            </summary>
+        </member>
+        <member name="T:Karol.Core.RobotOptions">
+            <summary>
+            Enthält einstellungen aus denen ein neuer Roboter erzeugt werden kann.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.RobotOptions.NorthImage">
+            <summary>
+            Überschreibt die standard Textur des Roboters wenn er nach Norden schaut.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.RobotOptions.EastImage">
+            <summary>
+            Überschreibt die standard Textur des Roboters wenn er nach Osten schaut.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.RobotOptions.SouthImage">
+            <summary>
+            Überschreibt die standard Textur des Roboters wenn er nach Süden schaut.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.RobotOptions.WestImage">
+            <summary>
+            Überschreibt die standard Textur des Roboters wenn er nach Westen schaut.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.RobotOptions.World">
+            <summary>
+            Welt in der der Roboter leben soll
+            </summary>
+        </member>
+        <member name="P:Karol.Core.RobotOptions.InitialDirection">
+            <summary>
+            Richtung in die der Roboter am anfang schauen soll <br></br>
+            Standard ist Norden
+            </summary>
+        </member>
+        <member name="P:Karol.Core.RobotOptions.StartX">
+            <summary>
+            Start X Position des Roboters
+            </summary>
+        </member>
+        <member name="P:Karol.Core.RobotOptions.StartZ">
+            <summary>
+            Start Z Position des Roboters
+            </summary>
+        </member>
+        <member name="M:Karol.Core.RobotOptions.#ctor(Karol.World)">
+            <summary>
+            Erzeugt eine neue Instantz der RobotOptions Klasse
+            </summary>
+        </member>
+        <member name="M:Karol.Core.RobotOptions.#ctor(System.Int32,System.Int32,Karol.World)">
+            <summary>
+            Erzeugt eine neue Instantz der RobotOptions Klasse
+            </summary>
+            <param name="startX">Start X Position</param>
+            <param name="startZ">Start Z Position</param>
+            <param name="world">Zielwelt</param>
+        </member>
+        <member name="T:Karol.Core.WorldElements.Brick">
+            <summary>
+            Stellt einen Ziegel in der Welt dar.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.Marker.Content">
+            <summary>
+            Roboter der auf der Marke steht
+            </summary>
+        </member>
+        <member name="T:Karol.Core.WorldElements.WorldElement">
+            <summary>
+            Basisklasse für alle Objekte die in einer Welt sein sollen.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.WorldElement.World">
+            <summary>
+            Die Welt in der sich dieses Objekt befindet.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.WorldElement.BitMap">
+            <summary>
+            Bild das Gerendert werden soll.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.WorldElement.Rect">
+            <summary>
+            Rechteck das Position und Größe der Bitmap angibt.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.WorldElement.PixelPosition">
+            <summary>
+            Pixel Position dieses Elements
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.WorldElement.ViewColor2D">
+            <summary>
+            Farbe in der dieses Element in 2D Dargestellt werden soll
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.WorldElement.XOffset">
+            <summary>
+            X Offset für das Bild
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.WorldElement.YOffset">
+            <summary>
+            Y Offset für das Bild
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.WorldElement.CanStackOnTop">
+            <summary>
+            Gibt an ob auf diesem Element andere gestapelt werden können oder nicht. <br></br>
+            Standard ist True.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.WorldElement.IsObstacle">
+            <summary>
+            Gibt an ob dieses World element ein Hindernis ist oder nicht <br></br>
+            Standard ist True.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.WorldElement.CanPickUp">
+            <summary>
+            Gibt an ob dieses World element aufgehoben werden kann oder nicht. <br></br>
+            Standrad ist True.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.WorldElement.ID">
+            <summary>
+            ID zum Speichern und Laden
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.WorldElement.Metadata">
+            <summary>
+            Metadaten zum Speichern und Laden
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.WorldElement.Position">
+            <summary>
+            Aktuelle Position
+            </summary>
+        </member>
+        <member name="M:Karol.Core.WorldElements.WorldElement.ForID(System.Char)">
+            <summary>
+            Gibt das zu der ID gehörende World Element zurück. Funktioniert für Roboter nur mit Parametern!
+            </summary>
+            <param name="id">ID des World Elements</param>
+            <returns>World Element</returns>
+        </member>
+        <member name="M:Karol.Core.WorldElements.WorldElement.HasPixel(System.Drawing.Point)">
+            <summary>
+            Gibt zurück ob sich der Pixel im bereich dieses Elements befindet.
+            </summary>
+            <param name="pixelWorldPos">Globale Position des Pixels</param>
+            <returns>True wenn sich der Pixel im bereich des Elements befindet und nicht Transparent ist. Ansonsten False</returns>
+        </member>
+        <member name="T:Karol.Core.KarolWorldFormat">
+            <summary>
+            Dateiformat in dem die Karol Welt gespeichert ist.
+            </summary>
+        </member>
+        <member name="F:Karol.Core.KarolWorldFormat.Auto">
+            <summary>
+            Automatisches erkennen des Formats. (Kann unter umständen nicht bei jeder Welt funktionieren)
+            </summary>
+        </member>
+        <member name="T:Karol.Core.WorldParser">
+            <summary>
+            Klasse zum Speichern und Laden von Karol welten. <br></br>
+            Kann C# und Java Welten Laden.
+            </summary>
+        </member>
+        <member name="T:Karol.Extensions.ImageExtension">
+            <summary>
+            Erweiterungsklasse für Bitmaps
+            </summary>
+        </member>
+        <member name="T:Karol.Properties.Resources">
+            <summary>
+              Eine stark typisierte Ressourcenklasse zum Suchen von lokalisierten Zeichenfolgen usw.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.ResourceManager">
+            <summary>
+              Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.Culture">
+            <summary>
+              Überschreibt die CurrentUICulture-Eigenschaft des aktuellen Threads für alle
+              Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.BrickDown">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.BrickUp">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.CancelButton">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.CubeDown">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.CubeUp">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.MarkDown">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.Marke">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.MarkUp">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.MoveDown">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.MoveLeft">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.MoveRight">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.MoveUp">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.OkButton">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.Quader">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robot0">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robot1">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robot2">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robot3">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotN1">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotN2">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotN3">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotN4">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotN5">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotN6">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotN7">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotN8">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotN9">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotO1">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotO2">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotO3">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotO4">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotO5">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotO6">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotO7">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotO8">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotO9">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotS1">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotS2">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotS3">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotS4">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotS5">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotS6">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotS7">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotS8">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotS9">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotW1">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotW2">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotW3">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotW4">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotW5">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotW6">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotW7">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotW8">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotW9">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.RotateLeft">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.RotateRight">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.Ziegel">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.ZiegelRed">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="T:Karol.Robot">
+            <summary>
+            Ein Roboter der sich in einer Welt bewegen und dort leben kann...
+            </summary>
+        </member>
+        <member name="E:Karol.Robot.onEnterMarkPreview">
+            <summary>
+            Event wird ausgelöst wenn der Roboter eine Marke betritt.
+            </summary>
+        </member>
+        <member name="E:Karol.Robot.onLeaveMarkPreview">
+            <summary>
+            Event wird ausgelöst wenn der Roboter eine Marke verlässt.
+            </summary>
+        </member>
+        <member name="E:Karol.Robot.onPlaceBrickPreview">
+            <summary>
+            Event wird ausgelöst wenn der Roboter einen Ziegel platziert.
+            </summary>
+        </member>
+        <member name="E:Karol.Robot.onPickUpBrickPreview">
+            <summary>
+            Event wird ausgelöst wenn der Roboter einen Ziegel aufhebt.
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.JumpHeight">
+            <summary>
+            Gibt an wie hoch der Roboter Springen kann. (in Zellen) <br></br>
+            Standard ist 1
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.Delay">
+            <summary>
+            Die Verzögerung in Millisekunden zwischen 2 Aktionen des Roboters. <br></br>
+            Standard ist 300
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.Paint">
+            <summary>
+            Die Farbe in der die von diesem Roboter platzierten Ziegel angemalt werden.
+            Standard ist Rot
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.Identifier">
+            <summary>
+            Gibt die nummer des Roboters zurück.
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.IsVisible">
+            <summary>
+            Sichtbarkeit des Roboters <br></br>
+            Standard ist True
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.BricksInBackpack">
+            <summary>
+            Die Anzahl der Ziegel die sich im Rucksack befinden.
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.MaxBackpackSize">
+            <summary>
+            Maximale Rucksackgröße. Durch setzen von -1 wird die Rucksack funktion deaktiviert. <br></br>
+            Standard ist -1
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.IsBackpackFull">
+            <summary>
+            Gibt zurück ob der Rucksack voll ist. <br></br>
+            Gibt immer false zurück wenn MaxBackpackSize = -1 ist.
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.IsBackpackEmpty">
+            <summary>
+            Gibt zurück ob der Rucksack leer ist. <br></br>
+            Gibt immer false zurück wenn MaxBackpackSize = -1 ist.
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.CanMove">
+            <summary>
+            Gibt zurück ob der Roboter einen Schritt nach vorne machen kann oder nicht.
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.HasWall">
+            <summary>
+            Gibt zurück ob sich vor dem Roboter eine Wand bzw. ein Quader befindet.
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.HasWallRight">
+            <summary>
+            Gibt zurück ob sich rechts neben dem Roboter eine Wand bzw. ein Quader befindet.
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.HasWallLeft">
+            <summary>
+            Gibt zurück ob sich links neben dem Roboter eine Wand bzw. ein Quader befindet.
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.HasRobot">
+            <summary>
+            Gibt zurück ob sich vor dem Roboter ein anderer Roboter befindet.
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.HasMark">
+            <summary>
+            Gibt zurück ob sich der Roboter auf einer Marke befindet.
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.HasBrick">
+            <summary>
+            Gibt zurück ob sich vor dem Roboter ein Ziegel befindet
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.HasBrickLeft">
+            <summary>
+            Gibt zurück ob sich links neben dem Roboter ein Ziegel befindet
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.HasBrickRight">
+            <summary>
+            Gibt zurück ob sich rechts neben dem Roboter ein Ziegel befindet
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.FrontBrickCount">
+            <summary>
+            Gibt die anzahl der Ziegel vor dem Roboter zurück.
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.BrickColor">
+            <summary>
+            Gibt die Farbe des höchsten Ziegels vor dem Roboter zurück. <br></br>
+            Wenn sich vor dem Roboter kein Ziegel befindet wird Color.Transparent zurück gegeben.
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.FrontRobotIdentifier">
+            <summary>
+            Gibt die nummer des Roboters vor dem Roboter zurück. <br></br>
+            Gibt -1 zurück wenn sich vor dem Roboter kein anderer befindet.
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.IsFacingNorth">
+            <summary>
+            Schaut der Roboter gerade nach Norden
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.IsFacingOst">
+            <summary>
+            Schaut der Roboter gerade nach Osten
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.IsFacingSouth">
+            <summary>
+            Schaut der Roboter gerade nach Süden
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.IsFacingEast">
+            <summary>
+            Schaut der Roboter gerade nach Westen
+            </summary>
+        </member>
+        <member name="P:Karol.Robot.FaceDirection">
+            <summary>
+            Aktuelle Blickrichtung des Roboters
+            </summary>
+        </member>
+        <member name="M:Karol.Robot.#ctor">
+            <summary>
+            Parameterloser Konstruktor damit der Roboter automatisch erzeugt werden kann.
+            </summary>
+        </member>
+        <member name="M:Karol.Robot.#ctor(System.Int32,System.Int32,Karol.World,Karol.Core.Direction,System.Boolean,System.Boolean)">
+            <summary>
+            Erstellt einen neuen Roboter
+            </summary>
+        </member>
+        <member name="M:Karol.Robot.#ctor(System.Int32,System.Int32,Karol.World,Karol.Core.Direction)">
+            <summary>
+            Erstellt einen neuen Roboter.
+            </summary>
+            <param name="xStart">Start X Position des Roboters</param>
+            <param name="zStart">Start Z Position des Roboters</param>
+            <param name="world">Welt in der der Roboter leben soll</param>
+            <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North
+            </param>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
+        </member>
+        <member name="M:Karol.Robot.#ctor(System.Int32,System.Int32,Karol.World)">
+            <summary>
+            Erstellt einen neuen Roboter.
+            </summary>
+            <param name="xStart">Start X Position des Roboters</param>
+            <param name="zStart">Start Z Position des Roboters</param>
+            <param name="world">Welt in der der Roboter leben soll</param>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
+        </member>
+        <member name="M:Karol.Robot.#ctor(Karol.World)">
+            <summary>
+            Erstellt einen neuen Roboter. An der Position 0, 0
+            </summary>
+            <param name="world">Welt in der der Roboter leben soll</param>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
+        </member>
+        <member name="M:Karol.Robot.#ctor(Karol.World,Karol.Core.Direction)">
+            <summary>
+            Erstellt einen neuen Roboter. An der Position 0, 0
+            </summary>
+            <param name="world">Welt in der der Roboter leben soll</param>
+            <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North</param>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
+        </member>
+        <member name="M:Karol.Robot.#ctor(Karol.Core.RobotOptions)">
+            <summary>
+            Erzeugt einen neuen Roboter anhand der übergebennen Optionen
+            </summary>
+            <param name="options">Roboter Optionen</param>
+        </member>
+        <member name="M:Karol.Robot.Wait(System.Int32)">
+            <summary>
+            Lässt den Roboter warten.
+            </summary>
+            <param name="time">Dauer die der Roboter warten soll.</param>
+        </member>
+        <member name="M:Karol.Robot.TurnLeft">
+            <summary>
+            Dreht den Roboter um 90 grad nach Links
+            </summary>
+        </member>
+        <member name="M:Karol.Robot.TurnRight">
+            <summary>
+            Dreht den Roboter um 90 grad nach Rechts
+            </summary>
+        </member>
+        <member name="M:Karol.Robot.Move">
+            <summary>
+            Lässt den Roboter einen Schritt nach vorne Machen
+            </summary>
+            <exception cref="T:Karol.Core.Exceptions.InvalidMoveException">Wird geworfen wenn beim bewegen nach vorne ein Fehler auftritt</exception>
+        </member>
+        <member name="M:Karol.Robot.Place(System.Drawing.Color)">
+            <summary>
+            Platziert einen Ziegel vor dem Roboter.
+            </summary>
+            <param name="paintOverride">Überschreibung der Standard Farbe für diesen Roboter.</param>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn kein Ziegel platziert werden kann</exception>
+        </member>
+        <member name="M:Karol.Robot.Place">
+            <summary>
+            Platziert einen Ziegel vor dem Roboter.
+            </summary>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn kein Ziegel platziert werden kann</exception>
+        </member>
+        <member name="M:Karol.Robot.PickUp">
+            <summary>
+            Hebt den Ziegel vor dem Roboter auf.
+            </summary>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn kein Ziegel aufgehoben werden kann</exception>
+        </member>
+        <member name="M:Karol.Robot.PlaceMark">
+            <summary>
+            Platziert eine Marke unter dem Roboter.
+            </summary>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn keine Marke platziert werden kann</exception>
+        </member>
+        <member name="M:Karol.Robot.PickUpMark">
+            <summary>
+            Hebt eine Marke unter dem Roboter auf.
+            </summary>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn keine Marke aufgehoben werden kann</exception>
+        </member>
+        <member name="M:Karol.Robot.PlaceCube">
+            <summary>
+            Platziert einen Quader vor dem Roboter
+            </summary>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn kein Quader platziert werden kann</exception>
+        </member>
+        <member name="M:Karol.Robot.PickUpCube">
+            <summary>
+            Hebt einen Quader vor dem Roboter auf
+            </summary>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn kein Quader aufgehoben werden kann</exception>
+        </member>
+        <member name="M:Karol.Robot.MakeSound">
+            <summary>
+            Der Roboter gibt einen Piep-Ton aus
+            </summary>
+        </member>
+        <member name="M:Karol.Robot.ToString">
+            <summary>
+            Gibt den Zustand des Roboters als String aus.
+            </summary>
+            <returns>Zustand des Roboters</returns>
+        </member>
+        <member name="M:Karol.Robot.Equals(System.Object)">
+            <summary>
+            Prüft ob das übergebene Objekt dieser Roboter ist.
+            </summary>
+            <param name="obj">Anderes Objekt</param>
+            <returns>True wenn sie gleich sind. Ansonsten False</returns>
+        </member>
+        <member name="T:Karol.SuperRobot">
+            <summary>
+            Eine erweiterung des normalen Roboters
+            </summary>
+        </member>
+        <member name="E:Karol.SuperRobot.onEnterMark">
+            <summary>
+            Event wird ausgelöst wenn der Roboter eine Marke betritt.
+            </summary>
+        </member>
+        <member name="E:Karol.SuperRobot.onLeaveMark">
+            <summary>
+            Event wird ausgelöst wenn der Roboter eine Marke verlässt.
+            </summary>
+        </member>
+        <member name="E:Karol.SuperRobot.onPlaceBrick">
+            <summary>
+            Event wird ausgelöst wenn der Roboter einen Ziegel platziert.
+            </summary>
+        </member>
+        <member name="E:Karol.SuperRobot.onPickUpBrick">
+            <summary>
+            Event wird ausgelöst wenn der Roboter einen Ziegel aufhebt.
+            </summary>
+        </member>
+        <member name="M:Karol.SuperRobot.#ctor(System.Int32,System.Int32,Karol.World,Karol.Core.Direction)">
+            <summary>
+            Erstellt einen neuen Roboter.
+            </summary>
+            <param name="xStart">Start X Position des Roboters</param>
+            <param name="zStart">Start Z Position des Roboters</param>
+            <param name="world">Welt in der der Roboter leben soll</param>
+            <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North</param>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
+        </member>
+        <member name="M:Karol.SuperRobot.#ctor(System.Int32,System.Int32,Karol.World)">
+            <summary>
+            Erstellt einen neuen Roboter.
+            </summary>
+            <param name="xStart">Start X Position des Roboters</param>
+            <param name="zStart">Start Z Position des Roboters</param>
+            <param name="world">Welt in der der Roboter leben soll</param>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Karol.SuperRobot.#ctor(Karol.World,Karol.Core.Direction)" -->
+        <member name="M:Karol.SuperRobot.#ctor(Karol.World)">
+            <summary>
+            Erstellt einen neuen Roboter. An der Position 0, 0
+            </summary>
+            <param name="world">Welt in der der Roboter leben soll</param>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
+        </member>
+        <member name="T:Karol.World">
+            <summary>
+            Eine Karol Welt in der Roboter, Ziegel, Marken, usw.. platziert werden können.
+            </summary>
+        </member>
+        <member name="P:Karol.World.SizeX">
+            <summary>
+            Breite der Welt
+            </summary>
+        </member>
+        <member name="P:Karol.World.SizeY">
+            <summary>
+            Höhe der Welt
+            </summary>
+        </member>
+        <member name="P:Karol.World.SizeZ">
+            <summary>
+            Länge/Tiefe der Welt
+            </summary>
+        </member>
+        <member name="P:Karol.World.Width">
+            <summary>
+            Breite der Welt
+            </summary>   
+        </member>
+        <member name="P:Karol.World.Height">
+            <summary>
+            Höhe der Welt
+            </summary>
+        </member>
+        <member name="P:Karol.World.Depth">
+            <summary>
+            Länge/Tiefe der Welt
+            </summary>
+        </member>
+        <member name="P:Karol.World.CellCount">
+            <summary>
+            Anzahl der Zellen die in der Welt zur Verfügung stehen. <br></br>
+            Immer gleich (SizeX * SizeY * SizeZ)
+            </summary>
+        </member>
+        <member name="P:Karol.World.RoboterCount">
+            <summary>
+            Anzahl der Roboter die sich in dieser Welt befinden.
+            </summary>
+        </member>
+        <member name="P:Karol.World.RenderingMode">
+            <summary>
+            Der aktuelle Render Methode dieser Welt
+            </summary>
+        </member>
+        <member name="P:Karol.World.Robots">
+            <summary>
+            Liste aller Roboter in dieser Welt
+            </summary>
+        </member>
+        <member name="M:Karol.World.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Erstellt eine neue Welt für Karol. <br></br>
+            Die Welt muss mindestens 1x1x1 groß sein.
+            </summary>
+            <param name="sizeX">Breite der Welt</param>
+            <param name="sizeY">Höhe der Welt</param>
+            <param name="sizeZ">Länge/Tiefe der Welt</param>
+            <exception cref="T:Karol.Core.Exceptions.InvalidSizeException"></exception>
+        </member>
+        <member name="M:Karol.World.OpenWindow">
+            <summary>
+            Öffnet und Konfiguriert das Fenster
+            </summary>
+        </member>
+        <member name="M:Karol.World.Pulse">
+            <summary>
+            Sorgt dafür das sich das Fenster nach ablauf aller anweisungen nicht schließt
+            </summary>
+        </member>
+        <member name="M:Karol.World.InvokeFormMethod(System.Action)">
+            <summary>
+            Führt die übergebene Methode auf dem UI Thred von WorldForm aus.
+            </summary>
+            <param name="method">Methode zum Ausführen</param>
+        </member>
+        <member name="M:Karol.World.CellToPixelPos(Karol.Core.Position,Karol.Core.WorldElements.WorldElement)">
+            <summary>
+            Übersetzt eine Grid-Koordinate in eine Pixel-Koordinate um einen Block an der gegebenen Stelle 
+            zeichnen zu können.
+            </summary>
+            <param name="pos">Grid-Koordinate</param>
+            <param name="map">Bild das gezeichnet werden soll</param>
+            <returns>Pixel-Koordinate</returns>
+        </member>
+        <member name="M:Karol.World.CellToPixelPos(System.Int32,System.Int32,System.Int32,Karol.Core.WorldElements.WorldElement)">
+            <summary>
+            Übersetzt eine Grid-Koordinate in eine Pixel-Koordinate um einen Block an der gegebenen Stelle 
+            zeichnen zu können.
+            </summary>
+            <param name="xPos">X Grid-Koordinate</param>
+            <param name="yPos">Y Grid-Koordinate</param>
+            <param name="zPos">Z Grid-Koordinate</param>
+            <param name="element">Bild das gezeichnet werden soll</param>
+            <returns>Pixel-Koordinate</returns>
+        </member>
+        <member name="M:Karol.World.GetStackSize(System.Int32,System.Int32)">
+            <summary>
+            Zählt wie viele Blöcke auf dem Stapel liegen
+            </summary>
+            <returns>Anzahl der Blöcke auf dem Stapel</returns>
+        </member>
+        <member name="M:Karol.World.IsStackFull(System.Int32,System.Int32)">
+            <summary>
+            Gibt zurück ob ein Stapel bis an die maximale höhe reicht
+            </summary>
+            <param name="xPos">X Position des Stapels</param>
+            <param name="zPos">Z Position des Stapels</param>
+            <returns>True wenn der Stapel voll ist, ansonsten false</returns>
+        </member>
+        <member name="M:Karol.World.IsPositionValid(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gibt zurück ob eine Position innerhalt der Welt ist oder nicht
+            </summary>
+            <param name="xPos">X Position</param>
+            <param name="yPos">Y Position</param>
+            <param name="zPos">Z Position</param>
+            <returns>True wenn die Position innerhalb der Welt ist, ansonsten false.</returns>
+        </member>
+        <member name="M:Karol.World.IsPositionValid(Karol.Core.Position)">
+            <summary>
+            Gibt zurück ob eine Position innerhalt der Welt ist oder nicht
+            </summary>
+            <param name="pos">Position</param>
+            <returns>True wenn die Position innerhalb der Welt ist, ansonsten false.</returns>
+        </member>
+        <member name="M:Karol.World.HasCellAt(System.Int32,System.Int32,System.Int32,Karol.Core.WorldElements.WorldElement@)">
+            <summary>
+            Gibt zurück ob an der Position eine Zelle ist
+            </summary>
+            <returns>True wenn ja, ansonsten false</returns>
+        </member>
+        <member name="M:Karol.World.HasCellAt(Karol.Core.Position,Karol.Core.WorldElements.WorldElement@)">
+            <summary>
+            Gibt zurück ob an der Position eine Zelle ist
+            </summary>
+            <returns>True wenn ja, ansonsten false</returns>
+        </member>
+        <member name="M:Karol.World.Redraw">
+            <summary>
+            Zeichnet das Grid in dem angegebenen Bereich neu (auch Langsam)
+            </summary>
+        </member>
+        <member name="M:Karol.World.Update(System.Int32,System.Int32,Karol.Core.WorldElements.WorldElement)">
+            <summary>
+            Wird aufgerufen, nachdem sich etwas im Grid geändert hat.
+            </summary>
+            <param name="xPos">X Position des sich geänderten Blocks</param>
+            <param name="zPos">Z Position des sich geänderten Blocks</param>
+            <param name="newCell">Neu hinzugefügtes Element</param>
+        </member>
+        <member name="M:Karol.World.AddToStack(System.Int32,System.Int32)">
+            <summary>
+            Fügt einen Ziegel zu einem Stapel hinzu
+            </summary>
+            <returns>Ziegel der hinzugefügt wurde</returns>
+        </member>
+        <member name="M:Karol.World.AddToStack(System.Int32,System.Int32,Karol.Core.WorldElements.WorldElement)">
+            <summary>
+            Fügt einen Block zu einem Stapel hinzu
+            </summary>
+            <returns>Block der hinzugefügt wurde</returns>
+        </member>
+        <member name="M:Karol.World.SetCell(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Setzt einen Ziegel in die entsprechende Zelle
+            </summary>
+            <param name="xPos">X Position des Blocks</param>
+            <param name="zPos">Z Position des Blocks</param>
+            <param name="updateView">Soll das View neu Gerendert werden</param>
+        </member>
+        <member name="M:Karol.World.SetCell(System.Int32,System.Int32,Karol.Core.WorldElements.WorldElement,System.Boolean)">
+            <summary>
+            Setzt das definierte World Element in die entsprechende Zelle
+            </summary>
+            <param name="xPos">X Position des Blocks</param>
+            <param name="zPos">Z Position des Blocks</param>
+            <param name="updateView">Soll das View neu Gerendert werden</param>
+        </member>
+        <member name="M:Karol.World.SetCell(Karol.Core.Position,Karol.Core.WorldElements.WorldElement,System.Boolean)">
+            <summary>
+            Setzt das definierte World Element in die entsprechende Zelle
+            </summary>
+            <param name="pos">Position des Blocks</param>
+            <param name="updateView">Soll das View neu Gerendert werden</param>
+        </member>
+        <member name="M:Karol.World.SetCell(System.Int32,System.Int32,System.Int32,Karol.Core.WorldElements.WorldElement,System.Boolean)">
+            <summary>
+            Setzt das definierte World Element in die entsprechende Zelle
+            </summary>
+            <param name="xPos">X Position des Blocks</param>
+            <param name="yPos">Y Position des Blocks</param>
+            <param name="zPos">Z Position des Blocks</param>
+            <param name="updateView">Soll das View neu Gerendert werden</param>
+        </member>
+        <member name="M:Karol.World.GetCell(Karol.Core.Position)">
+            <summary>
+            Gibt das World Element an der entsprechenden Position zurück.
+            </summary>
+            <returns>World Element an der entsprechenden Position</returns>
+        </member>
+        <member name="M:Karol.World.GetCell(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gibt das World Element an der entsprechenden Position zurück.
+            </summary>
+            <returns>World Element an der entsprechenden Position</returns>
+        </member>
+        <member name="M:Karol.World.PlaceRandomBricks(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Plaziert zufällige Ziegel in der Welt
+            </summary>
+            <param name="count">Anzahl der zu plazierenden Ziegel</param>
+            <param name="maxStackHeight">Maximale höhe wie hoch die Ziegel gestapelt werden können. <br></br>
+            Sollte die gegebenne Anzahl nicht in den Bereich passen werden keine Ziegel mehr plaziert.
+            </param>
+            <param name="randomColor">Blöcke in zufälliger farbe platzieren oder nicht</param>
+        </member>
+        <member name="M:Karol.World.PlaceRandomBricks(System.Int32,System.Boolean)">
+            <summary>
+            Plaziert zufällige Ziegel in der Welt
+            </summary>
+            <param name="count">Anzahl der zu plazierenden Steine</param>
+            <param name="randomColor">Blöcke in zufälliger farbe platzieren oder nicht</param>
+        </member>
+        <member name="M:Karol.World.LoadImage(System.String,System.Int32)">
+            <summary>
+            Erstellt eine Welt aus einem Bild. Jeder Pixel in dem Bild repräsentiert eine Zelle in der Welt.
+            </summary>
+            <param name="filePath">Pfad zu dem Bild. <br></br>
+            Unterstützte Dateitypen: bmp, gif, jpeg, png, exif, tiff
+            </param>
+            <param name="worldHeight">Höhe der Welt.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Karol.World.Load(System.String,Karol.Core.KarolWorldFormat)">
+            <summary>
+            Lädt eine Welt aus einer .cskw (C Sharp Karol World) Datei.
+            </summary>
+            <param name="filePath">Ort an dem die Datei liegt.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Karol.World.SaveScreenshot(System.String)">
+            <summary>
+            Speichert einen Screenshot der Welt an dem angegebenen Pfad.
+            </summary>
+            <param name="filePath">Pfad wo das Bild gespeichert werden soll.</param>
+        </member>
+        <member name="M:Karol.World.SaveImage(System.String,System.Int32)">
+            <summary>
+            Speichert eine Ebene der Welt als .png Datei ab die weider geladen werden kann.
+            </summary>
+            <param name="filePath">Pfad wo die Datei gespeichert werden soll.</param>
+            <param name="layer">Welche Ebene der Welt soll gespeichert werden <br></br>
+            Standard ist 0
+            </param>
+        </member>
+        <member name="M:Karol.World.Save(System.String)">
+            <summary>
+            Speichert eine Welt als .cskw (C Sharp Karol World). Diese kann jederzeit wieder geladen werden.
+            </summary>
+            <param name="filePath">Ort an dem die Welt gespeichert werden soll.</param>
+        </member>
+    </members>
+</doc>
