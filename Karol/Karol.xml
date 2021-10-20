@@ -107,6 +107,8 @@
             Updated die Welt um einen nuen Block Korrekt zu darzustellen
             </summary>
             <param name="newCell">Der neu platzierte Block. Oder null wenn ein Block entfernt wurde.</param>
+            <param name="xPos">Zu updatende X Position</param>
+            <param name="zPos">Zu updatende Z Position</param>
         </member>
         <member name="M:Karol.Core.Rendering.Renderer.DrawGrid">
             <summary>
@@ -121,7 +123,7 @@
             <param name="xPos">X Grid-Koordinate</param>
             <param name="yPos">Y Grid-Koordinate</param>
             <param name="zPos">Z Grid-Koordinate</param>
-            <param name="element">Bild das gezeichnet werden soll</param>
+            <param name="element">Element das gezeichnet werden soll</param>
             <returns>Pixel-Koordinate</returns>
         </member>
         <member name="M:Karol.Core.Rendering.Renderer.CellToPixelPos(Karol.Core.Position,Karol.Core.WorldElements.WorldElement)">
@@ -130,7 +132,7 @@
             zeichnen zu können.
             </summary>
             <param name="pos">Grid-Koordinate</param>
-            <param name="map">Bild das gezeichnet werden soll</param>
+            <param name="element">Element das gezeichnet werden soll</param>
             <returns>Pixel-Koordinate</returns>
         </member>
         <member name="M:Karol.Core.Rendering.Renderer.GetScreenshot">
@@ -247,6 +249,12 @@
             <param name="obj">Anderes Objekt</param>
             <returns>True wenn sie gleich sind. Ansonsten False</returns>
         </member>
+        <member name="M:Karol.Core.Direction.GetHashCode">
+            <summary>
+            Gibt den Hash Code für dieses Objekt zurück
+            </summary>
+            <returns>Hash Code für dieses Objekt</returns>
+        </member>
         <member name="M:Karol.Core.Direction.op_Addition(Karol.Core.Direction,System.Int32)">
             <summary>
             Addiert ein bestimmtes Offset zu dieser Direction
@@ -302,25 +310,89 @@
             the contents of this method with the code editor.
             </summary>
         </member>
+        <member name="T:Karol.Core.WorldChangedEventArgs">
+            <summary>
+            Event Argumente wenn sich die Welt geändert hat
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldChangedEventArgs.NewElement">
+            <summary>
+            Neues Element das Platziert wurde. Null wen ein Element gelöscht wurde.
+            </summary>
+        </member>
+        <member name="M:Karol.Core.WorldChangedEventArgs.#ctor(Karol.Core.WorldElements.WorldElement)">
+            <summary>
+            Erstellt eine neue Instanz von WorldChangedEventArgs
+            </summary>
+            <param name="element">Neues Element</param>
+        </member>
         <member name="T:Karol.Core.Exceptions.InvalidActionException">
             <summary>
             Wird geworfen wenn eine Ungültige aktion ausgeführt wird.
             </summary>
+        </member>
+        <member name="M:Karol.Core.Exceptions.InvalidActionException.#ctor(System.String)">
+            <summary>
+            Erstellt eine neue Instanz
+            </summary>
+            <param name="msg">Nachricht die in der Exception angezeigt wrden soll</param>
         </member>
         <member name="T:Karol.Core.Exceptions.InvalidMoveException">
             <summary>
             Wird geworfen wenn ein Roboter eine Ungültige bewegung ausführt.
             </summary>
         </member>
+        <member name="P:Karol.Core.Exceptions.InvalidMoveException.CurrentPosition">
+            <summary>
+            Aktuelle Position des Roboters
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Exceptions.InvalidMoveException.TargetPosition">
+            <summary>
+            Position auf die sich der Roboter bewegen wollte
+            </summary>
+        </member>
+        <member name="M:Karol.Core.Exceptions.InvalidMoveException.#ctor(Karol.Core.Position,Karol.Core.Position)">
+            <summary>
+            Erstellt eine neue Instanz
+            </summary>
+            <param name="current">Position des Roboters</param>
+            <param name="target">Position auf die sich der Roboter bewegen wollte</param>
+        </member>
+        <member name="M:Karol.Core.Exceptions.InvalidMoveException.#ctor(Karol.Core.Position,Karol.Core.Position,System.String)">
+            <summary>
+            Erstellt eine neue Instanz
+            </summary>
+            <param name="current">Position des Roboters</param>
+            <param name="target">Position auf die sich der Roboter bewegen wollte</param>
+            <param name="message">Nachricht die in der Exception angezeigt wrden soll</param>
+        </member>
         <member name="T:Karol.Core.Exceptions.InvalidSizeException">
             <summary>
             Wird geworfen wenn die größe der Welt ungültig ist.
             </summary>
         </member>
+        <member name="M:Karol.Core.Exceptions.InvalidSizeException.#ctor(System.String)">
+            <summary>
+            Erstellt eine neue Instanz
+            </summary>
+            <param name="msg">Nachricht die in der Exception angezeigt wrden soll</param>
+        </member>
         <member name="T:Karol.Core.Exceptions.KarolException">
             <summary>
             Basisklasse für alle Karol Exceptions
             </summary>
+        </member>
+        <member name="M:Karol.Core.Exceptions.KarolException.#ctor">
+            <summary>
+            Erstellt eine neue Instanz
+            </summary>
+        </member>
+        <member name="M:Karol.Core.Exceptions.KarolException.#ctor(System.String)">
+            <summary>
+            Erstellt eine neue Instanz
+            </summary>
+            <param name="msg">Nachricht die in der Exception angezeigt wrden soll</param>
         </member>
         <member name="T:Karol.Core.Position">
             <summary>
@@ -378,6 +450,12 @@
             </summary>
             <param name="obj">Anderes Objekt</param>
             <returns>True wenn sie gleich sind. Ansonsten False</returns>
+        </member>
+        <member name="M:Karol.Core.Position.GetHashCode">
+            <summary>
+            Gibt den Hash Code für dieses Objekt zurück
+            </summary>
+            <returns>Hash Code für dieses Objekt</returns>
         </member>
         <member name="M:Karol.Core.Position.op_Subtraction(Karol.Core.Position,Karol.Core.Position)">
             <summary>
@@ -457,6 +535,12 @@
             Überschreibt die standard Textur des Roboters wenn er nach Westen schaut.
             </summary>
         </member>
+        <member name="P:Karol.Core.RobotOptions.Set">
+            <summary>
+            Ein Set das alle Bilder für einen Roboter enthält. <br></br>
+            Sollte nicht in Kombination mit NorthImage, EastImage, SouthImage oder WestImage verwendet werden.
+            </summary>
+        </member>
         <member name="P:Karol.Core.RobotOptions.World">
             <summary>
             Welt in der der Roboter leben soll
@@ -500,6 +584,50 @@
             <param name="startX">Start X Position</param>
             <param name="startZ">Start Z Position</param>
             <param name="world">Zielwelt</param>
+        </member>
+        <member name="M:Karol.Core.RobotOptions.GetImages">
+            <summary>
+            Gibt eine Liste aller Bilder zurück die in dieser Optionen Instanz gespeichert sind. <br></br>
+            Diese Liste ist immer 4 stellen lang. Nicht gesetzte Bilder werden mit null gefüllt.
+            </summary>
+            <returns>Liste aller Bilder</returns>
+        </member>
+        <member name="T:Karol.Core.ImageSet">
+            <summary>
+            Ein Set von Bildern für einen Roboter
+            </summary>
+        </member>
+        <member name="P:Karol.Core.ImageSet.Images">
+            <summary>
+            Liste aller Bilder in diesem Set
+            </summary>
+        </member>
+        <member name="P:Karol.Core.ImageSet.Freddy">
+            <summary>
+            Roboter Skin Freddy
+            </summary>
+        </member>
+        <member name="P:Karol.Core.ImageSet.Default">
+            <summary>
+            Standard Skin eines Roboters (Ohne Nummer)
+            </summary>
+        </member>
+        <member name="M:Karol.Core.ImageSet.Create(System.Drawing.Bitmap)">
+            <summary>
+            Erstellt ein neues Image Set aus einer Bitmap
+            </summary>
+            <param name="image">Bild für den Roboter</param>
+            <returns>Image set in dem jedes Bild gleich ist</returns>
+        </member>
+        <member name="M:Karol.Core.ImageSet.Create(System.Drawing.Bitmap,System.Drawing.Bitmap,System.Drawing.Bitmap,System.Drawing.Bitmap)">
+            <summary>
+            Erstellt ein neues Image Set aus 4 Bitmaps
+            </summary>
+            <param name="northImage">Bild wenn der Roboter nach Norden schaut</param>
+            <param name="eastImage">Bild wenn der Roboter nach Osten schaut</param>
+            <param name="southImage">Bild wenn der Roboter nach Süden schaut</param>
+            <param name="westImage">Bild wenn der Roboter nach Westen schaut</param>
+            <returns>Image set mit 4 verschiedenen Bildern</returns>
         </member>
         <member name="T:Karol.Core.WorldElements.Brick">
             <summary>
@@ -584,6 +712,17 @@
             Aktuelle Position
             </summary>
         </member>
+        <member name="M:Karol.Core.WorldElements.WorldElement.#ctor(System.Drawing.Bitmap)">
+            <summary>
+            Erstellt ein neues World Element
+            </summary>
+            <param name="bitMap">Bild für das Element</param>
+        </member>
+        <member name="M:Karol.Core.WorldElements.WorldElement.#ctor">
+            <summary>
+            Erstellt ein neues World Element
+            </summary>
+        </member>
         <member name="M:Karol.Core.WorldElements.WorldElement.ForID(System.Char)">
             <summary>
             Gibt das zu der ID gehörende World Element zurück. Funktioniert für Roboter nur mit Parametern!
@@ -603,6 +742,16 @@
             Dateiformat in dem die Karol Welt gespeichert ist.
             </summary>
         </member>
+        <member name="F:Karol.Core.KarolWorldFormat.CSharp">
+            <summary>
+            C# Welten
+            </summary>
+        </member>
+        <member name="F:Karol.Core.KarolWorldFormat.Java">
+            <summary>
+            Java Welten
+            </summary>
+        </member>
         <member name="F:Karol.Core.KarolWorldFormat.Auto">
             <summary>
             Automatisches erkennen des Formats. (Kann unter umständen nicht bei jeder Welt funktionieren)
@@ -613,6 +762,18 @@
             Klasse zum Speichern und Laden von Karol welten. <br></br>
             Kann C# und Java Welten Laden.
             </summary>
+        </member>
+        <member name="T:Karol.Extensions.ColorExtension">
+            <summary>
+            Erweiterungsklasse für Color
+            </summary>
+        </member>
+        <member name="M:Karol.Extensions.ColorExtension.Invert(System.Drawing.Color)">
+            <summary>
+            Invertiert eine Farbe
+            </summary>
+            <param name="c">Farbe</param>
+            <returns>Invertierte Farbe</returns>
         </member>
         <member name="T:Karol.Extensions.ImageExtension">
             <summary>
@@ -656,6 +817,11 @@
             </summary>
         </member>
         <member name="P:Karol.Properties.Resources.CubeUp">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.Freddy">
             <summary>
               Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
             </summary>
@@ -1150,6 +1316,14 @@
             </summary>
             <param name="options">Roboter Optionen</param>
         </member>
+        <member name="M:Karol.Robot.#ctor(System.Int32,System.Int32,Karol.Core.RobotOptions)">
+            <summary>
+            Erstellt einen neuen Roboter anhand der übergebennen Optionen
+            </summary>
+            <param name="options">Roboter Optionen</param>
+            <param name="startX">X Start Position des Roboters</param>
+            <param name="startZ">Z Start Posotion des Roboters</param>
+        </member>
         <member name="M:Karol.Robot.Wait(System.Int32)">
             <summary>
             Lässt den Roboter warten.
@@ -1264,12 +1438,27 @@
             Event wird ausgelöst wenn der Roboter einen Ziegel aufhebt.
             </summary>
         </member>
-        <member name="M:Karol.SuperRobot.#ctor(System.Int32,System.Int32,Karol.World,Karol.Core.Direction)">
+        <member name="M:Karol.SuperRobot.#ctor">
             <summary>
-            Erstellt einen neuen Roboter.
+            Parameterloser Konstruktor damit der Roboter automatisch erzeugt werden kann.
             </summary>
-            <param name="xStart">Start X Position des Roboters</param>
-            <param name="zStart">Start Z Position des Roboters</param>
+        </member>
+        <member name="M:Karol.SuperRobot.#ctor(System.Int32,System.Int32,Karol.World,Karol.Core.Direction,System.Boolean,System.Boolean)">
+            <summary>
+            Erstellt einen neuen Roboter
+            </summary>
+        </member>
+        <member name="M:Karol.SuperRobot.#ctor(Karol.World)">
+            <summary>
+            Erstellt einen neuen Roboter. An der Position 0, 0
+            </summary>
+            <param name="world">Welt in der der Roboter leben soll</param>
+            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
+        </member>
+        <member name="M:Karol.SuperRobot.#ctor(Karol.World,Karol.Core.Direction)">
+            <summary>
+            Erstellt einen neuen Roboter. An der Position 0, 0
+            </summary>
             <param name="world">Welt in der der Roboter leben soll</param>
             <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North</param>
             <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
@@ -1283,19 +1472,15 @@
             <param name="world">Welt in der der Roboter leben soll</param>
             <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         </member>
-        <member name="M:Karol.SuperRobot.#ctor(Karol.World,Karol.Core.Direction)">
+        <member name="M:Karol.SuperRobot.#ctor(System.Int32,System.Int32,Karol.World,Karol.Core.Direction)">
             <summary>
-            Erstellt einen neuen Roboter. An der Position 0, 0
+            Erstellt einen neuen Roboter.
             </summary>
+            <param name="xStart">Start X Position des Roboters</param>
+            <param name="zStart">Start Z Position des Roboters</param>
             <param name="world">Welt in der der Roboter leben soll</param>
-            <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North</param>
-            <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
-        </member>
-        <member name="M:Karol.SuperRobot.#ctor(Karol.World)">
-            <summary>
-            Erstellt einen neuen Roboter. An der Position 0, 0
-            </summary>
-            <param name="world">Welt in der der Roboter leben soll</param>
+            <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North
+            </param>
             <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         </member>
         <member name="M:Karol.SuperRobot.#ctor(Karol.Core.RobotOptions)">
@@ -1303,6 +1488,14 @@
             Erstellt einen neuen Roboter anhand der übergebennen Optionen
             </summary>
             <param name="options">Roboter Optionen</param>
+        </member>
+        <member name="M:Karol.SuperRobot.#ctor(System.Int32,System.Int32,Karol.Core.RobotOptions)">
+            <summary>
+            Erstellt einen neuen Roboter anhand der übergebennen Optionen
+            </summary>
+            <param name="options">Roboter Optionen</param>
+            <param name="startX">X Start Position des Roboters</param>
+            <param name="startZ">Z Start Posotion des Roboters</param>
         </member>
         <member name="T:Karol.World">
             <summary>

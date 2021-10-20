@@ -13,7 +13,13 @@ namespace Karol.Core
     /// </summary>
     public enum KarolWorldFormat
     {
+        /// <summary>
+        /// C# Welten
+        /// </summary>
         CSharp,
+        /// <summary>
+        /// Java Welten
+        /// </summary>
         Java,
         /// <summary>
         /// Automatisches erkennen des Formats. (Kann unter umständen nicht bei jeder Welt funktionieren)

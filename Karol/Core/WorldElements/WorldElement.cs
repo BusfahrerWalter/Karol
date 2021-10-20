@@ -130,11 +130,18 @@ namespace Karol.Core.WorldElements
         #endregion
 
         #region Konstruktoren
+        /// <summary>
+        /// Erstellt ein neues World Element
+        /// </summary>
+        /// <param name="bitMap">Bild für das Element</param>
         public WorldElement(Bitmap bitMap)
         {
             BitMap = bitMap;
         }
 
+        /// <summary>
+        /// Erstellt ein neues World Element
+        /// </summary>
         public WorldElement() : this(null) { }
         #endregion
 
@@ -252,7 +259,9 @@ namespace Karol.Core.WorldElements
 
             return list;
 
+            #pragma warning disable CS8321 // Die lokale Funktion ist deklariert, wird aber nie verwendet.
             void AddPath(Position start)
+            #pragma warning restore CS8321 // Die lokale Funktion ist deklariert, wird aber nie verwendet.
             {
                 while (World.IsPositionValid(start))
                 {

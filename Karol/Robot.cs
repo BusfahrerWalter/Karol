@@ -200,7 +200,8 @@ namespace Karol
                 if (!World.IsPositionValid(facePos))
                     return false;
 
-                return World.HasCellAt(facePos.X, facePos.Y, facePos.Z, out WorldElement e) && e is Robot;
+                int stackSize = World.GetStackSize(facePos.X, facePos.Z);
+                return World.HasCellAt(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z, out WorldElement e) && e is Robot;
             }
         }
         /// <summary>
@@ -397,9 +398,18 @@ namespace Karol
         /// </summary>
         /// <param name="options">Roboter Optionen</param>
         public Robot(RobotOptions options) 
+            : this(options.StartX, options.StartZ, options) { }
+
+        /// <summary>
+        /// Erstellt einen neuen Roboter anhand der übergebennen Optionen
+        /// </summary>
+        /// <param name="options">Roboter Optionen</param>
+        /// <param name="startX">X Start Position des Roboters</param>
+        /// <param name="startZ">Z Start Posotion des Roboters</param>
+        public Robot(int startX, int startZ, RobotOptions options)
         {
             _faceDirection = options.InitialDirection;
-            Position = new Position(options.StartX, options.World.GetStackSize(options.StartX, options.StartZ), options.StartZ);
+            Position = new Position(startX, options.World.GetStackSize(startX, startZ), startZ);
             World = options.World;
 
             if (World.HasCellAt(Position, out WorldElement e) || (e != null && !e.CanStackOnTop))
@@ -425,7 +435,7 @@ namespace Karol
 
             BitMap = RoboterBitmaps[FaceDirection.Offset];
             World.RobotCollection.Add(this);
-            World.SetCell(options.StartX, options.StartZ, this);
+            World.SetCell(startX, startZ, this);
         }
         #endregion
 

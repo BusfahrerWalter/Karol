@@ -10,8 +10,9 @@ namespace Karol.Core.Rendering
     [RendererInfo(WorldRenderingMode.Render2D)]
     internal class WorldRenderer2D : Renderer
     {
-        public const int EdgeLength = 40;
+        public const int EdgeLength = 30;
         public static Size CellSize = new Size(EdgeLength - 1, EdgeLength - 1);
+        private static Font Font = new Font(FontFamily.GenericSansSerif, 12);
 
         private int Height => EdgeLength * SizeZ;
         private int Width => EdgeLength * SizeX;
@@ -78,7 +79,7 @@ namespace Karol.Core.Rendering
 
                     Rectangle rect = new Rectangle(CellToPixelPos(e.Position, null), CellSize);
                     g.FillRectangle(new SolidBrush(e.ViewColor2D), rect);
-                    g.DrawString(stackSize.ToString(), new Font(FontFamily.GenericSansSerif, 16), new SolidBrush(e.ViewColor2D.Invert()), rect);
+                    g.DrawString(stackSize.ToString(), Font, new SolidBrush(e.ViewColor2D.Invert()), rect);
                 }
             }
 
@@ -117,8 +118,7 @@ namespace Karol.Core.Rendering
 
             map.Clear(rect);
             g.FillRectangle(new SolidBrush(newCell.ViewColor2D), rect);
-            g.DrawString(stackSize.ToString(), new Font(FontFamily.GenericSansSerif, 16), 
-                new SolidBrush(newCell.ViewColor2D.Invert()), rect);
+            g.DrawString(stackSize.ToString(), Font, new SolidBrush(newCell.ViewColor2D.Invert()), rect);
 
             g.Flush();
             BlockMap.Invalidate(rect);

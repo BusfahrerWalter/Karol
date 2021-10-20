@@ -83,6 +83,10 @@ namespace Karol.Core
                    Z == position.Z;
         }
 
+        /// <summary>
+        /// Gibt den Hash Code für dieses Objekt zurück
+        /// </summary>
+        /// <returns>Hash Code für dieses Objekt</returns>
         public override int GetHashCode()
         {
             return HashCode.Combine(X, Y, Z);

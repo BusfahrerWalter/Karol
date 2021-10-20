@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Karol.Core
 {
-    public partial class EditorForm : Form
+    internal partial class EditorForm : Form
     {
         private class WorldElementItem
         {
@@ -47,6 +47,8 @@ namespace Karol.Core
             World = targetWorld;
             Remove = true;
             World.WorldForm.BlockMap.MouseMove += BlockMap_Click;
+            World.WorldForm.BlockMap.Click += BlockMap_Click;
+            World.WorldForm.BlockMap.MouseUp += BlockMap_MouseUp;
 
             InitializeComponent();
             InitializeListBox();
@@ -77,6 +79,9 @@ namespace Karol.Core
                 return;
 
             int stackSize = World.GetStackSize(pos.X, pos.Y);
+            if (Remove)
+                stackSize = Math.Max(stackSize - 1, 0);
+
             if (!World.IsPositionValid(pos.X, stackSize, pos.Y))
                 return;
 
@@ -110,6 +115,11 @@ namespace Karol.Core
             PlaceBlock(point);
         }
 
+        private void BlockMap_MouseUp(object sender, MouseEventArgs e)
+        {
+            LastPos = new Point(-1, -1);
+        }
+
         private void RemoveButton_Click(object sender, EventArgs e)
         {
             ActionListBox.ClearSelected();
@@ -129,6 +139,8 @@ namespace Karol.Core
         private void EditorForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             World.WorldForm.BlockMap.MouseMove -= BlockMap_Click;
+            World.WorldForm.BlockMap.Click -= BlockMap_Click;
+            World.WorldForm.BlockMap.MouseUp -= BlockMap_MouseUp;
         }
     }
 }

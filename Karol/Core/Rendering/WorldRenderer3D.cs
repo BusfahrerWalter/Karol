@@ -35,7 +35,7 @@ namespace Karol.Core.Rendering
                     for (int y = 0; y < SizeY; y++)
                     {
                         if (!World.HasCellAt(x, y, z, out WorldElement cell))
-                            continue;
+                            break;
 
                         var pos = World.CellToPixelPos(x, y, z, cell);
                         g.DrawImage(cell.BitMap, pos);

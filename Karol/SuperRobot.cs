@@ -10,7 +10,7 @@ namespace Karol
     /// Eine erweiterung des normalen Roboters
     /// </summary>
     public class SuperRobot : Robot
-    {
+    {        
         /// <summary>
         /// Event wird ausgelöst wenn der Roboter eine Marke betritt.
         /// </summary>
@@ -28,15 +28,42 @@ namespace Karol
         /// </summary>
         public event EventHandler onPickUpBrick;
 
-        internal SuperRobot() : base() { }
-
-        internal SuperRobot(int xStart, int zStart, World world, Direction initDir, bool updateView = true, bool placeInWorld = true)
-            : base(xStart, zStart, world, initDir, updateView, placeInWorld) 
+        /// <summary>
+        /// Parameterloser Konstruktor damit der Roboter automatisch erzeugt werden kann.
+        /// </summary>
+        internal SuperRobot() : base()
         {
-            onEnterMarkPreview += (s, e) => onEnterMark?.Invoke(this, e);
-            onPickUpBrickPreview += (s, e) => onLeaveMark?.Invoke(this, e); ;
-            onPlaceBrickPreview += (s, e) => onPlaceBrick?.Invoke(this, e); ;
-            onPickUpBrickPreview += (s, e) => onPickUpBrick?.Invoke(this, e); ;
+            SetUpEvents();
+        }
+
+        /// <summary>
+        /// Erstellt einen neuen Roboter
+        /// </summary>
+        internal SuperRobot(int xStart, int zStart, World world, Direction initDir, bool updateView = true, bool placeInWorld = true) 
+            : base(xStart, zStart, world, initDir, updateView, placeInWorld)
+        {
+            SetUpEvents();
+        }
+
+        /// <summary>
+        /// Erstellt einen neuen Roboter. An der Position 0, 0
+        /// </summary>
+        /// <param name="world">Welt in der der Roboter leben soll</param>
+        /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
+        public SuperRobot(World world) : base(world)
+        {
+            SetUpEvents();
+        }
+
+        /// <summary>
+        /// Erstellt einen neuen Roboter. An der Position 0, 0
+        /// </summary>
+        /// <param name="world">Welt in der der Roboter leben soll</param>
+        /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North</param>
+        /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
+        public SuperRobot(World world, Direction initialDirection) : base(world, initialDirection)
+        {
+            SetUpEvents();
         }
 
         /// <summary>
@@ -45,10 +72,11 @@ namespace Karol
         /// <param name="xStart">Start X Position des Roboters</param>
         /// <param name="zStart">Start Z Position des Roboters</param>
         /// <param name="world">Welt in der der Roboter leben soll</param>
-        /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North</param>
         /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
-        public SuperRobot(int xStart, int zStart, World world, Direction initialDirection)
-            : this(xStart, zStart, world, initialDirection, true, true) { }
+        public SuperRobot(int xStart, int zStart, World world) : base(xStart, zStart, world)
+        {
+            SetUpEvents();
+        }
 
         /// <summary>
         /// Erstellt einen neuen Roboter.
@@ -56,32 +84,45 @@ namespace Karol
         /// <param name="xStart">Start X Position des Roboters</param>
         /// <param name="zStart">Start Z Position des Roboters</param>
         /// <param name="world">Welt in der der Roboter leben soll</param>
+        /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North
+        /// </param>
         /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
-        public SuperRobot(int xStart, int zStart, World world)
-            : this(xStart, zStart, world, Direction.North) { }
-
-        /// <summary>
-        /// Erstellt einen neuen Roboter. An der Position 0, 0
-        /// </summary>
-        /// <param name="world">Welt in der der Roboter leben soll</param>
-        /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North</param>
-        /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
-        public SuperRobot(World world, Direction initialDirection)
-            : this(0, 0, world, initialDirection) { }
-
-        /// <summary>
-        /// Erstellt einen neuen Roboter. An der Position 0, 0
-        /// </summary>
-        /// <param name="world">Welt in der der Roboter leben soll</param>
-        /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
-        public SuperRobot(World world) 
-            : this(0, 0, world, Direction.North) { }
+        public SuperRobot(int xStart, int zStart, World world, Direction initialDirection) : base(xStart, zStart, world, initialDirection)
+        {
+            SetUpEvents();
+        }
 
         /// <summary>
         /// Erstellt einen neuen Roboter anhand der übergebennen Optionen
         /// </summary>
         /// <param name="options">Roboter Optionen</param>
-        public SuperRobot(RobotOptions options)
-            : base(options) { }
+        public SuperRobot(RobotOptions options) : base(options)
+        {
+            SetUpEvents();
+        }
+
+        /// <summary>
+        /// Erstellt einen neuen Roboter anhand der übergebennen Optionen
+        /// </summary>
+        /// <param name="options">Roboter Optionen</param>
+        /// <param name="startX">X Start Position des Roboters</param>
+        /// <param name="startZ">Z Start Posotion des Roboters</param>
+        public SuperRobot(int startX, int startZ, RobotOptions options) : base(startX, startZ, options)
+        {
+            SetUpEvents();
+        }
+
+        private void SetUpEvents()
+        {
+            onEnterMarkPreview += (s, e) => onEnterMark?.Invoke(this, e);
+            onPickUpBrickPreview += (s, e) => onLeaveMark?.Invoke(this, e);
+            onPlaceBrickPreview += (s, e) => onPlaceBrick?.Invoke(this, e);
+            onPickUpBrickPreview += (s, e) => onPickUpBrick?.Invoke(this, e);
+        }
     }
 }
+
+
+
+
+

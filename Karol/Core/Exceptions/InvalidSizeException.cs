@@ -9,6 +9,10 @@ namespace Karol.Core.Exceptions
     /// </summary>
     public class InvalidSizeException : KarolException
     {
+        /// <summary>
+        /// Erstellt eine neue Instanz
+        /// </summary>
+        /// <param name="msg">Nachricht die in der Exception angezeigt wrden soll</param>
         public InvalidSizeException(string msg) : base(msg)
         { }
     }

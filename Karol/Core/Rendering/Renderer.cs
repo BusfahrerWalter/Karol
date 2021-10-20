@@ -98,6 +98,8 @@ namespace Karol.Core.Rendering
         /// Updated die Welt um einen nuen Block Korrekt zu darzustellen
         /// </summary>
         /// <param name="newCell">Der neu platzierte Block. Oder null wenn ein Block entfernt wurde.</param>
+        /// <param name="xPos">Zu updatende X Position</param>
+        /// <param name="zPos">Zu updatende Z Position</param>
         public abstract void Update(int xPos, int zPos, WorldElement newCell);
         
         /// <summary>
@@ -112,7 +114,7 @@ namespace Karol.Core.Rendering
         /// <param name="xPos">X Grid-Koordinate</param>
         /// <param name="yPos">Y Grid-Koordinate</param>
         /// <param name="zPos">Z Grid-Koordinate</param>
-        /// <param name="element">Bild das gezeichnet werden soll</param>
+        /// <param name="element">Element das gezeichnet werden soll</param>
         /// <returns>Pixel-Koordinate</returns>
         public abstract Point CellToPixelPos(int xPos, int yPos, int zPos, WorldElement element);
 
@@ -121,7 +123,7 @@ namespace Karol.Core.Rendering
         /// zeichnen zu können.
         /// </summary>
         /// <param name="pos">Grid-Koordinate</param>
-        /// <param name="map">Bild das gezeichnet werden soll</param>
+        /// <param name="element">Element das gezeichnet werden soll</param>
         /// <returns>Pixel-Koordinate</returns>
         public Point CellToPixelPos(Position pos, WorldElement element)
         {
@@ -134,7 +136,9 @@ namespace Karol.Core.Rendering
         public Bitmap GetScreenshot()
         {
             Bitmap map = new Bitmap(GridMap.Image);
-            map.DrawImage(0, 0, (Bitmap)BlockMap.Image);
+            Graphics g = Graphics.FromImage(map);
+            g.DrawImage(BlockMap.Image, Point.Empty);
+            g.Flush();
             return map;
         }
 

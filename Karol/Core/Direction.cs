@@ -116,6 +116,10 @@ namespace Karol.Core
                    DirectionChar == direction.DirectionChar;
         }
 
+        /// <summary>
+        /// Gibt den Hash Code für dieses Objekt zurück
+        /// </summary>
+        /// <returns>Hash Code für dieses Objekt</returns>
         public override int GetHashCode()
         {
             return HashCode.Combine(DirectionChar);
