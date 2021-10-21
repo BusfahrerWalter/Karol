@@ -73,6 +73,11 @@ namespace Karol.Core
         public int OffsetY { get; set; }
 
         /// <summary>
+        /// Zeit in Millisekunden die der Roboter zwischen 2 Aktionen wartet.
+        /// </summary>
+        public int Delay { get; set; }
+
+        /// <summary>
         /// Erzeugt eine neue Instantz der RobotOptions Klasse
         /// </summary>
         public RobotOptions(World world) 
@@ -90,6 +95,7 @@ namespace Karol.Core
             StartX = startX;
             StartZ = startZ;
             InitialDirection = Direction.North;
+            Delay = Robot.DefaultDelay;
         }
 
         /// <summary>

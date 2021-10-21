@@ -1,5 +1,6 @@
 ﻿using Karol.Core;
 using Karol.Core.Exceptions;
+using Karol.Core.WorldElements;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -275,6 +276,15 @@ namespace Karol
                 RobotAction(() =>
                 {
                     ControlledRobot.IsVisible = Form.IsVisibleCheckbox.Checked;
+                });
+            };
+
+            Form.KillButton.Click += (e, args) =>
+            {
+                RobotAction(() =>
+                {
+                    WorldElement.Destroy(ControlledRobot, !ControlledRobot.HasMark);
+                    Form.Close();
                 });
             };
 

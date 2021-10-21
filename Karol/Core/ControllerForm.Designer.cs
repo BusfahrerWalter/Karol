@@ -44,6 +44,7 @@ namespace Karol.Core
             this.PickUpCubeButton = new System.Windows.Forms.Button();
             this.PlaceCubeButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.MoreInfoCheckBox = new System.Windows.Forms.CheckBox();
             this.KillButton = new System.Windows.Forms.Button();
             this.IsVisibleCheckbox = new System.Windows.Forms.CheckBox();
             this.GetPaintButton = new System.Windows.Forms.Button();
@@ -58,6 +59,7 @@ namespace Karol.Core
             this.DelayInput = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BrickCountInput)).BeginInit();
@@ -165,7 +167,7 @@ namespace Karol.Core
             this.LogListBox.ItemHeight = 15;
             this.LogListBox.Location = new System.Drawing.Point(9, 268);
             this.LogListBox.Name = "LogListBox";
-            this.LogListBox.Size = new System.Drawing.Size(348, 139);
+            this.LogListBox.Size = new System.Drawing.Size(559, 139);
             this.LogListBox.TabIndex = 8;
             // 
             // PickUpMarkButton
@@ -239,8 +241,7 @@ namespace Karol.Core
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.MoreInfoCheckBox);
             this.groupBox2.Controls.Add(this.KillButton);
             this.groupBox2.Controls.Add(this.IsVisibleCheckbox);
             this.groupBox2.Controls.Add(this.GetPaintButton);
@@ -261,16 +262,28 @@ namespace Karol.Core
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Settings";
             // 
+            // MoreInfoCheckBox
+            // 
+            this.MoreInfoCheckBox.Appearance = System.Windows.Forms.Appearance.Button;
+            this.MoreInfoCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.MoreInfoCheckBox.Location = new System.Drawing.Point(96, 220);
+            this.MoreInfoCheckBox.Name = "MoreInfoCheckBox";
+            this.MoreInfoCheckBox.Size = new System.Drawing.Size(84, 23);
+            this.MoreInfoCheckBox.TabIndex = 15;
+            this.MoreInfoCheckBox.Text = "More Info";
+            this.MoreInfoCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.MoreInfoCheckBox.UseVisualStyleBackColor = true;
+            this.MoreInfoCheckBox.CheckedChanged += new System.EventHandler(this.MoreInfoCheckBox_CheckedChanged);
+            // 
             // KillButton
             // 
             this.KillButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.KillButton.Location = new System.Drawing.Point(96, 222);
+            this.KillButton.Location = new System.Drawing.Point(6, 220);
             this.KillButton.Name = "KillButton";
             this.KillButton.Size = new System.Drawing.Size(84, 23);
             this.KillButton.TabIndex = 13;
             this.KillButton.Text = "Suicide";
             this.KillButton.UseVisualStyleBackColor = true;
-            this.KillButton.Visible = false;
             // 
             // IsVisibleCheckbox
             // 
@@ -279,7 +292,7 @@ namespace Karol.Core
             this.IsVisibleCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.IsVisibleCheckbox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.IsVisibleCheckbox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.IsVisibleCheckbox.Location = new System.Drawing.Point(6, 196);
+            this.IsVisibleCheckbox.Location = new System.Drawing.Point(6, 169);
             this.IsVisibleCheckbox.Name = "IsVisibleCheckbox";
             this.IsVisibleCheckbox.Size = new System.Drawing.Size(113, 19);
             this.IsVisibleCheckbox.TabIndex = 12;
@@ -289,17 +302,17 @@ namespace Karol.Core
             // GetPaintButton
             // 
             this.GetPaintButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.GetPaintButton.Location = new System.Drawing.Point(96, 109);
+            this.GetPaintButton.Location = new System.Drawing.Point(145, 80);
             this.GetPaintButton.Name = "GetPaintButton";
-            this.GetPaintButton.Size = new System.Drawing.Size(84, 23);
+            this.GetPaintButton.Size = new System.Drawing.Size(35, 23);
             this.GetPaintButton.TabIndex = 11;
-            this.GetPaintButton.Text = "Get Paint";
+            this.GetPaintButton.Text = "Get";
             this.GetPaintButton.UseVisualStyleBackColor = true;
             // 
             // BrickCountInput
             // 
             this.BrickCountInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.BrickCountInput.Location = new System.Drawing.Point(96, 167);
+            this.BrickCountInput.Location = new System.Drawing.Point(96, 140);
             this.BrickCountInput.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -317,7 +330,7 @@ namespace Karol.Core
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 169);
+            this.label5.Location = new System.Drawing.Point(6, 142);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(69, 15);
             this.label5.TabIndex = 9;
@@ -326,7 +339,7 @@ namespace Karol.Core
             // MaxBackpackSizeInput
             // 
             this.MaxBackpackSizeInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MaxBackpackSizeInput.Location = new System.Drawing.Point(96, 138);
+            this.MaxBackpackSizeInput.Location = new System.Drawing.Point(96, 111);
             this.MaxBackpackSizeInput.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -344,7 +357,7 @@ namespace Karol.Core
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 140);
+            this.label4.Location = new System.Drawing.Point(6, 113);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(84, 15);
             this.label4.TabIndex = 7;
@@ -355,7 +368,7 @@ namespace Karol.Core
             this.SelectColorButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SelectColorButton.Location = new System.Drawing.Point(96, 80);
             this.SelectColorButton.Name = "SelectColorButton";
-            this.SelectColorButton.Size = new System.Drawing.Size(84, 23);
+            this.SelectColorButton.Size = new System.Drawing.Size(48, 23);
             this.SelectColorButton.TabIndex = 6;
             this.SelectColorButton.Text = "Select";
             this.SelectColorButton.UseVisualStyleBackColor = true;
@@ -414,11 +427,23 @@ namespace Karol.Core
             this.label1.TabIndex = 0;
             this.label1.Text = "Delay";
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Location = new System.Drawing.Point(363, 12);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(205, 251);
+            this.groupBox3.TabIndex = 13;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Info";
+            // 
             // ControllerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(369, 419);
+            this.ClientSize = new System.Drawing.Size(580, 419);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.LogListBox);
@@ -470,5 +495,7 @@ namespace Karol.Core
         public System.Windows.Forms.Button PlaceCubeButton;
         public System.Windows.Forms.CheckBox IsVisibleCheckbox;
         public System.Windows.Forms.Button KillButton;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.CheckBox MoreInfoCheckBox;
     }
 }

@@ -116,7 +116,7 @@ namespace Karol.Core.Rendering
 
             Rectangle rect = new Rectangle(CellToPixelPos(newCell.Position, null), CellSize);
 
-            map.Clear(rect);
+            g.FillRectangle(Brushes.Transparent, rect);
             g.FillRectangle(new SolidBrush(newCell.ViewColor2D), rect);
             g.DrawString(stackSize.ToString(), Font, new SolidBrush(newCell.ViewColor2D.Invert()), rect);
 

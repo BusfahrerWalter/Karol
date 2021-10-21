@@ -572,6 +572,11 @@
             Y Offset um das die Bitmap beim Rendern der Welt verschoben wird.
             </summary>
         </member>
+        <member name="P:Karol.Core.RobotOptions.Delay">
+            <summary>
+            Zeit in Millisekunden die der Roboter zwischen 2 Aktionen wartet.
+            </summary>
+        </member>
         <member name="M:Karol.Core.RobotOptions.#ctor(Karol.World)">
             <summary>
             Erzeugt eine neue Instantz der RobotOptions Klasse
@@ -1104,6 +1109,26 @@
         <member name="T:Karol.Robot">
             <summary>
             Ein Roboter der sich in einer Welt bewegen und dort leben kann...
+            </summary>
+        </member>
+        <member name="F:Karol.Robot.DefaultDelay">
+            <summary>
+            Standard Verzögerung
+            </summary>
+        </member>
+        <member name="F:Karol.Robot.DefaultJumpHeight">
+            <summary>
+            Standard Sprunghöhe
+            </summary>
+        </member>
+        <member name="F:Karol.Robot.DefaultBackpackSize">
+            <summary>
+            Standard Rucksackgröße
+            </summary>
+        </member>
+        <member name="F:Karol.Robot.DefaultPaint">
+            <summary>
+            Standard Ziegelfarbe
             </summary>
         </member>
         <member name="E:Karol.Robot.onEnterMarkPreview">

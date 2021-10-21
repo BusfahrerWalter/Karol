@@ -22,6 +22,23 @@ namespace Karol
     public class Robot : WorldElement
     {
         #region Properties / Felder
+        /// <summary>
+        /// Standard Verzögerung
+        /// </summary>
+        public const int DefaultDelay = 300;
+        /// <summary>
+        /// Standard Sprunghöhe
+        /// </summary>
+        public const int DefaultJumpHeight = 1;
+        /// <summary>
+        /// Standard Rucksackgröße
+        /// </summary>
+        public const int DefaultBackpackSize = -1;
+        /// <summary>
+        /// Standard Ziegelfarbe
+        /// </summary>
+        public static Color DefaultPaint = Color.Red;
+
         private Direction _faceDirection = Direction.North;
         private bool _isVisible = true;
         private int _bricksInBackpack;
@@ -411,6 +428,7 @@ namespace Karol
             _faceDirection = options.InitialDirection;
             Position = new Position(startX, options.World.GetStackSize(startX, startZ), startZ);
             World = options.World;
+            Delay = options.Delay;
 
             if (World.HasCellAt(Position, out WorldElement e) || (e != null && !e.CanStackOnTop))
                 throw new InvalidActionException($"An der gegebenen Position {Position} befindet sich bereits etwas!");
@@ -513,10 +531,10 @@ namespace Karol
             if (!reloadData)
                 return;
 
-            Delay = 300;
-            JumpHeight = 1;
-            MaxBackpackSize = -1;
-            Paint = Color.Red;
+            Delay = DefaultDelay;
+            JumpHeight = DefaultJumpHeight;
+            MaxBackpackSize = DefaultBackpackSize;
+            Paint = DefaultPaint;
 
             CanStackOnTop = false;
             CanPickUp = false;
