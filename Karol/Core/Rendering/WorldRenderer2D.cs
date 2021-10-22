@@ -22,7 +22,7 @@ namespace Karol.Core.Rendering
 
         public override Point CellToPixelPos(int xPos, int yPos, int zPos, WorldElement element)
         {
-            return new Point(xPos * EdgeLength + 1, Height - ((zPos + 1) * EdgeLength - 1));
+            return new Point(xPos * EdgeLength + 1 + TopLeft.X, Height - ((zPos + 1) * EdgeLength - 1));
         }
 
         public override Bitmap DrawGrid()
@@ -32,7 +32,7 @@ namespace Karol.Core.Rendering
             BottomLeft = new Point(0, Height);
             BottomRight = new Point(Width, Height);
 
-            Bitmap map = new Bitmap(Width + 1, Height + 1);
+            Bitmap map = new Bitmap(Width + 11, Height + 1);
 
             map.DrawPath(Color.Blue, true, TopLeft, TopRight, BottomRight, BottomLeft);
 

@@ -44,6 +44,7 @@ namespace Karol
         public ToolStripMenuItem View2DButton;
         private ToolStripSeparator toolStripSeparator1;
         public ToolStripMenuItem EditorButton;
+        private Panel panel1;
         private ToolStripMenuItem SaveScreenshotButton;
 
         public KarolForm(World world, string title)
@@ -74,7 +75,7 @@ namespace Karol
             GridPicture.Image = image;
             BlockMap.Size = image.Size;
             BlockMap.Image = new Bitmap(image.Size.Width, image.Size.Height);
-            Size = new Size(image.Width + 40, image.Height + 60);
+            Size = new Size(image.Width + 30, image.Height + 60);
             
             World.WorldRenderer.GridMap = GridPicture;
             World.WorldRenderer.BlockMap = BlockMap;
@@ -94,17 +95,19 @@ namespace Karol
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.RobotsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ProgressBar = new System.Windows.Forms.ProgressBar();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.GridPicture)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // GridPicture
             // 
             this.GridPicture.BackColor = System.Drawing.Color.Transparent;
-            this.GridPicture.Location = new System.Drawing.Point(9, 9);
+            this.GridPicture.Location = new System.Drawing.Point(0, 0);
             this.GridPicture.Margin = new System.Windows.Forms.Padding(0, 0, 10, 10);
             this.GridPicture.Name = "GridPicture";
-            this.GridPicture.Size = new System.Drawing.Size(108, 79);
+            this.GridPicture.Size = new System.Drawing.Size(130, 100);
             this.GridPicture.TabIndex = 0;
             this.GridPicture.TabStop = false;
             // 
@@ -183,25 +186,38 @@ namespace Karol
             this.ProgressBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.ProgressBar.Location = new System.Drawing.Point(0, 0);
             this.ProgressBar.Name = "ProgressBar";
-            this.ProgressBar.Size = new System.Drawing.Size(133, 5);
-            this.ProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.ProgressBar.Size = new System.Drawing.Size(131, 10);
+            this.ProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.ProgressBar.TabIndex = 1;
             this.ProgressBar.UseWaitCursor = true;
             this.ProgressBar.Value = 1;
+            this.ProgressBar.Visible = false;
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.GridPicture);
+            this.panel1.Location = new System.Drawing.Point(0, 12);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(131, 101);
+            this.panel1.TabIndex = 2;
             // 
             // KarolForm
             // 
-            this.AutoScroll = true;
             this.AutoScrollMargin = new System.Drawing.Size(10, 10);
-            this.ClientSize = new System.Drawing.Size(133, 103);
+            this.ClientSize = new System.Drawing.Size(131, 113);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.ProgressBar);
-            this.Controls.Add(this.GridPicture);
             this.HelpButton = true;
             this.MaximumSize = new System.Drawing.Size(1920, 1080);
             this.Name = "KarolForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             ((System.ComponentModel.ISupportInitialize)(this.GridPicture)).EndInit();
             this.contextMenuStrip.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

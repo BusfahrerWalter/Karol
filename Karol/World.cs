@@ -558,9 +558,12 @@ namespace Karol
 
             var map = new Bitmap(filePath);
             World world = new World(map.Width, worldHeight, map.Height);
-            world.WorldForm.ProgressBar.Visible = true;
-            world.WorldForm.ProgressBar.Value = 0;
-            world.WorldForm.ProgressBar.MarqueeAnimationSpeed = 30;
+            world.InvokeFormMethod(() =>
+            {
+                world.WorldForm.ProgressBar.Visible = true;
+                world.WorldForm.ProgressBar.Enabled = true;
+                world.WorldForm.ProgressBar.Value = 0;
+            });
 
             for (int x = 0; x < map.Width; x++)
             {
@@ -572,7 +575,18 @@ namespace Karol
 
                     world.AddToStack(x, map.Height - y - 1, new Brick(color));
                 }
+
+                world.InvokeFormMethod(() =>
+                {
+                    double val = (double)(x + 1) / map.Width;
+                    world.WorldForm.ProgressBar.Value = (int)Math.Round(val * 100);
+                });
             }
+
+            world.InvokeFormMethod(() =>
+            {
+                world.WorldForm.ProgressBar.Visible = false;
+            });
 
             world.Redraw();
             map.Dispose();
