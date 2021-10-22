@@ -178,6 +178,18 @@
   <data name="robot3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\robot3.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="robotMagentaE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\robotMagentaE.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="robotMagentaN" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\robotMagentaN.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="robotMagentaS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\robotMagentaS.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="robotMagentaW" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\robotMagentaW.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="robotN1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\robotN1.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

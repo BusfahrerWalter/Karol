@@ -617,6 +617,11 @@
             Standard Skin eines Roboters (Ohne Nummer)
             </summary>
         </member>
+        <member name="P:Karol.Core.ImageSet.Magenta">
+            <summary>
+            Magenta Skin für einen Roboter (Ohne Nummer)
+            </summary>
+        </member>
         <member name="M:Karol.Core.ImageSet.Create(System.Drawing.Bitmap)">
             <summary>
             Erstellt ein neues Image Set aus einer Bitmap
@@ -897,6 +902,26 @@
             </summary>
         </member>
         <member name="P:Karol.Properties.Resources.robot3">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotMagentaE">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotMagentaN">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotMagentaS">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.robotMagentaW">
             <summary>
               Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
             </summary>

@@ -1,20 +1,13 @@
-﻿using System;
-using Karol.Core;
-using Karol.Extensions;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Windows.Forms;
-using System.Drawing;
-using System.Threading.Tasks;
-using System.Threading;
+﻿using Karol.Core;
 using Karol.Core.Exceptions;
-using System.Reflection;
-using Karol.Properties;
-using System.Linq;
-using Karol.Core.WorldElements;
-using System.IO;
-using System.Text;
 using Karol.Core.Rendering;
+using Karol.Core.WorldElements;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Karol
 {

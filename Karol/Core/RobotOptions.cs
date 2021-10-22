@@ -138,6 +138,11 @@ namespace Karol.Core
         public static ImageSet Default => Create(Resources.robot2, Resources.robot3, Resources.robot0, Resources.robot1);
 
         /// <summary>
+        /// Magenta Skin für einen Roboter (Ohne Nummer)
+        /// </summary>
+        public static ImageSet Magenta => Create(Resources.robotMagentaN, Resources.robotMagentaE, Resources.robotMagentaS, Resources.robotMagentaW);
+
+        /// <summary>
         /// Erstellt ein neues Image Set aus einer Bitmap
         /// </summary>
         /// <param name="image">Bild für den Roboter</param>

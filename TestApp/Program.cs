@@ -9,10 +9,9 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            World w2 = new World(10, 15, 20);
-            World w1 = World.LoadImage(@"H:\Daten\sachen\fehler.PNG");
-            //World w1 = new World(40, 88, 40);
-            //Egon 
+            //World w1 = World.LoadImage(@"H:\Daten\sachen\fehler.PNG");
+            World w1 = new World(40, 88, 40);
+            
             RobotOptions o = new RobotOptions(w1)
             {
                 StartX = 0,
@@ -22,6 +21,10 @@ namespace TestApp
             };
 
             SuperRobot r1 = new SuperRobot(o);
+
+
+            r1.Wait(2000);
+            r1.MakeSound();
         }
     }
 }
