@@ -12,7 +12,7 @@ namespace TestApp
             World w2 = new World(10, 15, 20);
             World w1 = World.LoadImage(@"H:\Daten\sachen\fehler.PNG");
             //World w1 = new World(40, 88, 40);
-
+            //Egon
             RobotOptions o = new RobotOptions(w1)
             {
                 StartX = 0,
