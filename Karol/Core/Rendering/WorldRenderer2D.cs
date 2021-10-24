@@ -10,9 +10,10 @@ namespace Karol.Core.Rendering
     [RendererInfo(WorldRenderingMode.Render2D)]
     internal class WorldRenderer2D : Renderer
     {
-        public const int EdgeLength = 30;
+        public static int EdgeLength = 30;
         public static Size CellSize = new Size(EdgeLength - 1, EdgeLength - 1);
-        private static Font Font = new Font(FontFamily.GenericSansSerif, 12);
+        public static Bounds Padding = new Bounds(10, 0, 0, 0);
+        private static readonly Font Font = new Font(FontFamily.GenericSansSerif, 12);
 
         private int Height => EdgeLength * SizeZ;
         private int Width => EdgeLength * SizeX;
@@ -22,19 +23,21 @@ namespace Karol.Core.Rendering
 
         public override Point CellToPixelPos(int xPos, int yPos, int zPos, WorldElement element)
         {
-            return new Point(xPos * EdgeLength + 1 + TopLeft.X, Height - ((zPos + 1) * EdgeLength - 1));
+            return new Point(xPos * EdgeLength + 1 + Padding.Left, Height - ((zPos + 1) * EdgeLength - 1 - Padding.Top));
         }
 
         public override Bitmap DrawGrid()
         {
-            TopLeft = new Point(0, 0);
-            TopRight = new Point(Width, 0);
-            BottomLeft = new Point(0, Height);
-            BottomRight = new Point(Width, Height);
+            TopLeft = new Point(Padding.Left, Padding.Top);
+            TopRight = new Point(Width + Padding.Left, Padding.Top);
+            BottomLeft = new Point(Padding.Left, Height + Padding.Top);
+            BottomRight = new Point(Width + Padding.Left, Height + Padding.Top);
 
-            Bitmap map = new Bitmap(Width + 11, Height + 1);
+            Bitmap map = new Bitmap(Width + Padding.Horizontal + 1, Height + Padding.Vertical + 1);
+            Graphics g = Graphics.FromImage(map);
+            Pen pen = new Pen(Brushes.Blue);
 
-            map.DrawPath(Color.Blue, true, TopLeft, TopRight, BottomRight, BottomLeft);
+            g.DrawPolygon(pen, new Point[] { TopLeft, TopRight, BottomRight, BottomLeft, TopLeft });
 
             for(int x = 1; x < SizeX; x++)
             {
@@ -44,7 +47,7 @@ namespace Karol.Core.Rendering
                 start.X += EdgeLength * x;
                 end.X = start.X;
 
-                map.DrawLine(start, end, Color.Blue);
+                g.DrawLine(pen, start, end);
             }
 
             for (int y = 1; y < SizeZ; y++)
@@ -55,9 +58,10 @@ namespace Karol.Core.Rendering
                 start.Y -= EdgeLength * y;
                 end.Y = start.Y;
 
-                map.DrawLine(start, end, Color.Blue);
+                g.DrawLine(pen, start, end);
             }
 
+            g.Flush();
             return map;
         }
 

@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Karol\Karol.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="articles\" />
+  </ItemGroup>
+
 </Project>

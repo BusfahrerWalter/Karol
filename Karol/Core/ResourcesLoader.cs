@@ -1,4 +1,5 @@
 ﻿using Karol.Properties;
+using System;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -12,7 +13,7 @@ namespace Karol.Core
     {       
         public static Bitmap[] LoadRobotBitmaps(int roboNumber)
         {
-            roboNumber += 1;
+            roboNumber = Math.Min(roboNumber + 1, 9);
             var flags = BindingFlags.Static | BindingFlags.NonPublic;
             return new Bitmap[]
             {

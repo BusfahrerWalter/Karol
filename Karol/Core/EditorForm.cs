@@ -69,7 +69,7 @@ namespace Karol.Core
 
         private Point PixelToCellPos(int x, int y)
         {
-            return new Point((int)Math.Ceiling((double)(x / WorldRenderer2D.EdgeLength)), 
+            return new Point((int)Math.Ceiling((double)((x - WorldRenderer2D.Padding.Left) / WorldRenderer2D.EdgeLength)), 
                 (int)Math.Ceiling((double)((World.WorldForm.BlockMap.Height - y) / WorldRenderer2D.EdgeLength)));
         }
 
