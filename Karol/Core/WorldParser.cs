@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace Karol.Core
 {
@@ -119,42 +120,44 @@ namespace Karol.Core
 
             World world = new World(xSize, ySize, zSize);
 
-            while (!reader.EndOfStream)
-            {            
-                for (int y = 0; y < ySize; y++)
+            for (int y = 0; y < ySize; y++)
+            {
+                NextLine(reader);
+                for (int z = zSize - 1; z >= 0; z--)
                 {
-                    NextLine(reader);
-                    for (int z = zSize - 1; z >= 0; z--)
+                    string line = NextLine(reader);
+                    if (line != null && line.StartsWith(LayerSeperator))
+                        line = NextLine(reader);
+
+                    if (line == null)
                     {
-                        string line = NextLine(reader);
-                        if (line != null && line.StartsWith(LayerSeperator))
-                            line = NextLine(reader);
+                        world.Redraw();
+                        reader.Close();
+                        return world;
+                    }
 
-                        if (line == null)
-                            return world;
+                    string[] arr = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                    int xCount = Math.Min(xSize, arr.Length);
+                    for (int x = 0; x < xCount; x++)
+                    {
+                        if (IsPlaceholder(arr[x]))
+                            continue;
 
-                        string[] arr = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                        int xCount = Math.Min(xSize, arr.Length);
-                        for (int x = 0; x < xCount; x++)
+                        if (world.HasCellAt(x, y, z, out WorldElement e))
                         {
-                            if (IsPlaceholder(arr[x]))
-                                continue;
+                            reader.Close();
+                            Kill();
+                        }
 
-                            if (world.HasCellAt(x, y, z, out WorldElement e))
-                            {
-                                reader.Close();
-                                Kill();
-                            }
+                        char id = char.ToUpper(arr[x][0]);
+                        WorldElement cell = WorldElement.ForID(id);
 
-                            char id = char.ToUpper(arr[x][0]);
-                            WorldElement cell = WorldElement.ForID(id);
-
-                            if (cell == null)
-                            {
-                                reader.Close();
-                                Kill();
-                            }
-
+                        if (cell == null)
+                        {
+                            Console.WriteLine($"Ungültiges Zeichen in zeile {CurrentLine}");
+                        }
+                        else
+                        {
                             world.SetCell(x, y, z, cell, false);
                             if (GetMetaData(arr[x], out string metadata))
                                 cell.Metadata = metadata;
