@@ -188,7 +188,7 @@ namespace Karol
         /// <summary>
         /// Gibt zurück ob sich rechts neben dem Roboter eine Wand bzw. ein Quader befindet.
         /// </summary>
-        public bool HasWallRight
+        internal bool HasWallRight
         {
             get
             {
@@ -198,7 +198,7 @@ namespace Karol
         /// <summary>
         /// Gibt zurück ob sich links neben dem Roboter eine Wand bzw. ein Quader befindet.
         /// </summary>
-        public bool HasWallLeft
+        internal bool HasWallLeft
         {
             get
             {

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Karol.Core
@@ -122,6 +123,8 @@ namespace Karol.Core
             World world = new World(xSize, ySize, zSize);
             WorldElement last = null;
 
+            EnableProgressBar(world, true);
+
             for (int y = 0; y < ySize; y++)
             {
                 NextLine(reader);
@@ -166,11 +169,14 @@ namespace Karol.Core
                                 cell.Metadata = metadata;
 
                             last = cell;
-                        }
+                        }   
                     }
+
+                    SetProgress(world, (double)(y + 1) / ySize);
                 }
             }
 
+            EnableProgressBar(world, false);
             world.Redraw();
             reader.Close();
             return world;
@@ -204,6 +210,8 @@ namespace Karol.Core
             int z = zSize - 1;
             bool hasPlacedCube = false;
 
+            EnableProgressBar(world, true);
+
             for (int i = 0; i < arr.Length; i++)
             {
                 string[] blocks = arr[i].Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -223,6 +231,7 @@ namespace Karol.Core
                     hasPlacedCube = !hasPlacedCube && c == 'Q';
                 }
 
+                SetProgress(world, (double)(i + 1) / arr.Length);
 
                 z--;
                 if (z == -1)
@@ -237,6 +246,7 @@ namespace Karol.Core
 
             Robot r = new Robot(rXpos, rZpos, world, Direction.South, false);
 
+            EnableProgressBar(world, false);
             world.Redraw();
             reader.Close();
             return world;

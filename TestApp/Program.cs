@@ -10,8 +10,7 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            World w = World.LoadImage(@"H:\Daten\sachen\fehler.PNG");
-            World w1 = World.Load(@"C:\Users\damuelle\Desktop\Brams\KarolWorld23.cskw");
+            World w = World.LoadImage(@"H:\Daten\sachen\fehler.PNG", 100);
         }
     }
 }
