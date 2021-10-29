@@ -1,6 +1,7 @@
 ﻿using Karol.Core.WorldElements;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -119,6 +120,7 @@ namespace Karol.Core
             int zSize = int.Parse(dimension[2]);
 
             World world = new World(xSize, ySize, zSize);
+            WorldElement last = null;
 
             for (int y = 0; y < ySize; y++)
             {
@@ -150,7 +152,8 @@ namespace Karol.Core
                         }
 
                         char id = char.ToUpper(arr[x][0]);
-                        WorldElement cell = WorldElement.ForID(id);
+                        bool hasMetaData = HasMetadata(arr[x]);
+                        WorldElement cell = (last != null && !hasMetaData && last.ID == id) ? last : WorldElement.ForID(id);
 
                         if (cell == null)
                         {
@@ -161,6 +164,8 @@ namespace Karol.Core
                             world.SetCell(x, y, z, cell, false);
                             if (GetMetaData(arr[x], out string metadata))
                                 cell.Metadata = metadata;
+
+                            last = cell;
                         }
                     }
                 }
@@ -188,6 +193,7 @@ namespace Karol.Core
             int rYpos = int.Parse(posArr[6]);
 
             World world = new World(xSize, ySize, zSize);
+            WorldElement last = null;
             Dictionary<char, char> IDMap = new Dictionary<char, char>()
             {
                 { 'n', EmptyCellID },
@@ -207,8 +213,12 @@ namespace Karol.Core
                         break;
 
                     char c = Translate(block[0]);
-                    if(!hasPlacedCube)
-                        world.SetCell(x, z, WorldElement.ForID(c), false);
+                    if (!hasPlacedCube)
+                    {
+                        var cell = last != null && last.ID == c ? last : WorldElement.ForID(c);
+                        world.SetCell(x, z, cell, false);
+                        last = cell;
+                    }
 
                     hasPlacedCube = !hasPlacedCube && c == 'Q';
                 }
@@ -255,6 +265,40 @@ namespace Karol.Core
                 return 32;
             }
         }
+
+        public World LoadImage(string filePath, int worldHeight = 5)
+        {
+            if (!File.Exists(filePath))
+                return null;
+
+            var map = new Bitmap(filePath);
+            World world = new World(map.Width, worldHeight, map.Height);
+            Brick last = null;
+
+            EnableProgressBar(world, true);
+
+            for (int x = 0; x < map.Width; x++)
+            {
+                for (int y = 0; y < map.Height; y++)
+                {
+                    Color color = map.GetPixel(x, y);
+                    if (color.A == 0)
+                        continue;
+
+                    var cell = last != null && last.Paint == color ? last : new Brick(color);
+                    world.SetGridElement(x, 0, map.Height - y - 1, cell);
+                    last = cell;
+                }
+
+                double val = (double)(x + 1) / map.Width;
+                SetProgress(world, val);
+            }
+
+            EnableProgressBar(world, false);
+            world.Redraw();
+            map.Dispose();
+            return world;
+        }
         #endregion
 
         #region Private
@@ -274,6 +318,11 @@ namespace Karol.Core
             return str.StartsWith(EmptyCellID) || str.StartsWith("D");
         }
 
+        private bool HasMetadata(string str)
+        {
+            return str.Length != 1;
+        }
+
         private bool GetMetaData(string str, out string metadata)
         {
             if(str.Length == 1)
@@ -284,6 +333,26 @@ namespace Karol.Core
 
             metadata = str[2..^1];
             return true;
+        }
+        #endregion
+
+        #region ProgressBar
+        private void EnableProgressBar(World targetWorld, bool enabled)
+        {
+            targetWorld.InvokeFormMethod(() =>
+            {
+                targetWorld.WorldForm.ProgressBar.Visible = enabled;
+                targetWorld.WorldForm.ProgressBar.Enabled = enabled;
+                targetWorld.WorldForm.ProgressBar.Value = 0;
+            });
+        }
+
+        private void SetProgress(World targetWorld, double value)
+        {
+            targetWorld.InvokeFormMethod(() =>
+            {
+                targetWorld.WorldForm.ProgressBar.Value = (int)Math.Round(value * 100);
+            });
         }
         #endregion
     }

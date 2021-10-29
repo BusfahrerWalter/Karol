@@ -1295,7 +1295,7 @@
             Schaut der Roboter gerade nach Norden
             </summary>
         </member>
-        <member name="P:Karol.Robot.IsFacingOst">
+        <member name="P:Karol.Robot.IsFacingEast">
             <summary>
             Schaut der Roboter gerade nach Osten
             </summary>
@@ -1305,7 +1305,7 @@
             Schaut der Roboter gerade nach Süden
             </summary>
         </member>
-        <member name="P:Karol.Robot.IsFacingEast">
+        <member name="P:Karol.Robot.IsFacingWest">
             <summary>
             Schaut der Roboter gerade nach Westen
             </summary>
@@ -1811,7 +1811,9 @@
             </summary>
             <param name="filePath">Ort an dem die Datei liegt.</param>
             <param name="format">Format der Datei die geladen werden soll</param>
-            <returns></returns>
+            <returns>Aus der Datei geladene Welt</returns>
+            <exception cref="T:System.IO.IOException"></exception>
+            <exception cref="T:System.IO.InvalidDataException"></exception>
         </member>
         <member name="M:Karol.World.SaveScreenshot(System.String)">
             <summary>
