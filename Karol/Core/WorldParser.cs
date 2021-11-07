@@ -107,9 +107,35 @@ namespace Karol.Core
             };
         }
 
-        private World LoadCSharp(string filePath)
+        public World Load(StreamReader reader)
+        {
+            return Load(reader, KarolWorldFormat.Auto);
+        }
+
+        public World Load(StreamReader reader, KarolWorldFormat format)
+        {
+            byte[] buffer = new byte[FirstLine.Length];
+            reader.BaseStream.Read(buffer, 0, FirstLine.Length);
+            reader.BaseStream.Position = 0;
+            string head = Encoding.ASCII.GetString(buffer);
+
+            return format switch
+            {
+                KarolWorldFormat.CSharp => LoadCSharp(reader),
+                KarolWorldFormat.Java => LoadJava(reader),
+                KarolWorldFormat.Auto => head.StartsWith(FirstLine) ? LoadCSharp(reader) : LoadJava(reader),
+                _ => throw new NotImplementedException(),
+            };
+        }
+
+        public World LoadCSharp(string filePath)
         {
             using StreamReader reader = new StreamReader(filePath);
+            return LoadCSharp(reader);
+        }
+
+        public World LoadCSharp(StreamReader reader)
+        {
             if (NextLine(reader) != FirstLine)
                 Console.WriteLine("Header nicht gefunden. Welt kann möglicherweise nicht geladen werden.");
 
@@ -182,10 +208,15 @@ namespace Karol.Core
             return world;
         }
 
-        private World LoadJava(string filePath)
+        public World LoadJava(string filePath)
         {
             using StreamReader reader = new StreamReader(filePath);
-            string line = NextLine(reader);
+            return LoadJava(reader);
+        }
+
+        public World LoadJava(StreamReader reader)
+        {
+            string line = reader.ReadLine();
             int startIndex = StartIndex(line);
             string[] arr = Regex.Split(line[startIndex..], @"(?<=[om])");
             string[] posArr = line[..startIndex].Split(' ');
@@ -279,7 +310,7 @@ namespace Karol.Core
         public World LoadImage(string filePath, int worldHeight = 5)
         {
             if (!File.Exists(filePath))
-                return null;
+                throw new FileNotFoundException("Datei nicht gefunden", filePath);
 
             var map = new Bitmap(filePath);
             World world = new World(map.Width, worldHeight, map.Height);

@@ -5,6 +5,7 @@ using Karol.Core.WorldElements;
 using System;
 using System.Drawing;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -483,11 +484,13 @@ namespace Karol
         /// Sollte die gegebenne Anzahl nicht in den Bereich passen werden keine Ziegel mehr plaziert.
         /// </param>
         /// <param name="randomColor">Blöcke in zufälliger farbe platzieren oder nicht</param>
-        public void PlaceRandomBricks(int count, int maxStackHeight, bool randomColor = false)
+        /// <returns>Anzahl der tatsächlich Platzierten Ziegel</returns>
+        public int PlaceRandomBricks(int count, int maxStackHeight, bool randomColor = false)
         {
             maxStackHeight = Math.Clamp(maxStackHeight, 0, SizeY);
             count = Math.Clamp(count, 0, SizeX * SizeZ * maxStackHeight);
             Random rand = new Random();
+            int acctualCount = 0;
 
             for (int i = 0; i < count; i++)
             {
@@ -521,9 +524,11 @@ namespace Karol
                     color = Color.FromArgb(rand.Next(0, 256), rand.Next(0, 256), rand.Next(0, 256));
 
                 AddToStack(xPos, zPos, new Brick(color));
+                acctualCount++;
             }
 
             Redraw();
+            return acctualCount;
         }
 
         /// <summary>
@@ -531,9 +536,10 @@ namespace Karol
         /// </summary>
         /// <param name="count">Anzahl der zu plazierenden Steine</param>
         /// <param name="randomColor">Blöcke in zufälliger farbe platzieren oder nicht</param>
-        public void PlaceRandomBricks(int count, bool randomColor = false)
+        /// <returns>Anzahl der tatsächlich Platzierten Ziegel</returns>
+        public int PlaceRandomBricks(int count, bool randomColor = false)
         {
-            PlaceRandomBricks(count, int.MaxValue, randomColor);
+            return PlaceRandomBricks(count, int.MaxValue, randomColor);
         }
 
         /// <summary>
@@ -543,7 +549,8 @@ namespace Karol
         /// Unterstützte Dateitypen: bmp, gif, jpeg, png, exif, tiff
         /// </param>
         /// <param name="worldHeight">Höhe der Welt.</param>
-        /// <returns></returns>
+        /// <returns>Aus dem Bild geladene Welt</returns>
+        /// <exception cref="FileNotFoundException"></exception>
         public static World LoadImage(string filePath, int worldHeight = 5)
         {
             WorldParser parser = new WorldParser();
@@ -561,14 +568,43 @@ namespace Karol
         public static World Load(string filePath, KarolWorldFormat format = KarolWorldFormat.Auto)
         {
             WorldParser parser = new WorldParser();
-            World world = parser.Load(filePath, format);
-            return world;
+            return parser.Load(filePath, format);
+        }
+
+        /// <summary>
+        /// Lädt eine Welt aus einem StreamReader.
+        /// </summary>
+        /// <param name="reader">Reader der die Weltdaten lesen kann.</param>
+        /// <param name="format">Format der Datei die geladen werden soll</param>
+        /// <returns>Aus dem StreamReader geladene Welt</returns>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="InvalidDataException"></exception>
+        public static World Load(StreamReader reader, KarolWorldFormat format = KarolWorldFormat.Auto)
+        {
+            WorldParser parser = new WorldParser();
+            return parser.Load(reader, format);
+        }
+
+        /// <summary>
+        /// Lädt eine Welt aus einem Stream.
+        /// </summary>
+        /// <param name="stream">Stream zu den Weltdaten.</param>
+        /// <param name="format">Format der Datei die geladen werden soll</param>
+        /// <returns>Aus dem Stream geladene Welt</returns>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="InvalidDataException"></exception>
+        public static World Load(Stream stream, KarolWorldFormat format = KarolWorldFormat.Auto)
+        {
+            StreamReader reader = new StreamReader(stream);
+            return Load(reader, format);
         }
 
         /// <summary>
         /// Speichert einen Screenshot der Welt an dem angegebenen Pfad.
         /// </summary>
         /// <param name="filePath">Pfad wo das Bild gespeichert werden soll.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ExternalException"></exception>
         public void SaveScreenshot(string filePath)
         {
             Bitmap map = WorldRenderer.GetScreenshot();
@@ -582,6 +618,8 @@ namespace Karol
         /// <param name="layer">Welche Ebene der Welt soll gespeichert werden <br></br>
         /// Standard ist 0
         /// </param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ExternalException"></exception>
         public void SaveImage(string filePath, int layer = 0)
         {
             if (layer >= SizeY)
@@ -607,6 +645,7 @@ namespace Karol
         /// Speichert eine Welt als .cskw (C Sharp Karol World). Diese kann jederzeit wieder geladen werden.
         /// </summary>
         /// <param name="filePath">Ort an dem die Welt gespeichert werden soll.</param>
+        /// <exception cref="IOException"></exception>
         public void Save(string filePath)
         {
             WorldParser parser = new WorldParser();

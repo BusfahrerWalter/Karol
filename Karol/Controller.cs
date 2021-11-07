@@ -230,12 +230,12 @@ namespace Karol
             {
                 RobotAction(() =>
                 {
-                    if (ControlledRobot.BrickColor == Color.Transparent)
+                    if (ControlledRobot.FrontBrickColor == Color.Transparent)
                         return;
 
-                    ControlledRobot.Paint = ControlledRobot.BrickColor;
-                    Form.ColorDialog.Color = ControlledRobot.BrickColor;
-                    Form.SelectColorButton.BackColor = ControlledRobot.BrickColor;
+                    ControlledRobot.Paint = ControlledRobot.FrontBrickColor;
+                    Form.ColorDialog.Color = ControlledRobot.FrontBrickColor;
+                    Form.SelectColorButton.BackColor = ControlledRobot.FrontBrickColor;
                 });
             };
 

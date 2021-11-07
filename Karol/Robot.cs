@@ -55,7 +55,7 @@ namespace Karol
             set
             {
                 if (int.TryParse(value, out int offset))
-                    _faceDirection = Direction.FromOffset(offset);
+                    FaceDirection = Direction.FromOffset(offset);
             }
         }
 
@@ -273,7 +273,7 @@ namespace Karol
         /// Gibt die Farbe des höchsten Ziegels vor dem Roboter zurück. <br></br>
         /// Wenn sich vor dem Roboter kein Ziegel befindet wird Color.Transparent zurück gegeben.
         /// </summary>
-        public Color BrickColor
+        public Color FrontBrickColor
         {
             get
             {
@@ -358,6 +358,8 @@ namespace Karol
         /// </summary>
         internal Robot(int xStart, int zStart, World world, Direction initDir, bool updateView = true, bool placeInWorld = true)
         {
+            ValidatePos(new Position(xStart, 0, zStart), world);
+
             _faceDirection = initDir;
             Position = new Position(xStart, world.GetStackSize(xStart, zStart), zStart);
             World = world;
@@ -420,12 +422,14 @@ namespace Karol
         /// Erstellt einen neuen Roboter anhand der übergebennen Optionen
         /// </summary>
         /// <param name="options">Roboter Optionen</param>
-        /// <param name="startX">X Start Position des Roboters</param>
-        /// <param name="startZ">Z Start Posotion des Roboters</param>
-        public Robot(int startX, int startZ, RobotOptions options)
+        /// <param name="xStart">X Start Position des Roboters</param>
+        /// <param name="zStart">Z Start Posotion des Roboters</param>
+        public Robot(int xStart, int zStart, RobotOptions options)
         {
+            ValidatePos(new Position(xStart, 0, zStart), options.World);
+
             _faceDirection = options.InitialDirection;
-            Position = new Position(startX, options.World.GetStackSize(startX, startZ), startZ);
+            Position = new Position(xStart, options.World.GetStackSize(xStart, zStart), zStart);
             World = options.World;
             Delay = options.Delay;
 
@@ -450,29 +454,46 @@ namespace Karol
                 YOffset = options.OffsetY;
 
             BitMap = RoboterBitmaps[FaceDirection.Offset];
-            World.SetCell(startX, startZ, this);
+            World.SetCell(xStart, zStart, this);
             World.RobotCollection.Add(this);
         }
         #endregion
 
         #region Util
+        private void ValidatePos(Position pos, World world)
+        {
+            if (!world.IsPositionValid(pos))
+                throw new InvalidPositionException(pos);
+        }
+
         private void CheckStartPos()
         {
             var tPos = new Position(Position.X, Position.Y - 1, Position.Z);
-            if (World.HasCellAt(tPos, out WorldElement e) || (e != null && !e.CanStackOnTop))
-                throw new InvalidActionException($"An der gegebenen Position {Position} befindet sich bereits etwas! Oder auf das darunter liegende Objekt kann nicht gestapelt werden");
+            if (World.HasCellAt(tPos, out WorldElement e) && e != null && !e.CanStackOnTop)
+                throw new InvalidPositionException($"An der gegebenen Position {Position} kann nichts platziert werden da auf das darunter liegende Objekt nicht gestapelt werden kann", Position);
+
+            if (World.HasCellAt(Position, out WorldElement e1))
+                throw new InvalidPositionException($"An der gegebenen Position {Position} befindet sich bereits etwas!", Position);
         }
 
         /// <summary>
         /// Lässt den Roboter warten.
         /// </summary>
-        /// <param name="time">Dauer die der Roboter warten soll.</param>
-        public void Wait(int time)
+        /// <param name="timeMs">Dauer die der Roboter warten soll. In Millisekunden</param>
+        public void Wait(int timeMs)
         {
-            Thread.Sleep(time);
+            Thread.Sleep(timeMs);
         }
 
-        private void Wait()
+        /// <summary>
+        /// Lässt den Roboter die für ihn definierte standard zeit warten.
+        /// </summary>
+        public void Wait()
+        {
+            Wait(Delay);
+        }
+
+        private void WaitDefault()
         {
             int time = (int)(DateTime.Now - WaitStartTime).TotalMilliseconds;
             Thread.Sleep(Math.Max(Delay - time, 0));
@@ -568,7 +589,7 @@ namespace Karol
             PrepareWait();
             FaceDirection -= 1;
             World.Update(Position.X, Position.Z, this);
-            Wait();
+            WaitDefault();
         }
 
         /// <summary>
@@ -579,7 +600,7 @@ namespace Karol
             PrepareWait();
             FaceDirection += 1;
             World.Update(Position.X, Position.Z, this);
-            Wait();
+            WaitDefault();
         }
 
         /// <summary>
@@ -640,7 +661,7 @@ namespace Karol
                 }
             }
             
-            Wait();
+            WaitDefault();
             isMoving = false;
         }
 
@@ -663,7 +684,7 @@ namespace Karol
             World.Update(facePos.X, facePos.Z, newCell);
 
             OnPlaceBrick();
-            Wait();
+            WaitDefault();
         }
 
         /// <summary>
@@ -695,7 +716,7 @@ namespace Karol
 
             if (cell == null || !cell.CanPickUp)
             {
-                Wait();
+                WaitDefault();
                 return;
             }
 
@@ -703,7 +724,7 @@ namespace Karol
             World.SetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z, null, true);
 
             OnPickUpBrick();
-            Wait();
+            WaitDefault();
         }
 
         /// <summary>
@@ -719,7 +740,7 @@ namespace Karol
             Mark = new Marker(this);
             World.SetCell(Position, Mark);
             OnEnterMark();
-            Wait();
+            WaitDefault();
         }
 
         /// <summary>
@@ -735,7 +756,7 @@ namespace Karol
             World.SetCell(Position, this);
             Mark = null;
             OnLeaveMark();
-            Wait();
+            WaitDefault();
         }
 
         /// <summary>
@@ -750,7 +771,7 @@ namespace Karol
             var newCell = World.AddToStack(facePos.X, facePos.Z, new Cube());
             World.Update(facePos.X, facePos.Y, newCell);
 
-            Wait();
+            WaitDefault();
         }
 
         /// <summary>
@@ -777,12 +798,12 @@ namespace Karol
 
             if (!(cell is Cube))
             {
-                Wait();
+                WaitDefault();
                 return;
             }
 
             World.SetCell(facePos.X, y, facePos.Z, null, true);
-            Wait();
+            WaitDefault();
         }
 
         /// <summary>

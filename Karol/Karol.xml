@@ -367,6 +367,29 @@
             <param name="target">Position auf die sich der Roboter bewegen wollte</param>
             <param name="message">Nachricht die in der Exception angezeigt wrden soll</param>
         </member>
+        <member name="T:Karol.Core.Exceptions.InvalidPositionException">
+            <summary>
+            Wird geworfen wenn mit einer Ungültigen Position interagiert wird.
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Exceptions.InvalidPositionException.Position">
+            <summary>
+            Betroffene Position
+            </summary>
+        </member>
+        <member name="M:Karol.Core.Exceptions.InvalidPositionException.#ctor(Karol.Core.Position)">
+            <summary>
+            Erstellt eine neue Instanz
+            </summary>
+            <param name="pos">Position mit der Interagiert wurde.</param>
+        </member>
+        <member name="M:Karol.Core.Exceptions.InvalidPositionException.#ctor(System.String,Karol.Core.Position)">
+            <summary>
+            Erstellt eine neue Instanz
+            </summary>
+            <param name="msg">Nachricht</param>
+            <param name="pos">Position mit der Interagiert wurde.</param>
+        </member>
         <member name="T:Karol.Core.Exceptions.InvalidSizeException">
             <summary>
             Wird geworfen wenn die größe der Welt ungültig ist.
@@ -1278,7 +1301,7 @@
             Gibt die anzahl der Ziegel vor dem Roboter zurück.
             </summary>
         </member>
-        <member name="P:Karol.Robot.BrickColor">
+        <member name="P:Karol.Robot.FrontBrickColor">
             <summary>
             Gibt die Farbe des höchsten Ziegels vor dem Roboter zurück. <br></br>
             Wenn sich vor dem Roboter kein Ziegel befindet wird Color.Transparent zurück gegeben.
@@ -1371,14 +1394,19 @@
             Erstellt einen neuen Roboter anhand der übergebennen Optionen
             </summary>
             <param name="options">Roboter Optionen</param>
-            <param name="startX">X Start Position des Roboters</param>
-            <param name="startZ">Z Start Posotion des Roboters</param>
+            <param name="xStart">X Start Position des Roboters</param>
+            <param name="zStart">Z Start Posotion des Roboters</param>
         </member>
         <member name="M:Karol.Robot.Wait(System.Int32)">
             <summary>
             Lässt den Roboter warten.
             </summary>
-            <param name="time">Dauer die der Roboter warten soll.</param>
+            <param name="timeMs">Dauer die der Roboter warten soll. In Millisekunden</param>
+        </member>
+        <member name="M:Karol.Robot.Wait">
+            <summary>
+            Lässt den Roboter die für ihn definierte standard zeit warten.
+            </summary>
         </member>
         <member name="M:Karol.Robot.TurnLeft">
             <summary>
@@ -1787,6 +1815,7 @@
             Sollte die gegebenne Anzahl nicht in den Bereich passen werden keine Ziegel mehr plaziert.
             </param>
             <param name="randomColor">Blöcke in zufälliger farbe platzieren oder nicht</param>
+            <returns>Anzahl der tatsächlich Platzierten Ziegel</returns>
         </member>
         <member name="M:Karol.World.PlaceRandomBricks(System.Int32,System.Boolean)">
             <summary>
@@ -1794,6 +1823,7 @@
             </summary>
             <param name="count">Anzahl der zu plazierenden Steine</param>
             <param name="randomColor">Blöcke in zufälliger farbe platzieren oder nicht</param>
+            <returns>Anzahl der tatsächlich Platzierten Ziegel</returns>
         </member>
         <member name="M:Karol.World.LoadImage(System.String,System.Int32)">
             <summary>
@@ -1803,7 +1833,8 @@
             Unterstützte Dateitypen: bmp, gif, jpeg, png, exif, tiff
             </param>
             <param name="worldHeight">Höhe der Welt.</param>
-            <returns></returns>
+            <returns>Aus dem Bild geladene Welt</returns>
+            <exception cref="T:System.IO.FileNotFoundException"></exception>
         </member>
         <member name="M:Karol.World.Load(System.String,Karol.Core.KarolWorldFormat)">
             <summary>
@@ -1815,11 +1846,33 @@
             <exception cref="T:System.IO.IOException"></exception>
             <exception cref="T:System.IO.InvalidDataException"></exception>
         </member>
+        <member name="M:Karol.World.Load(System.IO.StreamReader,Karol.Core.KarolWorldFormat)">
+            <summary>
+            Lädt eine Welt aus einem StreamReader.
+            </summary>
+            <param name="reader">Reader der die Weltdaten lesen kann.</param>
+            <param name="format">Format der Datei die geladen werden soll</param>
+            <returns>Aus dem StreamReader geladene Welt</returns>
+            <exception cref="T:System.IO.IOException"></exception>
+            <exception cref="T:System.IO.InvalidDataException"></exception>
+        </member>
+        <member name="M:Karol.World.Load(System.IO.Stream,Karol.Core.KarolWorldFormat)">
+            <summary>
+            Lädt eine Welt aus einem Stream.
+            </summary>
+            <param name="stream">Stream zu den Weltdaten.</param>
+            <param name="format">Format der Datei die geladen werden soll</param>
+            <returns>Aus dem Stream geladene Welt</returns>
+            <exception cref="T:System.IO.IOException"></exception>
+            <exception cref="T:System.IO.InvalidDataException"></exception>
+        </member>
         <member name="M:Karol.World.SaveScreenshot(System.String)">
             <summary>
             Speichert einen Screenshot der Welt an dem angegebenen Pfad.
             </summary>
             <param name="filePath">Pfad wo das Bild gespeichert werden soll.</param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.Runtime.InteropServices.ExternalException"></exception>
         </member>
         <member name="M:Karol.World.SaveImage(System.String,System.Int32)">
             <summary>
@@ -1829,12 +1882,15 @@
             <param name="layer">Welche Ebene der Welt soll gespeichert werden <br></br>
             Standard ist 0
             </param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.Runtime.InteropServices.ExternalException"></exception>
         </member>
         <member name="M:Karol.World.Save(System.String)">
             <summary>
             Speichert eine Welt als .cskw (C Sharp Karol World). Diese kann jederzeit wieder geladen werden.
             </summary>
             <param name="filePath">Ort an dem die Welt gespeichert werden soll.</param>
+            <exception cref="T:System.IO.IOException"></exception>
         </member>
     </members>
 </doc>

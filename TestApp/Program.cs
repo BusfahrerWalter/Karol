@@ -10,7 +10,7 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            World w = World.LoadImage(@"H:\Daten\sachen\fehler.PNG", 100);
+            World w = World.Load(@"H:\Daten\Fächer\java\lib\karol\labs\lab11.kdw");
         }
     }
 }
