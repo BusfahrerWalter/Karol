@@ -1,10 +1,13 @@
 ﻿using Karol.Core.WorldElements;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace Karol.Core
 {
@@ -118,51 +121,62 @@ namespace Karol.Core
             int zSize = int.Parse(dimension[2]);
 
             World world = new World(xSize, ySize, zSize);
+            WorldElement last = null;
 
-            while (!reader.EndOfStream)
-            {            
-                for (int y = 0; y < ySize; y++)
+            EnableProgressBar(world, true);
+
+            for (int y = 0; y < ySize; y++)
+            {
+                NextLine(reader);
+                for (int z = zSize - 1; z >= 0; z--)
                 {
-                    NextLine(reader);
-                    for (int z = zSize - 1; z >= 0; z--)
+                    string line = NextLine(reader);
+                    if (line != null && line.StartsWith(LayerSeperator))
+                        line = NextLine(reader);
+
+                    if (line == null)
                     {
-                        string line = NextLine(reader);
-                        if (line != null && line.StartsWith(LayerSeperator))
-                            line = NextLine(reader);
+                        world.Redraw();
+                        reader.Close();
+                        return world;
+                    }
 
-                        if (line == null)
-                            return world;
+                    string[] arr = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                    int xCount = Math.Min(xSize, arr.Length);
+                    for (int x = 0; x < xCount; x++)
+                    {
+                        if (IsPlaceholder(arr[x]))
+                            continue;
 
-                        string[] arr = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                        int xCount = Math.Min(xSize, arr.Length);
-                        for (int x = 0; x < xCount; x++)
+                        if (world.HasCellAt(x, y, z, out WorldElement e))
                         {
-                            if (IsPlaceholder(arr[x]))
-                                continue;
+                            reader.Close();
+                            Kill();
+                        }
 
-                            if (world.HasCellAt(x, y, z, out WorldElement e))
-                            {
-                                reader.Close();
-                                Kill();
-                            }
+                        char id = char.ToUpper(arr[x][0]);
+                        bool hasMetaData = HasMetadata(arr[x]);
+                        WorldElement cell = (last != null && !hasMetaData && last.ID == id) ? last : WorldElement.ForID(id);
 
-                            char id = char.ToUpper(arr[x][0]);
-                            WorldElement cell = WorldElement.ForID(id);
-
-                            if (cell == null)
-                            {
-                                reader.Close();
-                                Kill();
-                            }
-
+                        if (cell == null)
+                        {
+                            Console.WriteLine($"Ungültiges Zeichen in zeile {CurrentLine}");
+                        }
+                        else
+                        {
                             world.SetCell(x, y, z, cell, false);
                             if (GetMetaData(arr[x], out string metadata))
                                 cell.Metadata = metadata;
-                        }
+
+                            last = cell;
+                        }   
                     }
+
+                    SetProgress(world, (double)(y + 1) / ySize);
                 }
             }
 
+            EnableProgressBar(world, false);
             world.Redraw();
             reader.Close();
             return world;
@@ -185,6 +199,7 @@ namespace Karol.Core
             int rYpos = int.Parse(posArr[6]);
 
             World world = new World(xSize, ySize, zSize);
+            WorldElement last = null;
             Dictionary<char, char> IDMap = new Dictionary<char, char>()
             {
                 { 'n', EmptyCellID },
@@ -195,6 +210,8 @@ namespace Karol.Core
             int z = zSize - 1;
             bool hasPlacedCube = false;
 
+            EnableProgressBar(world, true);
+
             for (int i = 0; i < arr.Length; i++)
             {
                 string[] blocks = arr[i].Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -204,12 +221,17 @@ namespace Karol.Core
                         break;
 
                     char c = Translate(block[0]);
-                    if(!hasPlacedCube)
-                        world.SetCell(x, z, WorldElement.ForID(c), false);
+                    if (!hasPlacedCube)
+                    {
+                        var cell = last != null && last.ID == c ? last : WorldElement.ForID(c);
+                        world.SetCell(x, z, cell, false);
+                        last = cell;
+                    }
 
                     hasPlacedCube = !hasPlacedCube && c == 'Q';
                 }
 
+                SetProgress(world, (double)(i + 1) / arr.Length);
 
                 z--;
                 if (z == -1)
@@ -224,6 +246,7 @@ namespace Karol.Core
 
             Robot r = new Robot(rXpos, rZpos, world, Direction.South, false);
 
+            EnableProgressBar(world, false);
             world.Redraw();
             reader.Close();
             return world;
@@ -252,6 +275,40 @@ namespace Karol.Core
                 return 32;
             }
         }
+
+        public World LoadImage(string filePath, int worldHeight = 5)
+        {
+            if (!File.Exists(filePath))
+                return null;
+
+            var map = new Bitmap(filePath);
+            World world = new World(map.Width, worldHeight, map.Height);
+            Brick last = null;
+
+            EnableProgressBar(world, true);
+
+            for (int x = 0; x < map.Width; x++)
+            {
+                for (int y = 0; y < map.Height; y++)
+                {
+                    Color color = map.GetPixel(x, y);
+                    if (color.A == 0)
+                        continue;
+
+                    var cell = last != null && last.Paint == color ? last : new Brick(color);
+                    world.SetGridElement(x, 0, map.Height - y - 1, cell);
+                    last = cell;
+                }
+
+                double val = (double)(x + 1) / map.Width;
+                SetProgress(world, val);
+            }
+
+            EnableProgressBar(world, false);
+            world.Redraw();
+            map.Dispose();
+            return world;
+        }
         #endregion
 
         #region Private
@@ -271,6 +328,11 @@ namespace Karol.Core
             return str.StartsWith(EmptyCellID) || str.StartsWith("D");
         }
 
+        private bool HasMetadata(string str)
+        {
+            return str.Length != 1;
+        }
+
         private bool GetMetaData(string str, out string metadata)
         {
             if(str.Length == 1)
@@ -281,6 +343,26 @@ namespace Karol.Core
 
             metadata = str[2..^1];
             return true;
+        }
+        #endregion
+
+        #region ProgressBar
+        private void EnableProgressBar(World targetWorld, bool enabled)
+        {
+            targetWorld.InvokeFormMethod(() =>
+            {
+                targetWorld.WorldForm.ProgressBar.Visible = enabled;
+                targetWorld.WorldForm.ProgressBar.Enabled = enabled;
+                targetWorld.WorldForm.ProgressBar.Value = 0;
+            });
+        }
+
+        private void SetProgress(World targetWorld, double value)
+        {
+            targetWorld.InvokeFormMethod(() =>
+            {
+                targetWorld.WorldForm.ProgressBar.Value = (int)Math.Round(value * 100);
+            });
         }
         #endregion
     }

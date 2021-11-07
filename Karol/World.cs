@@ -201,7 +201,7 @@ namespace Karol
         /// Führt die übergebene Methode auf dem UI Thred von WorldForm aus.
         /// </summary>
         /// <param name="method">Methode zum Ausführen</param>
-        private void InvokeFormMethod(Action method)
+        internal void InvokeFormMethod(Action method)
         {
             while (!WorldForm.IsHandleCreated)
                 Thread.Sleep(10);
@@ -442,7 +442,7 @@ namespace Karol
                 Update(xPos, zPos, element);
         }
 
-        private void SetGridElement(int xPos, int yPos, int zPos, WorldElement element)
+        internal void SetGridElement(int xPos, int yPos, int zPos, WorldElement element)
         {
             if (Grid[xPos, zPos, yPos] != null)
                 Grid[xPos, zPos, yPos].OnDestroy();
@@ -546,44 +546,8 @@ namespace Karol
         /// <returns></returns>
         public static World LoadImage(string filePath, int worldHeight = 5)
         {
-            if (!File.Exists(filePath))
-                return null;
-
-            var map = new Bitmap(filePath);
-            World world = new World(map.Width, worldHeight, map.Height);
-            world.InvokeFormMethod(() =>
-            {
-                world.WorldForm.ProgressBar.Visible = true;
-                world.WorldForm.ProgressBar.Enabled = true;
-                world.WorldForm.ProgressBar.Value = 0;
-            });
-
-            for (int x = 0; x < map.Width; x++)
-            {
-                for(int y = 0; y < map.Height; y++)
-                {
-                    Color color = map.GetPixel(x, y);
-                    if (color.A == 0)
-                        continue;
-
-                    world.AddToStack(x, map.Height - y - 1, new Brick(color));
-                }
-
-                world.InvokeFormMethod(() =>
-                {
-                    double val = (double)(x + 1) / map.Width;
-                    world.WorldForm.ProgressBar.Value = (int)Math.Round(val * 100);
-                });
-            }
-
-            world.InvokeFormMethod(() =>
-            {
-                world.WorldForm.ProgressBar.Visible = false;
-            });
-
-            world.Redraw();
-            map.Dispose();
-            return world;
+            WorldParser parser = new WorldParser();
+            return parser.LoadImage(filePath, worldHeight);
         }
 
         /// <summary>
@@ -591,23 +555,14 @@ namespace Karol
         /// </summary>
         /// <param name="filePath">Ort an dem die Datei liegt.</param>
         /// <param name="format">Format der Datei die geladen werden soll</param>
-        /// <returns></returns>
+        /// <returns>Aus der Datei geladene Welt</returns>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="InvalidDataException"></exception>
         public static World Load(string filePath, KarolWorldFormat format = KarolWorldFormat.Auto)
         {
-            try
-            {
-                WorldParser parser = new WorldParser();
-                World world = parser.Load(filePath, format);
-                return world;  
-            }
-            catch (InvalidDataException e)
-            {
-                throw e;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            WorldParser parser = new WorldParser();
+            World world = parser.Load(filePath, format);
+            return world;
         }
 
         /// <summary>

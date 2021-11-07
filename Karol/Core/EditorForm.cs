@@ -87,7 +87,7 @@ namespace Karol.Core
 
             if (Remove)
             {
-                World.SetCell(pos.X, Math.Max(stackSize - 1, 0), pos.Y, null, true);
+                World.SetCell(pos.X, stackSize, pos.Y, null, true);
             }
             else
             {

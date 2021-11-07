@@ -188,7 +188,7 @@ namespace Karol
         /// <summary>
         /// Gibt zurück ob sich rechts neben dem Roboter eine Wand bzw. ein Quader befindet.
         /// </summary>
-        public bool HasWallRight
+        internal bool HasWallRight
         {
             get
             {
@@ -198,7 +198,7 @@ namespace Karol
         /// <summary>
         /// Gibt zurück ob sich links neben dem Roboter eine Wand bzw. ein Quader befindet.
         /// </summary>
-        public bool HasWallLeft
+        internal bool HasWallLeft
         {
             get
             {
@@ -320,7 +320,7 @@ namespace Karol
         /// <summary>
         /// Schaut der Roboter gerade nach Osten
         /// </summary>
-        public bool IsFacingOst => FaceDirection == Direction.East;
+        public bool IsFacingEast => FaceDirection == Direction.East;
         /// <summary>
         /// Schaut der Roboter gerade nach Süden
         /// </summary>
@@ -328,7 +328,7 @@ namespace Karol
         /// <summary>
         /// Schaut der Roboter gerade nach Westen
         /// </summary>
-        public bool IsFacingEast => FaceDirection == Direction.West;
+        public bool IsFacingWest => FaceDirection == Direction.West;
         /// <summary>
         /// Aktuelle Blickrichtung des Roboters
         /// </summary>
@@ -362,8 +362,7 @@ namespace Karol
             Position = new Position(xStart, world.GetStackSize(xStart, zStart), zStart);
             World = world;
 
-            if (World.HasCellAt(Position, out WorldElement e) || (e != null && !e.CanStackOnTop))
-                throw new InvalidActionException($"An der gegebenen Position {Position} befindet sich bereits etwas!");
+            CheckStartPos();
 
             if (placeInWorld)
                 world.SetCell(xStart, zStart, this, updateView);
@@ -430,8 +429,7 @@ namespace Karol
             World = options.World;
             Delay = options.Delay;
 
-            if (World.HasCellAt(Position, out WorldElement e) || (e != null && !e.CanStackOnTop))
-                throw new InvalidActionException($"An der gegebenen Position {Position} befindet sich bereits etwas!");
+            CheckStartPos();
 
             if (options.NorthImage != null)
                 RoboterBitmaps[0] = options.NorthImage;
@@ -452,12 +450,19 @@ namespace Karol
                 YOffset = options.OffsetY;
 
             BitMap = RoboterBitmaps[FaceDirection.Offset];
-            World.RobotCollection.Add(this);
             World.SetCell(startX, startZ, this);
+            World.RobotCollection.Add(this);
         }
         #endregion
 
         #region Util
+        private void CheckStartPos()
+        {
+            var tPos = new Position(Position.X, Position.Y - 1, Position.Z);
+            if (World.HasCellAt(tPos, out WorldElement e) || (e != null && !e.CanStackOnTop))
+                throw new InvalidActionException($"An der gegebenen Position {Position} befindet sich bereits etwas! Oder auf das darunter liegende Objekt kann nicht gestapelt werden");
+        }
+
         /// <summary>
         /// Lässt den Roboter warten.
         /// </summary>
