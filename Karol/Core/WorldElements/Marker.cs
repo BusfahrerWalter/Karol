@@ -28,7 +28,7 @@ namespace Karol.Core.WorldElements
                     int absX = Math.Abs(value.XOffset);
                     int absY = Math.Abs(value.YOffset);
                     int width = Math.Max(value.BitMap.Width, Resources.Marke.Width) + absX;
-                    int height = value.BitMap.Height + absY;
+                    int height = Math.Max(value.BitMap.Height, Resources.Marke.Height) + absY;
 
                     BitMap = new Bitmap(width, height);
                     BitMap.DrawImage(absX, BitMap.Height - Resources.Marke.Height, Resources.Marke);

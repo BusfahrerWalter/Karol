@@ -60,12 +60,23 @@ namespace Karol.Core
             this.label1 = new System.Windows.Forms.Label();
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.BackPackEmptyCheckBox = new System.Windows.Forms.CheckBox();
+            this.BackPackFullCheckBox = new System.Windows.Forms.CheckBox();
+            this.HasRoboCheckBox = new System.Windows.Forms.CheckBox();
+            this.HasBrickCheckBox = new System.Windows.Forms.CheckBox();
+            this.HasMarkCheckBox = new System.Windows.Forms.CheckBox();
+            this.HasWallCheckBox = new System.Windows.Forms.CheckBox();
+            this.FaceDirectionTextBox = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.PositionTextBox = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BrickCountInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MaxBackpackSizeInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.JumpHeightInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DelayInput)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // ButtonRight
@@ -431,12 +442,152 @@ namespace Karol.Core
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.BackPackEmptyCheckBox);
+            this.groupBox3.Controls.Add(this.BackPackFullCheckBox);
+            this.groupBox3.Controls.Add(this.HasRoboCheckBox);
+            this.groupBox3.Controls.Add(this.HasBrickCheckBox);
+            this.groupBox3.Controls.Add(this.HasMarkCheckBox);
+            this.groupBox3.Controls.Add(this.HasWallCheckBox);
+            this.groupBox3.Controls.Add(this.FaceDirectionTextBox);
+            this.groupBox3.Controls.Add(this.label7);
+            this.groupBox3.Controls.Add(this.PositionTextBox);
+            this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Location = new System.Drawing.Point(363, 12);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(205, 251);
             this.groupBox3.TabIndex = 13;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Info";
+            // 
+            // BackPackEmptyCheckBox
+            // 
+            this.BackPackEmptyCheckBox.AutoSize = true;
+            this.BackPackEmptyCheckBox.Checked = true;
+            this.BackPackEmptyCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.BackPackEmptyCheckBox.Enabled = false;
+            this.BackPackEmptyCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BackPackEmptyCheckBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BackPackEmptyCheckBox.Location = new System.Drawing.Point(6, 112);
+            this.BackPackEmptyCheckBox.Name = "BackPackEmptyCheckBox";
+            this.BackPackEmptyCheckBox.Size = new System.Drawing.Size(121, 19);
+            this.BackPackEmptyCheckBox.TabIndex = 18;
+            this.BackPackEmptyCheckBox.Text = "Is Backpack Empty";
+            this.BackPackEmptyCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // BackPackFullCheckBox
+            // 
+            this.BackPackFullCheckBox.AutoSize = true;
+            this.BackPackFullCheckBox.Checked = true;
+            this.BackPackFullCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.BackPackFullCheckBox.Enabled = false;
+            this.BackPackFullCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BackPackFullCheckBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.BackPackFullCheckBox.Location = new System.Drawing.Point(6, 87);
+            this.BackPackFullCheckBox.Name = "BackPackFullCheckBox";
+            this.BackPackFullCheckBox.Size = new System.Drawing.Size(103, 19);
+            this.BackPackFullCheckBox.TabIndex = 17;
+            this.BackPackFullCheckBox.Text = "Is BackpackFull";
+            this.BackPackFullCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // HasRoboCheckBox
+            // 
+            this.HasRoboCheckBox.AutoSize = true;
+            this.HasRoboCheckBox.Checked = true;
+            this.HasRoboCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.HasRoboCheckBox.Enabled = false;
+            this.HasRoboCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.HasRoboCheckBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.HasRoboCheckBox.Location = new System.Drawing.Point(6, 219);
+            this.HasRoboCheckBox.Name = "HasRoboCheckBox";
+            this.HasRoboCheckBox.Size = new System.Drawing.Size(88, 19);
+            this.HasRoboCheckBox.TabIndex = 16;
+            this.HasRoboCheckBox.Text = "Has Roboter";
+            this.HasRoboCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // HasBrickCheckBox
+            // 
+            this.HasBrickCheckBox.AutoSize = true;
+            this.HasBrickCheckBox.Checked = true;
+            this.HasBrickCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.HasBrickCheckBox.Enabled = false;
+            this.HasBrickCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.HasBrickCheckBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.HasBrickCheckBox.Location = new System.Drawing.Point(6, 194);
+            this.HasBrickCheckBox.Name = "HasBrickCheckBox";
+            this.HasBrickCheckBox.Size = new System.Drawing.Size(72, 19);
+            this.HasBrickCheckBox.TabIndex = 15;
+            this.HasBrickCheckBox.Text = "Has Brick";
+            this.HasBrickCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // HasMarkCheckBox
+            // 
+            this.HasMarkCheckBox.AutoSize = true;
+            this.HasMarkCheckBox.Checked = true;
+            this.HasMarkCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.HasMarkCheckBox.Enabled = false;
+            this.HasMarkCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.HasMarkCheckBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.HasMarkCheckBox.Location = new System.Drawing.Point(6, 169);
+            this.HasMarkCheckBox.Name = "HasMarkCheckBox";
+            this.HasMarkCheckBox.Size = new System.Drawing.Size(73, 19);
+            this.HasMarkCheckBox.TabIndex = 14;
+            this.HasMarkCheckBox.Text = "Has Mark";
+            this.HasMarkCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // HasWallCheckBox
+            // 
+            this.HasWallCheckBox.AutoSize = true;
+            this.HasWallCheckBox.Checked = true;
+            this.HasWallCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.HasWallCheckBox.Enabled = false;
+            this.HasWallCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.HasWallCheckBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.HasWallCheckBox.Location = new System.Drawing.Point(6, 144);
+            this.HasWallCheckBox.Name = "HasWallCheckBox";
+            this.HasWallCheckBox.Size = new System.Drawing.Size(69, 19);
+            this.HasWallCheckBox.TabIndex = 13;
+            this.HasWallCheckBox.Text = "Has Wall";
+            this.HasWallCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // FaceDirectionTextBox
+            // 
+            this.FaceDirectionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.FaceDirectionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.FaceDirectionTextBox.Enabled = false;
+            this.FaceDirectionTextBox.Location = new System.Drawing.Point(115, 53);
+            this.FaceDirectionTextBox.Name = "FaceDirectionTextBox";
+            this.FaceDirectionTextBox.ReadOnly = true;
+            this.FaceDirectionTextBox.Size = new System.Drawing.Size(84, 23);
+            this.FaceDirectionTextBox.TabIndex = 3;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 56);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(82, 15);
+            this.label7.TabIndex = 2;
+            this.label7.Text = "Face Direction";
+            // 
+            // PositionTextBox
+            // 
+            this.PositionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.PositionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PositionTextBox.Enabled = false;
+            this.PositionTextBox.Location = new System.Drawing.Point(115, 21);
+            this.PositionTextBox.Name = "PositionTextBox";
+            this.PositionTextBox.ReadOnly = true;
+            this.PositionTextBox.Size = new System.Drawing.Size(84, 23);
+            this.PositionTextBox.TabIndex = 1;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 24);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(50, 15);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "Position";
             // 
             // ControllerForm
             // 
@@ -460,6 +611,8 @@ namespace Karol.Core
             ((System.ComponentModel.ISupportInitialize)(this.MaxBackpackSizeInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.JumpHeightInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DelayInput)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -497,5 +650,15 @@ namespace Karol.Core
         public System.Windows.Forms.Button KillButton;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox MoreInfoCheckBox;
+        public System.Windows.Forms.TextBox FaceDirectionTextBox;
+        private System.Windows.Forms.Label label7;
+        public System.Windows.Forms.TextBox PositionTextBox;
+        private System.Windows.Forms.Label label6;
+        public System.Windows.Forms.CheckBox HasMarkCheckBox;
+        public System.Windows.Forms.CheckBox HasWallCheckBox;
+        public System.Windows.Forms.CheckBox HasRoboCheckBox;
+        public System.Windows.Forms.CheckBox HasBrickCheckBox;
+        public System.Windows.Forms.CheckBox BackPackEmptyCheckBox;
+        public System.Windows.Forms.CheckBox BackPackFullCheckBox;
     }
 }

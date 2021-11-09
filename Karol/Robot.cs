@@ -75,6 +75,10 @@ namespace Karol
         /// Event wird ausgelöst wenn der Roboter einen Ziegel aufhebt.
         /// </summary>
         internal event EventHandler onPickUpBrickPreview;
+        /// <summary>
+        /// Wird ausgelöst wenn sich der Roboter bewegt oder dreht.
+        /// </summary>
+        internal event EventHandler onMove;
 
         #region Anderes Public
         /// <summary>
@@ -510,6 +514,7 @@ namespace Karol
             if (!World.IsPositionValid(pos))
                 return false;
 
+            pos.Y = Math.Max(World.GetStackSize(pos.X, pos.Z) - 1, 0);
             return World.HasCellAt(pos, out WorldElement cell) && cell is Brick;
         }
 
@@ -589,6 +594,7 @@ namespace Karol
             PrepareWait();
             FaceDirection -= 1;
             World.Update(Position.X, Position.Z, this);
+            OnMove();
             WaitDefault();
         }
 
@@ -600,6 +606,7 @@ namespace Karol
             PrepareWait();
             FaceDirection += 1;
             World.Update(Position.X, Position.Z, this);
+            OnMove();
             WaitDefault();
         }
 
@@ -660,7 +667,8 @@ namespace Karol
                     Position = newPos;
                 }
             }
-            
+
+            OnMove();
             WaitDefault();
             isMoving = false;
         }
@@ -864,6 +872,11 @@ namespace Karol
         internal void OnPickUpBrick()
         {
             onPickUpBrickPreview?.Invoke(this, EventArgs.Empty);
+        }
+
+        internal void OnMove()
+        {
+            onMove?.Invoke(this, EventArgs.Empty);
         }
         #endregion
     }

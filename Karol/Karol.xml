@@ -1199,6 +1199,11 @@
             Event wird ausgelöst wenn der Roboter einen Ziegel aufhebt.
             </summary>
         </member>
+        <member name="E:Karol.Robot.onMove">
+            <summary>
+            Wird ausgelöst wenn sich der Roboter bewegt oder dreht.
+            </summary>
+        </member>
         <member name="P:Karol.Robot.JumpHeight">
             <summary>
             Gibt an wie hoch der Roboter Springen kann. (in Zellen) <br></br>

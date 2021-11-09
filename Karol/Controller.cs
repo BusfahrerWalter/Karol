@@ -1,5 +1,6 @@
 ﻿using Karol.Core;
 using Karol.Core.Exceptions;
+using Karol.Core.Extensions;
 using Karol.Core.WorldElements;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace Karol
         /// Roboter der von diesem Controller gesteuert wird.
         /// </summary>
         public Robot ControlledRobot { get; private set; }
+
         private ControllerForm Form { get; set; }
         private Dictionary<Keys, Action> InputMap { get; set; }
 
@@ -74,6 +76,8 @@ namespace Karol
             Form.PickUpMarkButton.Enabled = ControlledRobot.HasMark;
             Form.PlaceMarkButton.Enabled = !ControlledRobot.HasMark;
             Form.Text = $"Karol Controller - Robot {ControlledRobot.Identifier}";
+
+            UpdateInfo();
 
             ActiveControllers.Add(this);
             InputMap = new Dictionary<Keys, Action>()
@@ -192,6 +196,8 @@ namespace Karol
                 {
                     ControlledRobot.PlaceMark();
                 });
+
+                UpdateInfo();
             };
 
             Form.PickUpMarkButton.Click += (e, args) =>
@@ -200,6 +206,8 @@ namespace Karol
                 {
                     ControlledRobot.PickUpMark();
                 });
+
+                UpdateInfo();
             };
 
             Form.DelayInput.ValueChanged += (e, args) =>
@@ -245,6 +253,8 @@ namespace Karol
                 {
                     ControlledRobot.BricksInBackpack = (int)Form.BrickCountInput.Value;
                 });
+
+                UpdateBackpackInfo();
             };
 
             Form.MaxBackpackSizeInput.ValueChanged += (e, args) =>
@@ -253,6 +263,9 @@ namespace Karol
                 {
                     ControlledRobot.MaxBackpackSize = (int)Form.MaxBackpackSizeInput.Value;
                 });
+
+                Form.BrickCountInput.Maximum = Form.MaxBackpackSizeInput.Value;
+                UpdateBackpackInfo();
             };
 
             Form.PlaceCubeButton.Click += (e, args) =>
@@ -290,25 +303,69 @@ namespace Karol
 
             ControlledRobot.onEnterMarkPreview += (e, args) =>
             {
-                Form.PlaceMarkButton.Enabled = false;
-                Form.PickUpMarkButton.Enabled = true;
+                Form.InvokeFormMethod(() =>
+                {
+                    Form.PlaceMarkButton.Enabled = false;
+                    Form.PickUpMarkButton.Enabled = true;
+                });
             };
 
             ControlledRobot.onLeaveMarkPreview += (e, args) =>
             {
-                Form.PlaceMarkButton.Enabled = true;
-                Form.PickUpMarkButton.Enabled = false;
+                Form.InvokeFormMethod(() =>
+                {
+                    Form.PlaceMarkButton.Enabled = true;
+                    Form.PickUpMarkButton.Enabled = false;
+                });
             };
 
             ControlledRobot.onPlaceBrickPreview += (e, args) =>
             {
-                Form.BrickCountInput.Value = ControlledRobot.BricksInBackpack;
+                Form.InvokeFormMethod(() =>
+                {
+                    Form.BrickCountInput.Value = ControlledRobot.BricksInBackpack;
+                });
+
+                UpdateInfo();
             };
 
             ControlledRobot.onPickUpBrickPreview += (e, args) =>
             {
-                Form.BrickCountInput.Value = ControlledRobot.BricksInBackpack;
+                Form.InvokeFormMethod(() =>
+                {
+                    Form.BrickCountInput.Value = ControlledRobot.BricksInBackpack;
+                });
+                
+                UpdateInfo();
             };
+
+            ControlledRobot.onMove += (e, args) =>
+            {
+                UpdateInfo();
+            };
+        }
+
+        private void UpdateInfo()
+        {
+            Form.InvokeFormMethod(() =>
+            {
+                Form.PositionTextBox.Text = ControlledRobot.Position.ToString();
+                Form.FaceDirectionTextBox.Text = ControlledRobot.FaceDirection.ToString();
+                Form.HasWallCheckBox.Checked = ControlledRobot.HasWall;
+                Form.HasMarkCheckBox.Checked = ControlledRobot.HasMark;
+                Form.HasBrickCheckBox.Checked = ControlledRobot.HasBrick;
+                Form.HasRoboCheckBox.Checked = ControlledRobot.HasRobot;
+                UpdateBackpackInfo();
+            });       
+        }
+
+        private void UpdateBackpackInfo()
+        {
+            Form.InvokeFormMethod(() =>
+            {
+                Form.BackPackEmptyCheckBox.Checked = ControlledRobot.IsBackpackEmpty;
+                Form.BackPackFullCheckBox.Checked = ControlledRobot.IsBackpackFull;
+            });
         }
 
         private void MoveTo(Direction dir)
