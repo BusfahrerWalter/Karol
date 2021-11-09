@@ -102,20 +102,22 @@ namespace Karol
                 Application.Run(Form);
             });
 
-            ControlledRobot.World.onWorldClosed += (e, args) =>
-            {
-                if (!Form.IsHandleCreated)
-                    return;
-
-                Form.Invoke((MethodInvoker)delegate
-                {
-                    Form.Close();
-                });
-            };
+            ControlledRobot.World.onWorldClosed += OnWorldClosed;
+            ControlledRobot.onEnterMarkPreview += OnEnterMark;
+            ControlledRobot.onLeaveMarkPreview += OnLeaveMark;
+            ControlledRobot.onPlaceBrickPreview += OnPlaceBrick;
+            ControlledRobot.onPickUpBrickPreview += OnPickUpBrick;
+            ControlledRobot.onMove += OnMove;
 
             Form.FormClosed += (e, args) =>
             {
                 ActiveControllers.Remove(this);
+                ControlledRobot.World.onWorldClosed -= OnWorldClosed;
+                ControlledRobot.onEnterMarkPreview -= OnEnterMark;
+                ControlledRobot.onLeaveMarkPreview -= OnLeaveMark;
+                ControlledRobot.onPlaceBrickPreview -= OnPlaceBrick;
+                ControlledRobot.onPickUpBrickPreview -= OnPickUpBrick;
+                ControlledRobot.onMove -= OnMove;
             };
 
             Form.KeyUp += (e, args) =>
@@ -300,51 +302,63 @@ namespace Karol
                     Form.Close();
                 });
             };
+        }
+        #endregion
 
-            ControlledRobot.onEnterMarkPreview += (e, args) =>
+        #region RobotEvents
+        private void OnEnterMark(object sender, EventArgs args)
+        {
+            Form.InvokeFormMethod(() =>
             {
-                Form.InvokeFormMethod(() =>
-                {
-                    Form.PlaceMarkButton.Enabled = false;
-                    Form.PickUpMarkButton.Enabled = true;
-                });
-            };
-
-            ControlledRobot.onLeaveMarkPreview += (e, args) =>
-            {
-                Form.InvokeFormMethod(() =>
-                {
-                    Form.PlaceMarkButton.Enabled = true;
-                    Form.PickUpMarkButton.Enabled = false;
-                });
-            };
-
-            ControlledRobot.onPlaceBrickPreview += (e, args) =>
-            {
-                Form.InvokeFormMethod(() =>
-                {
-                    Form.BrickCountInput.Value = ControlledRobot.BricksInBackpack;
-                });
-
-                UpdateInfo();
-            };
-
-            ControlledRobot.onPickUpBrickPreview += (e, args) =>
-            {
-                Form.InvokeFormMethod(() =>
-                {
-                    Form.BrickCountInput.Value = ControlledRobot.BricksInBackpack;
-                });
-                
-                UpdateInfo();
-            };
-
-            ControlledRobot.onMove += (e, args) =>
-            {
-                UpdateInfo();
-            };
+                Form.PlaceMarkButton.Enabled = false;
+                Form.PickUpMarkButton.Enabled = true;
+            });
         }
 
+        private void OnLeaveMark(object sender, EventArgs args)
+        {
+            Form.InvokeFormMethod(() =>
+            {
+                Form.PlaceMarkButton.Enabled = true;
+                Form.PickUpMarkButton.Enabled = false;
+            });
+        }
+
+        private void OnPlaceBrick(object sender, EventArgs args)
+        {
+            Form.InvokeFormMethod(() =>
+            {
+                Form.BrickCountInput.Value = ControlledRobot.BricksInBackpack;
+            });
+
+            UpdateInfo();
+        }
+
+        private void OnPickUpBrick(object sender, EventArgs args)
+        {
+            Form.InvokeFormMethod(() =>
+            {
+                Form.BrickCountInput.Value = ControlledRobot.BricksInBackpack;
+            });
+
+            UpdateInfo();
+        }
+
+        private void OnMove(object sender, EventArgs args)
+        {
+            UpdateInfo();
+        }
+
+        private void OnWorldClosed(object sender, EventArgs args)
+        {
+            Form.InvokeFormMethod(() =>
+            {
+                Form.Close();
+            });
+        }
+        #endregion
+
+        #region Util
         private void UpdateInfo()
         {
             Form.InvokeFormMethod(() =>

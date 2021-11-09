@@ -10,6 +10,9 @@ namespace Karol.Core.Extensions
     {
         public static void InvokeFormMethod(this Form form, Action action)
         {
+            if (form == null)
+                return;
+
             if (!form.IsHandleCreated)
                 return;
 

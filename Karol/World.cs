@@ -19,7 +19,7 @@ namespace Karol
     {
         #region Properties & Felder
         #region Hilfs zeug
-        private const int MaxRoboterCount = 9;
+        private const int MaxRoboterCount = 9999999;
         private WorldRenderingMode _renderingMode;
         #endregion
 
