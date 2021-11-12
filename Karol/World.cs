@@ -651,6 +651,19 @@ namespace Karol
             WorldParser parser = new WorldParser();
             parser.Save(this, filePath);
         }
+
+        /// <summary>
+        /// Gibt den Roboter an dem spezifizierten Index zurück. Oder null wenn an dem Index kein Roboter existiert.
+        /// </summary>
+        /// <param name="index">Index des Roboters</param>
+        /// <returns>Roboter mit dem gegebenen Index</returns>
+        public Robot GetRobot(int index)
+        {
+            if (index >= RobotCollection.Count)
+                return null;
+
+            return RobotCollection[index];
+        }
         #endregion
 
         #region Events

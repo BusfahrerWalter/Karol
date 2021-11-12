@@ -14,7 +14,7 @@ namespace ComponentTest
     [TestClass]
     public class RobotTest
     {
-        private World TestWorld => new World(8, 4, 8);
+        private World TestWorld => new World(8, 4, 7);
 
         [TestMethod("Standard Constructor")]
         public void TestConstructor1()
@@ -23,7 +23,7 @@ namespace ComponentTest
 
             Robot r1 = new Robot(1, 1, w1);
             Robot r3 = new Robot(2, 2, w1, Direction.East);
-            Robot r2 = new Robot(w1);      // sollte auf Position 0, 0, 0 sein
+            Robot r2 = new Robot(w1);      // sollte auf Position 0, 0, 0 sein 
         }
 
         [TestMethod("Constructor mit RobotOptions")]
@@ -33,7 +33,7 @@ namespace ComponentTest
             {
                 StartX = 0,
                 StartZ = 1,
-                InitialDirection = Direction.West,
+                InitialDirection = Direction.West, 
                 Delay = 10,
                 Set = ImageSet.Magenta
             };
@@ -46,21 +46,21 @@ namespace ComponentTest
         [ExpectedException(typeof(InvalidPositionException))]
         public void TestConstructor3()
         {
-            Robot r1 = new Robot(-1, 0, TestWorld);
+            Robot r1 = new Robot(-1, 0, TestWorld); 
         }
 
         [TestMethod("Constructor mit zu großer Position")]
         [ExpectedException(typeof(InvalidPositionException))]
         public void TestConstructor3einHalb()
         {
-            Robot r1 = new Robot(999999999, 666, TestWorld);
+            Robot r1 = new Robot(999999999, 666, TestWorld); 
         }
 
         [TestMethod("Andere Constructoren?")]
         public void TestConstructor4()
         {
             World w1 = TestWorld;
-
+             
             Robot r1 = new Robot(1, 0, w1);
             Robot r2 = new Robot(w1);
             Robot r3 = new Robot(2, 1, w1, Direction.South);
@@ -73,7 +73,7 @@ namespace ComponentTest
             World w1 = TestWorld;
             Robot r1 = new Robot(3, 3, w1);
             Robot r2 = new Robot(0, 0, w1);
-
+             
             Assert.AreNotEqual(r1, r2);
 
             Assert.AreEqual(new Position(3, 0, 3), r1.Position);
@@ -83,8 +83,8 @@ namespace ComponentTest
             Assert.AreEqual(Color.Red, r1.Paint);
             Assert.IsTrue(r1.IsVisible);
 
-            Assert.AreEqual(0, r1.Identifier);
-            Assert.AreEqual(1, r2.Identifier);
+            Assert.AreEqual(1, r1.Identifier);
+            Assert.AreEqual(2, r2.Identifier);
 
             Assert.AreEqual(w1, r1.World);
             Assert.AreEqual(r1.World, r2.World);
@@ -118,10 +118,10 @@ namespace ComponentTest
             MemoryStream stream = new MemoryStream(Encoding.ASCII.GetBytes(str));
             World w1 = World.Load(stream);
             Robot r1 = w1.Robots[0];
-
+             
             Assert.AreEqual(new Position(0, 0, 2), r1.Position);
             Assert.AreEqual(Direction.South, r1.FaceDirection);
-            Assert.AreEqual(0, r1.Identifier);
+            Assert.AreEqual(1, r1.Identifier);
 
             Assert.AreEqual(1, w1.RoboterCount);
             Assert.AreEqual(1, w1.Robots.Length);

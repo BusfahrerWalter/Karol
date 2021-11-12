@@ -12,35 +12,45 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            for(int i = 0; i < 300; i++)
-            {
-                Thread t = new Thread(() =>
-                {
-                    World w = new World(20, 2, 20);
-                    List<Robot> list = new List<Robot>(w.Width * w.Depth);
+            World w = new World(5, 5, 5);
+            Robot r = new Robot(1, 1, w);
 
-                    for (int i = 0; i < w.Width; i++)
-                    {
-                        for (int j = 0; j < w.Depth; j++)
-                        {
-                            Robot r = new Robot(i, j, w);
-                            r.Delay = 0;
-                            list.Add(r);
-                        }
-                    }
+            var re = w.GetRobot(0);
 
-                    while (!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false)
-                    {
-                        foreach (var r in list)
-                        {
-                            r.TurnRight();
-                            r.TurnRight();
-                        }
-                    }
-                });
+            re.Wait();
+            re.Move();
 
-                t.Start();
-            }
+            Console.WriteLine(re.Identifier);
+
+            //for(int i = 0; i < 300; i++)
+            //{
+            //    Thread t = new Thread(() =>
+            //    {
+            //        World w = new World(20, 2, 20);
+            //        List<Robot> list = new List<Robot>(w.Width * w.Depth);
+
+            //        for (int i = 0; i < w.Width; i++)
+            //        {
+            //            for (int j = 0; j < w.Depth; j++)
+            //            {
+            //                Robot r = new Robot(i, j, w);
+            //                r.Delay = 0;
+            //                list.Add(r);
+            //            }
+            //        }
+
+            //        while (!!!!!!!!!!!!!!!!!!!!!!!!!!!!!false)
+            //        {
+            //            foreach (var r in list)
+            //            {
+            //                r.TurnRight();
+            //                r.TurnRight();
+            //            }
+            //        }
+            //    });
+
+            //    t.Start();
+            //}
 
             //for(int i = 0; i < 9; i++)
             //{

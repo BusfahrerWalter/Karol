@@ -16,10 +16,10 @@ namespace ComponentTest
     public class WorldTest
     {
         // .cskw Datei
-        private string TestLoad2Path = @"E:\Files\Schule\Schule 12\TrFi\C_Gartenzaun_Karol\Brams\KarolMap - 6.cskw";
+        private string TestLoad2Path = @"C:\Users\damuelle\Desktop\Brams\KarolMap - 3.cskw";
 
         // .kdw Datei
-        private string TestLoad3Path = @"E:\Files\Schule\Schule 12\TrFi\C_Gartenzaun_Karol\Brams\labs\lab5.kdw";
+        private string TestLoad3Path = @"H:\Daten\Fächer\java\lib\karol\labs\lab1.kdw";
 
         [TestMethod("Schlechter Constructor 1")]
         [ExpectedException(typeof(InvalidSizeException))]

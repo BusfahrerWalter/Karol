@@ -1224,7 +1224,7 @@
         </member>
         <member name="P:Karol.Robot.Identifier">
             <summary>
-            Gibt die nummer des Roboters zurück.
+            Gibt die nummer des Roboters zurück. (Normalerweise gleich der Rückennummer des Roboters)
             </summary>
         </member>
         <member name="P:Karol.Robot.IsVisible">
@@ -1896,6 +1896,13 @@
             </summary>
             <param name="filePath">Ort an dem die Welt gespeichert werden soll.</param>
             <exception cref="T:System.IO.IOException"></exception>
+        </member>
+        <member name="M:Karol.World.GetRobot(System.Int32)">
+            <summary>
+            Gibt den Roboter an dem spezifizierten Index zurück. Oder null wenn an dem Index kein Roboter existiert.
+            </summary>
+            <param name="index">Index des Roboters</param>
+            <returns>Roboter mit dem gegebenen Index</returns>
         </member>
     </members>
 </doc>

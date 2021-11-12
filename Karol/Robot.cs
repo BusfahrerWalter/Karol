@@ -97,7 +97,7 @@ namespace Karol
         /// </summary>
         public Color Paint { get; set; }
         /// <summary>
-        /// Gibt die nummer des Roboters zurück.
+        /// Gibt die nummer des Roboters zurück. (Normalerweise gleich der Rückennummer des Roboters)
         /// </summary>
         public int Identifier { get; private set; }
 
@@ -576,7 +576,7 @@ namespace Karol
             RoboterBitmaps = ResourcesLoader.LoadRobotBitmaps(World.RoboterCount);
             FaceDirection = _faceDirection;
             BitMap = RoboterBitmaps[FaceDirection.Offset];
-            Identifier = World.RoboterCount;
+            Identifier = World.RoboterCount + 1;
 
             if(addToList)
                 World.RobotCollection.Add(this);
