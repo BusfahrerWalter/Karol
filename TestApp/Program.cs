@@ -12,15 +12,47 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            World w = new World(5, 5, 5);
-            Robot r = new Robot(1, 1, w);
+            int x, y, z;
+            Console.Write("X: ");
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out int xIn))
+                {
+                    x = xIn;
+                    break;
+                }
+            }
 
-            var re = w.GetRobot(0);
+            Console.Write("Y: ");
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out int yIn))
+                {
+                    y = yIn;
+                    break;
+                }
+            }
 
-            re.Wait();
-            re.Move();
+            Console.Write("Z: ");
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out int zIn))
+                {
+                    z = zIn;
+                    break;
+                }
+            }
 
-            Console.WriteLine(re.Identifier);
+            try
+            {
+                World w = new World(x, y, z);
+            }
+            catch (Exception e) 
+            {
+                Console.Write(e);
+            }
+
+            Main(args);
 
             //for(int i = 0; i < 300; i++)
             //{

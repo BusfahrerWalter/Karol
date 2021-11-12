@@ -245,14 +245,14 @@ namespace Karol
         /// </summary>
         public bool HasBrickLeft
         {
-            get => HasBrickInDirection(FaceDirection + 1);
+            get => HasBrickInDirection(FaceDirection - 1);
         }
         /// <summary>
         /// Gibt zurück ob sich rechts neben dem Roboter ein Ziegel befindet
         /// </summary>
         public bool HasBrickRight
         {
-            get => HasBrickInDirection(FaceDirection - 1);
+            get => HasBrickInDirection(FaceDirection + 1);
         }
 
         /// <summary>

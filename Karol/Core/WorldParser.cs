@@ -8,7 +8,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("ComponentTest")]
 namespace Karol.Core
 {
     /// <summary>
@@ -339,6 +341,20 @@ namespace Karol.Core
             world.Redraw();
             map.Dispose();
             return world;
+        }
+        #endregion
+
+        #region Generate World
+        public static World Generate(int xSize, int ySize, int zSize, Dictionary<Position, WorldElement> elements)
+        {
+            World w = new World(xSize, ySize, zSize);
+
+            foreach(var e in elements)
+            {
+                w.SetCell(e.Key, e.Value);
+            }
+
+            return w;
         }
         #endregion
 
