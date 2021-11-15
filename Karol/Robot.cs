@@ -343,6 +343,7 @@ namespace Karol
             {
                 _faceDirection = value;
                 BitMap = IsVisible ? RoboterBitmaps[value.Offset] : ImageExtension.EmptyBitmap;
+                Info2D.Image = ResourcesLoader.RobotBitmaps2D[value.Offset];
             }
         }
         #endregion
@@ -569,7 +570,7 @@ namespace Karol
 
             CanStackOnTop = false;
             CanPickUp = false;
-            ViewColor2D = Color.Black;
+            Info2D.Image = Resources.Robot_2D_N;
             XOffset = -2;
             YOffset = -2;
 
@@ -583,6 +584,19 @@ namespace Karol
 
             reloadData = false;
         }
+
+        private void UpdateImage()
+        {
+            if (Mark != null)
+            {
+                Mark.Content = this;
+                World.Update(Position.X, Position.Z, Mark);
+            }
+            else
+            {
+                World.Update(Position.X, Position.Z, this);
+            }
+        }
         #endregion
 
         #region Public
@@ -593,7 +607,7 @@ namespace Karol
         {
             PrepareWait();
             FaceDirection -= 1;
-            World.Update(Position.X, Position.Z, this);
+            UpdateImage();
             OnMove();
             WaitDefault();
         }
@@ -605,7 +619,7 @@ namespace Karol
         {
             PrepareWait();
             FaceDirection += 1;
-            World.Update(Position.X, Position.Z, this);
+            UpdateImage();
             OnMove();
             WaitDefault();
         }
@@ -747,6 +761,7 @@ namespace Karol
 
             Mark = new Marker(this);
             World.SetCell(Position, Mark);
+            World.RobotCollection.Add(this);
             OnEnterMark();
             WaitDefault();
         }
@@ -762,6 +777,7 @@ namespace Karol
                 throw new InvalidActionException($"Kann an Position {Position} keine Marke aufheben!");
 
             World.SetCell(Position, this);
+            World.RobotCollection.Add(this);
             Mark = null;
             OnLeaveMark();
             WaitDefault();

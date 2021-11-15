@@ -301,6 +301,18 @@
   <data name="robotW9" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\robotW9.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Robot_2D_E" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Robot 2D E.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Robot_2D_N" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Robot 2D N.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Robot_2D_S" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Robot 2D S.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Robot_2D_W" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Robot 2D W.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="RotateLeft" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\UI\RotateLeft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

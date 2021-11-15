@@ -13,7 +13,8 @@ namespace Karol.Core.Rendering
         public static int EdgeLength = 30;
         public static Size CellSize = new Size(EdgeLength - 1, EdgeLength - 1);
         public static Bounds Padding = new Bounds(10, 0, 0, 0);
-        private static readonly Font Font = new Font(FontFamily.GenericSansSerif, 12);
+        private static readonly Font Font = new Font(FontFamily.GenericSansSerif, 10);
+        private static readonly StringFormat Format = new StringFormat(StringFormatFlags.NoWrap | StringFormatFlags.NoClip);
 
         private int Height => EdgeLength * SizeZ;
         private int Width => EdgeLength * SizeX;
@@ -70,7 +71,7 @@ namespace Karol.Core.Rendering
             Bitmap map = (Bitmap)BlockMap.Image;
             Graphics g = Graphics.FromImage(map);
 
-            map.Clear();
+            g.Clear(Color.Transparent);
             
             for (int x = 0; x < SizeX; x++)
             {
@@ -81,9 +82,7 @@ namespace Karol.Core.Rendering
                     if (!World.HasCellAt(x, y, z, out WorldElement e))
                         continue;
 
-                    Rectangle rect = new Rectangle(CellToPixelPos(e.Position, null), CellSize);
-                    g.FillRectangle(new SolidBrush(e.ViewColor2D), rect);
-                    g.DrawString(stackSize.ToString(), Font, new SolidBrush(e.ViewColor2D.Invert()), rect);
+                    DrawCell(stackSize, e, g);
                 }
             }
 
@@ -119,14 +118,48 @@ namespace Karol.Core.Rendering
             }
 
             Rectangle rect = new Rectangle(CellToPixelPos(newCell.Position, null), CellSize);
-
-            g.FillRectangle(Brushes.Transparent, rect);
-            g.FillRectangle(new SolidBrush(newCell.ViewColor2D), rect);
-            g.DrawString(stackSize.ToString(), Font, new SolidBrush(newCell.ViewColor2D.Invert()), rect);
+            DrawCell(stackSize, newCell, g);
 
             g.Flush();
             BlockMap.Invalidate(rect);
             BlockMap.Update();
+        }
+
+        private void DrawCell(int stackSize, WorldElement e, Graphics g, bool clear = true)
+        {
+            Rectangle rect = new Rectangle(CellToPixelPos(e.Position, null), CellSize);
+            SizeF textSize = g.MeasureString(stackSize.ToString(), Font);
+            Brush textBrush;
+
+            if (e.Info2D.DrawSolidColor)
+            {
+                var c = (Color)e.Info2D.FillColor;
+                g.FillRectangle(new SolidBrush(c), rect);
+                textBrush = new SolidBrush(c.Invert());
+            }
+            else
+            {
+                if(clear)
+                    g.FillRectangle(Brushes.White, rect);
+
+                if(e.Position.Y > 0)
+                {
+                    var cellBelow = World.GetCell(e.Position.X, e.Position.Y - 1, e.Position.Z);
+                    DrawCell(stackSize, cellBelow, g);
+                }
+
+                g.DrawImage(e.Info2D.Image, rect);
+                textBrush = Brushes.White;     
+            }
+
+            if (e is IContainer container && !container.IsEmpty)
+            {
+                DrawCell(stackSize, container.Content, g, false);
+            }
+
+            rect.X += rect.Width / 2 - (int)(textSize.Width / 2);
+            rect.Y += rect.Height / 2 - (int)(textSize.Height / 2);
+            g.DrawString(stackSize.ToString(), Font, textBrush, rect, Format);
         }
     }
 }

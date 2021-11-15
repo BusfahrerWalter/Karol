@@ -909,6 +909,26 @@
               Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:Karol.Properties.Resources.Robot_2D_E">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.Robot_2D_N">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.Robot_2D_S">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Karol.Properties.Resources.Robot_2D_W">
+            <summary>
+              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:Karol.Properties.Resources.robot0">
             <summary>
               Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.

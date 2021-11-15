@@ -12,47 +12,56 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            int x, y, z;
-            Console.Write("X: ");
-            while (true)
-            {
-                if (int.TryParse(Console.ReadLine(), out int xIn))
-                {
-                    x = xIn;
-                    break;
-                }
-            }
+            World w = new World(10, 15, 10);
+            Robot r = new Robot(1, 1, w);
 
-            Console.Write("Y: ");
-            while (true)
-            {
-                if (int.TryParse(Console.ReadLine(), out int yIn))
-                {
-                    y = yIn;
-                    break;
-                }
-            }
+            r.Delay = 0;
+            r.Place();
+            r.Place();
+            r.Place();
+            r.PlaceMark();
 
-            Console.Write("Z: ");
-            while (true)
-            {
-                if (int.TryParse(Console.ReadLine(), out int zIn))
-                {
-                    z = zIn;
-                    break;
-                }
-            }
+            //int x, y, z;
+            //Console.Write("X: ");
+            //while (true)
+            //{
+            //    if (int.TryParse(Console.ReadLine(), out int xIn))
+            //    {
+            //        x = xIn;
+            //        break;
+            //    }
+            //}
 
-            try
-            {
-                World w = new World(x, y, z);
-            }
-            catch (Exception e) 
-            {
-                Console.Write(e);
-            }
+            //Console.Write("Y: ");
+            //while (true)
+            //{
+            //    if (int.TryParse(Console.ReadLine(), out int yIn))
+            //    {
+            //        y = yIn;
+            //        break;
+            //    }
+            //}
 
-            Main(args);
+            //Console.Write("Z: ");
+            //while (true)
+            //{
+            //    if (int.TryParse(Console.ReadLine(), out int zIn))
+            //    {
+            //        z = zIn;
+            //        break;
+            //    }
+            //}
+
+            //try
+            //{
+            //    World w = new World(x, y, z);
+            //}
+            //catch (Exception e) 
+            //{
+            //    Console.Write(e);
+            //}
+
+            //Main(args);
 
             //for(int i = 0; i < 300; i++)
             //{

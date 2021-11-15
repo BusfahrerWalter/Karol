@@ -16,7 +16,7 @@ namespace Karol.Core.WorldElements
         {
             CanPickUp = true;
             CanStackOnTop = false;
-            ViewColor2D = Color.DarkGray;
+            Info2D.FillColor = Color.DarkGray;
         }
 
         internal override void OnWorldSet()
@@ -29,11 +29,9 @@ namespace Karol.Core.WorldElements
             {
                 isDummyDead = true;
                 Destroy(this);
-            })
-            {
-                ViewColor2D = ViewColor2D
-            };
+            });
 
+            dummy.Info2D.FillColor = Info2D.FillColor;
             World.SetCell(pos, dummy, false);
         }
 

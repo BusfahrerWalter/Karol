@@ -1,4 +1,5 @@
 ﻿using Karol.Core.Annotations;
+using Karol.Core.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -65,6 +66,8 @@ namespace Karol.Core.WorldElements
         /// Farbe in der dieses Element in 2D Dargestellt werden soll
         /// </summary>
         internal Color ViewColor2D { get; set; }
+
+        internal CellInfo2D Info2D { get; private set; }
 
         /// <summary>
         /// X Offset für das Bild
@@ -138,6 +141,7 @@ namespace Karol.Core.WorldElements
         public WorldElement(Bitmap bitMap)
         {
             BitMap = bitMap;
+            Info2D = new CellInfo2D();
         }
 
         /// <summary>
