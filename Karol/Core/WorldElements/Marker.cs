@@ -11,39 +11,14 @@ namespace Karol.Core.WorldElements
     [WorldElementInfo('M')]
     internal class Marker : WorldElement, IContainer
     {
-        private WorldElement _content;
         private event EventHandler onWorldSet;
 
         /// <summary>
         /// Roboter der auf der Marke steht
         /// </summary>
-        public WorldElement Content
-        {
-            get => _content;
-            set
-            {
-                _content = value;
-                if(value != null)
-                {
-                    int absX = Math.Abs(value.XOffset);
-                    int absY = Math.Abs(value.YOffset);
-                    int width = Math.Max(value.BitMap.Width, Resources.Marke.Width) + absX;
-                    int height = Math.Max(value.BitMap.Height, Resources.Marke.Height) + absY;
+        public WorldElement Content { get; set; }
 
-                    BitMap = new Bitmap(width, height);
-                    BitMap.DrawImage(absX, BitMap.Height - Resources.Marke.Height, Resources.Marke);
-                    BitMap.DrawImage(0, 0, value.BitMap);
-
-                    XOffset = value.XOffset;
-                }
-                else
-                {
-                    BitMap = new Bitmap(Resources.Marke);
-                    XOffset = 0;
-                    YOffset = 0;
-                }
-            }
-        }
+        public Point ContentOffset => new Point(0, 33);
 
         public bool IsEmpty => Content == null;
 
@@ -77,12 +52,9 @@ namespace Karol.Core.WorldElements
             Info2D.FillColor = Color.Yellow;
         }
 
-        public Marker(Robot robot) 
+        public Marker(Robot robot) : this()
         {
-            CanStackOnTop = false;
-            CanPickUp = false;
             Content = robot;
-            Info2D.FillColor = Color.Yellow;
         }
 
         public void Reset()

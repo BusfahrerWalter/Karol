@@ -12,14 +12,24 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            World w = new World(10, 15, 10);
-            Robot r = new Robot(1, 1, w);
+
+            World w = new World(40, 10, 40);
+            RobotOptions o = new RobotOptions(w)
+            {
+                Set = ImageSet.Create(
+                    @"C:\Users\damuelle\Downloads\drachen\N.jpg", 
+                    @"C:\Users\damuelle\Downloads\drachen\O.jpg",
+                    @"C:\Users\damuelle\Downloads\drachen\S.jpg", 
+                    @"C:\Users\damuelle\Downloads\drachen\W.jpg")
+            };
+
+            Robot r = new Robot(25, 25, o);
 
             r.Delay = 0;
             r.Place();
             r.Place();
             r.Place();
-            r.PlaceMark();
+            w.PlaceRandomBricks(100);
 
             //int x, y, z;
             //Console.Write("X: ");

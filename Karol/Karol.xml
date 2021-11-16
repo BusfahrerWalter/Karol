@@ -652,6 +652,13 @@
             <param name="image">Bild für den Roboter</param>
             <returns>Image set in dem jedes Bild gleich ist</returns>
         </member>
+        <member name="M:Karol.Core.ImageSet.Create(System.String)">
+            <summary>
+            Erstellt ein neues Image Set 
+            </summary>
+            <param name="filePath">Pfad zu einem Bild für den Roboter</param>
+            <returns>Image set in dem jedes Bild gleich ist</returns>
+        </member>
         <member name="M:Karol.Core.ImageSet.Create(System.Drawing.Bitmap,System.Drawing.Bitmap,System.Drawing.Bitmap,System.Drawing.Bitmap)">
             <summary>
             Erstellt ein neues Image Set aus 4 Bitmaps
@@ -662,9 +669,39 @@
             <param name="westImage">Bild wenn der Roboter nach Westen schaut</param>
             <returns>Image set mit 4 verschiedenen Bildern</returns>
         </member>
+        <member name="M:Karol.Core.ImageSet.Create(System.String,System.String,System.String,System.String)">
+            <summary>
+            Erstellt ein neues Image Set aus 4 Bildern
+            </summary>
+            <param name="northImage">Bild wenn der Roboter nach Norden schaut</param>
+            <param name="eastImage">Bild wenn der Roboter nach Osten schaut</param>
+            <param name="southImage">Bild wenn der Roboter nach Süden schaut</param>
+            <param name="westImage">Bild wenn der Roboter nach Westen schaut</param>
+            <returns>Image set mit 4 verschiedenen Bildern</returns>
+        </member>
         <member name="T:Karol.Core.WorldElements.Brick">
             <summary>
             Stellt einen Ziegel in der Welt dar.
+            </summary>
+        </member>
+        <member name="T:Karol.Core.WorldElements.IContainer">
+            <summary>
+            Markiert Elemente die ein anderes beinhalten können...
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.IContainer.Content">
+            <summary>
+            Enthaltenes Element
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.IContainer.IsEmpty">
+            <summary>
+            Ist der Container leer
+            </summary>
+        </member>
+        <member name="P:Karol.Core.WorldElements.IContainer.ContentOffset">
+            <summary>
+            Offset um das der Content versetzt werden soll
             </summary>
         </member>
         <member name="P:Karol.Core.WorldElements.Marker.Content">

@@ -153,6 +153,16 @@ namespace Karol.Core
         }
 
         /// <summary>
+        /// Erstellt ein neues Image Set 
+        /// </summary>
+        /// <param name="filePath">Pfad zu einem Bild für den Roboter</param>
+        /// <returns>Image set in dem jedes Bild gleich ist</returns>
+        public static ImageSet Create(string filePath)
+        {
+            return Create(new Bitmap(filePath));
+        }
+
+        /// <summary>
         /// Erstellt ein neues Image Set aus 4 Bitmaps
         /// </summary>
         /// <param name="northImage">Bild wenn der Roboter nach Norden schaut</param>
@@ -163,6 +173,19 @@ namespace Karol.Core
         public static ImageSet Create(Bitmap northImage, Bitmap eastImage, Bitmap southImage, Bitmap westImage)
         {
             return new ImageSet(northImage, eastImage, southImage, westImage);
+        }
+
+        /// <summary>
+        /// Erstellt ein neues Image Set aus 4 Bildern
+        /// </summary>
+        /// <param name="northImage">Bild wenn der Roboter nach Norden schaut</param>
+        /// <param name="eastImage">Bild wenn der Roboter nach Osten schaut</param>
+        /// <param name="southImage">Bild wenn der Roboter nach Süden schaut</param>
+        /// <param name="westImage">Bild wenn der Roboter nach Westen schaut</param>
+        /// <returns>Image set mit 4 verschiedenen Bildern</returns>
+        public static ImageSet Create(string northImage, string eastImage, string southImage, string westImage)
+        {
+            return Create(new Bitmap(northImage), new Bitmap(eastImage), new Bitmap(southImage), new Bitmap(westImage));
         }
     }
 }

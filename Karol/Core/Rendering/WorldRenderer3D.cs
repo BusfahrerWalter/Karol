@@ -13,6 +13,7 @@ namespace Karol.Core.Rendering
     {
         private const int PixelWidth = 30;
         private const int PixelHeight = 15;
+        private readonly Size RoboImageSize = Resources.robot0.Size;
         private readonly Bounds Padding = new Bounds(30, 0, 50, 0);
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace Karol.Core.Rendering
                             break;
 
                         var pos = World.CellToPixelPos(x, y, z, cell);
-                        g.DrawImage(cell.BitMap, pos);
+                        DrawCell(pos, cell, g);
                     }
                 }
             }
@@ -249,6 +250,32 @@ namespace Karol.Core.Rendering
             int x = BottomLeft.X + zPos * LineOffset + xPos * PixelWidth;
             int y = BottomLeft.Y - element.BitMap.Height - (zPos + yPos) * PixelHeight + 1;
             return new Point(x + element.XOffset, y + element.YOffset);
+        }
+
+        private void DrawCell(Point pos, WorldElement cell, Graphics g)
+        {
+            if(cell is Robot)
+            {
+                pos.Y += cell.BitMap.Height - RoboImageSize.Height;
+                g.DrawImage(cell.BitMap, new Rectangle(pos, RoboImageSize));
+            }
+            else
+            {
+                g.DrawImage(cell.BitMap, pos);
+            }
+
+            if (cell is IContainer c && !c.IsEmpty)
+            {
+                //int absX = Math.Abs(c.Content.XOffset);
+                //int width = Math.Max(c.Content.BitMap.Width, cell.BitMap.Width) + absX;
+                int absY = Math.Abs(c.Content.YOffset);
+                int height = Math.Max(c.Content.BitMap.Height, cell.BitMap.Height) + absY;
+
+                pos.Y -= height;
+                pos.Y += c.Content.YOffset + c.ContentOffset.Y;
+                pos.X += c.Content.XOffset + c.ContentOffset.X;
+                DrawCell(pos, c.Content, g);
+            }
         }
     }
 }
