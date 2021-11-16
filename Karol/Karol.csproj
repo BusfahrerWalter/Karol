@@ -9,7 +9,7 @@ Roboter können in einer Welt tolle sachen machen...</Description>
     <PackageIconUrl />
     <Authors>Daniel Müller</Authors>
     <Company>AdamSandler GmbH</Company>
-    <PackageTags>Karol, Roboter, LERNEN, Cool, AdamSandler, Egon34</PackageTags>
+    <PackageTags>Karol, Roboter, LERNEN, Cool, Adam Sandler, Egon34, Phasenweise Pessimistische Programmablaufplan Visualisierungssoftware</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -19,6 +19,8 @@ Roboter können in einer Welt tolle sachen machen...</Description>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <DefineConstants>TRACE</DefineConstants>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageReleaseNotes>r</PackageReleaseNotes>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

@@ -189,26 +189,6 @@ namespace Karol
                 return HasWallInDirection(FaceDirection);
             }
         }
-        /// <summary>
-        /// Gibt zurück ob sich rechts neben dem Roboter eine Wand bzw. ein Quader befindet.
-        /// </summary>
-        internal bool HasWallRight
-        {
-            get
-            {
-                return HasWallInDirection(FaceDirection + 1);
-            }
-        }
-        /// <summary>
-        /// Gibt zurück ob sich links neben dem Roboter eine Wand bzw. ein Quader befindet.
-        /// </summary>
-        internal bool HasWallLeft
-        {
-            get
-            {
-                return HasWallInDirection(FaceDirection - 1);
-            }
-        }
 
         /// <summary>
         /// Gibt zurück ob sich vor dem Roboter ein anderer Roboter befindet.

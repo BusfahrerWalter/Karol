@@ -12,24 +12,45 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
+            World w = new World(10, 10, 10);
+            Robot r = new Robot(w);
 
-            World w = new World(40, 10, 40);
-            RobotOptions o = new RobotOptions(w)
+            while (!false)
             {
-                Set = ImageSet.Create(
-                    @"C:\Users\damuelle\Downloads\drachen\N.jpg", 
-                    @"C:\Users\damuelle\Downloads\drachen\O.jpg",
-                    @"C:\Users\damuelle\Downloads\drachen\S.jpg", 
-                    @"C:\Users\damuelle\Downloads\drachen\W.jpg")
-            };
+                r.Move();
+            }
 
-            Robot r = new Robot(25, 25, o);
+            //World w = new World(40, 3, 1);
+            //RobotOptions o = new RobotOptions(w)
+            //{
+            //    InitialDirection = Direction.South,
+            //    Set = ImageSet.Create(
+            //        @"C:\Users\damuelle\Downloads\drachen\N.jpg", 
+            //        @"C:\Users\damuelle\Downloads\drachen\O.jpg",
+            //        @"C:\Users\damuelle\Downloads\drachen\S.jpg", 
+            //        @"C:\Users\damuelle\Downloads\drachen\W.jpg")
+            //};
 
-            r.Delay = 0;
-            r.Place();
-            r.Place();
-            r.Place();
-            w.PlaceRandomBricks(100);
+            //for(int i = 0; i < w.Width; i++)
+            //{
+            //    Robot r = new Robot(i, 0, o);
+            //    r.IsVisible = false;
+            //}
+
+            //Robot[] rs = w.Robots;
+            //while (true)
+            //{
+            //    foreach (var r in rs)
+            //    {
+            //        r.IsVisible = true;
+            //        Thread t = new Thread(() =>
+            //        {
+            //            Thread.Sleep(350);
+            //            r.IsVisible = false;
+            //        });
+            //        t.Start();
+            //    }
+            //}
 
             //int x, y, z;
             //Console.Write("X: ");
