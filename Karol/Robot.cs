@@ -535,6 +535,9 @@ namespace Karol
             if (isMoving)
                 return;
 
+            if (HasMark)
+                Mark.Reset();
+
             World.RobotCollection.Remove(this);
         }
 
@@ -741,7 +744,6 @@ namespace Karol
 
             Mark = new Marker(this);
             World.SetCell(Position, Mark);
-            World.RobotCollection.Add(this);
             OnEnterMark();
             WaitDefault();
         }
@@ -757,7 +759,6 @@ namespace Karol
                 throw new InvalidActionException($"Kann an Position {Position} keine Marke aufheben!");
 
             World.SetCell(Position, this);
-            World.RobotCollection.Add(this);
             Mark = null;
             OnLeaveMark();
             WaitDefault();

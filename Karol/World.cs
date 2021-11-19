@@ -445,7 +445,7 @@ namespace Karol
 
         internal void SetGridElement(int xPos, int yPos, int zPos, WorldElement element)
         {
-            if (Grid[xPos, zPos, yPos] != null)
+            if (Grid[xPos, zPos, yPos] != null && element == null)
                 Grid[xPos, zPos, yPos].OnDestroy();
 
             Grid[xPos, zPos, yPos] = element;

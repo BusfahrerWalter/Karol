@@ -1,8 +1,8 @@
 ﻿using Karol;
 using Karol.Core;
+using Karol.Core.Rendering;
 using System;
 using System.Drawing;
-using Karol.Core.Rendering;
 using System.Threading;
 using System.Collections.Generic;
 
@@ -12,29 +12,19 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            World w = new World(10, 10, 10);
-            Robot r = new Robot(w);
-
-            while (!false)
-            {
-                r.Move();
-            }
-
-            //World w = new World(40, 3, 1);
+            //World w = new World(40, 3, 12);
             //RobotOptions o = new RobotOptions(w)
             //{
             //    InitialDirection = Direction.South,
-            //    Set = ImageSet.Create(
-            //        @"C:\Users\damuelle\Downloads\drachen\N.jpg", 
-            //        @"C:\Users\damuelle\Downloads\drachen\O.jpg",
-            //        @"C:\Users\damuelle\Downloads\drachen\S.jpg", 
-            //        @"C:\Users\damuelle\Downloads\drachen\W.jpg")
+            //    Delay = 20
             //};
 
-            //for(int i = 0; i < w.Width; i++)
+            //Robot r = new Robot(5, 5, o);
+            //r.Wait(10000);
+
+            //for (int i = 0; i < 10; i++)
             //{
-            //    Robot r = new Robot(i, 0, o);
-            //    r.IsVisible = false;
+            //    Robot r = new Robot(i, i, w);
             //}
 
             //Robot[] rs = w.Robots;
@@ -94,7 +84,7 @@ namespace TestApp
 
             //Main(args);
 
-            //for(int i = 0; i < 300; i++)
+            //for (int i = 0; i < 300; i++)
             //{
             //    Thread t = new Thread(() =>
             //    {
@@ -124,24 +114,24 @@ namespace TestApp
             //    t.Start();
             //}
 
-            //for(int i = 0; i < 9; i++)
-            //{
-            //    Robot r = new Robot(i, i, w);
-            //    Thread t = new Thread(() =>
-            //    {
-            //        r.Delay = 20;
+            World w = new World(20, 2, 20);
+            for (int i = 0; i < 3; i++)
+            {
+                Robot r = new Robot(i, i, w);
+                Thread t = new Thread(() =>
+                {
+                    r.Delay = 20;
 
-            //        while (true)
-            //        {
-            //            r.TurnRight();
-            //            if (!r.HasWall && !r.HasRobot)
-            //                r.Move();
-            //        }
+                    while (true)
+                    {
+                        r.TurnRight();
 
-            //    });
+                    }
 
-            //    t.Start();
-            //}
+                });
+
+                t.Start();
+            }
         }
     }
 }

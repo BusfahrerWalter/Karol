@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Karol" Version="1.0.1" />
+    <ProjectReference Include="..\Karol\Karol.csproj" />
   </ItemGroup>
 
 </Project>
