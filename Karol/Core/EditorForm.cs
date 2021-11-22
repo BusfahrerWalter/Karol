@@ -78,10 +78,7 @@ namespace Karol.Core
             if (!World.IsPositionValid(pos.X, 0, pos.Y))
                 return;
 
-            int stackSize = World.GetStackSize(pos.X, pos.Y);
-            if (Remove)
-                stackSize = Math.Max(stackSize - 1, 0);
-
+            int stackSize = World.GetStackSize(pos.X, pos.Y) - (Remove ? 1 : 0);
             if (!World.IsPositionValid(pos.X, stackSize, pos.Y))
                 return;
 

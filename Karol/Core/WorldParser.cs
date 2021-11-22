@@ -143,10 +143,12 @@ namespace Karol.Core
 
             string sizeLine = NextLine(reader);
             var dimension = sizeLine.Trim().Replace(" ", "")[5..].Split(',');
+            int iteration = 0;
 
             int xSize = int.Parse(dimension[0]);
             int ySize = int.Parse(dimension[1]);
             int zSize = int.Parse(dimension[2]);
+            int count = xSize * ySize * zSize;
 
             World world = new World(xSize, ySize, zSize);
             WorldElement last = null;
@@ -164,8 +166,7 @@ namespace Karol.Core
 
                     if (line == null)
                     {
-                        world.Redraw();
-                        reader.Close();
+                        End();
                         return world;
                     }
 
@@ -173,6 +174,7 @@ namespace Karol.Core
                     int xCount = Math.Min(xSize, arr.Length);
                     for (int x = 0; x < xCount; x++)
                     {
+                        iteration++;
                         if (IsPlaceholder(arr[x]))
                             continue;
 
@@ -185,7 +187,7 @@ namespace Karol.Core
                         char id = char.ToUpper(arr[x][0]);
                         bool hasMetaData = HasMetadata(arr[x]);
                         WorldElement cell = (last != null && !hasMetaData && last.ID == id) ? last : WorldElement.ForID(id);
-
+                        
                         if (cell == null)
                         {
                             Console.WriteLine($"Ungültiges Zeichen in zeile {CurrentLine}");
@@ -197,17 +199,22 @@ namespace Karol.Core
                                 cell.Metadata = metadata;
 
                             last = cell;
-                        }   
-                    }
+                        }
 
-                    SetProgress(world, (double)(y + 1) / ySize);
+                        SetProgress(world, (double)iteration / count);
+                    }
                 }
             }
 
-            EnableProgressBar(world, false);
-            world.Redraw();
-            reader.Close();
+            End();
             return world;
+
+            void End()
+            {
+                EnableProgressBar(world, false);
+                world.Redraw();
+                reader.Close();
+            }
         }
 
         public World LoadJava(string filePath)

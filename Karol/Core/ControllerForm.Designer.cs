@@ -29,6 +29,7 @@ namespace Karol.Core
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.ButtonRight = new System.Windows.Forms.Button();
             this.ButtonLeft = new System.Windows.Forms.Button();
             this.ButtonDown = new System.Windows.Forms.Button();
@@ -70,6 +71,7 @@ namespace Karol.Core
             this.label7 = new System.Windows.Forms.Label();
             this.PositionTextBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BrickCountInput)).BeginInit();
@@ -88,6 +90,7 @@ namespace Karol.Core
             this.ButtonRight.Name = "ButtonRight";
             this.ButtonRight.Size = new System.Drawing.Size(40, 40);
             this.ButtonRight.TabIndex = 0;
+            this.ButtonRight.Tag = "Move Right (D / Right Arrow)";
             this.ButtonRight.UseVisualStyleBackColor = true;
             // 
             // ButtonLeft
@@ -99,6 +102,7 @@ namespace Karol.Core
             this.ButtonLeft.Name = "ButtonLeft";
             this.ButtonLeft.Size = new System.Drawing.Size(40, 40);
             this.ButtonLeft.TabIndex = 1;
+            this.ButtonLeft.Tag = "Move Left (A / Left Arrow)";
             this.ButtonLeft.UseVisualStyleBackColor = true;
             // 
             // ButtonDown
@@ -110,6 +114,7 @@ namespace Karol.Core
             this.ButtonDown.Name = "ButtonDown";
             this.ButtonDown.Size = new System.Drawing.Size(40, 40);
             this.ButtonDown.TabIndex = 2;
+            this.ButtonDown.Tag = "Move Down (S / Down Arrow)";
             this.ButtonDown.UseVisualStyleBackColor = true;
             // 
             // ButtonUp
@@ -121,6 +126,7 @@ namespace Karol.Core
             this.ButtonUp.Name = "ButtonUp";
             this.ButtonUp.Size = new System.Drawing.Size(40, 40);
             this.ButtonUp.TabIndex = 3;
+            this.ButtonUp.Tag = "Move Up (W / Up Arrow)";
             this.ButtonUp.UseVisualStyleBackColor = true;
             // 
             // PlaceBrickButton
@@ -133,6 +139,7 @@ namespace Karol.Core
             this.PlaceBrickButton.Name = "PlaceBrickButton";
             this.PlaceBrickButton.Size = new System.Drawing.Size(62, 40);
             this.PlaceBrickButton.TabIndex = 4;
+            this.PlaceBrickButton.Tag = "Place Brick (F)";
             this.PlaceBrickButton.UseVisualStyleBackColor = true;
             // 
             // PlaceMarkButton
@@ -145,6 +152,7 @@ namespace Karol.Core
             this.PlaceMarkButton.Name = "PlaceMarkButton";
             this.PlaceMarkButton.Size = new System.Drawing.Size(62, 40);
             this.PlaceMarkButton.TabIndex = 5;
+            this.PlaceMarkButton.Tag = "Place Mark (M)";
             this.PlaceMarkButton.UseVisualStyleBackColor = true;
             // 
             // TurnLeftButton
@@ -156,6 +164,7 @@ namespace Karol.Core
             this.TurnLeftButton.Name = "TurnLeftButton";
             this.TurnLeftButton.Size = new System.Drawing.Size(40, 40);
             this.TurnLeftButton.TabIndex = 6;
+            this.TurnLeftButton.Tag = "Turn Left (Q)";
             this.TurnLeftButton.UseVisualStyleBackColor = true;
             // 
             // TurnRightButton
@@ -167,6 +176,7 @@ namespace Karol.Core
             this.TurnRightButton.Name = "TurnRightButton";
             this.TurnRightButton.Size = new System.Drawing.Size(40, 40);
             this.TurnRightButton.TabIndex = 7;
+            this.TurnRightButton.Tag = "Turn Right (E)";
             this.TurnRightButton.UseVisualStyleBackColor = true;
             // 
             // LogListBox
@@ -180,6 +190,8 @@ namespace Karol.Core
             this.LogListBox.Name = "LogListBox";
             this.LogListBox.Size = new System.Drawing.Size(559, 139);
             this.LogListBox.TabIndex = 8;
+            this.LogListBox.Tag = "Exception List";
+            this.LogListBox.SelectedIndexChanged += new System.EventHandler(this.LogListBox_SelectedIndexChanged);
             // 
             // PickUpMarkButton
             // 
@@ -191,6 +203,7 @@ namespace Karol.Core
             this.PickUpMarkButton.Name = "PickUpMarkButton";
             this.PickUpMarkButton.Size = new System.Drawing.Size(62, 40);
             this.PickUpMarkButton.TabIndex = 10;
+            this.PickUpMarkButton.Tag = "Pick up Mark (M)";
             this.PickUpMarkButton.UseVisualStyleBackColor = true;
             // 
             // PickUpBrickButton
@@ -203,6 +216,7 @@ namespace Karol.Core
             this.PickUpBrickButton.Name = "PickUpBrickButton";
             this.PickUpBrickButton.Size = new System.Drawing.Size(62, 40);
             this.PickUpBrickButton.TabIndex = 9;
+            this.PickUpBrickButton.Tag = "Pick up Brick (R)";
             this.PickUpBrickButton.UseVisualStyleBackColor = true;
             // 
             // groupBox1
@@ -236,6 +250,7 @@ namespace Karol.Core
             this.PickUpCubeButton.Name = "PickUpCubeButton";
             this.PickUpCubeButton.Size = new System.Drawing.Size(62, 40);
             this.PickUpCubeButton.TabIndex = 12;
+            this.PickUpCubeButton.Tag = "Pick up Cube (T)";
             this.PickUpCubeButton.UseVisualStyleBackColor = true;
             // 
             // PlaceCubeButton
@@ -248,6 +263,7 @@ namespace Karol.Core
             this.PlaceCubeButton.Name = "PlaceCubeButton";
             this.PlaceCubeButton.Size = new System.Drawing.Size(62, 40);
             this.PlaceCubeButton.TabIndex = 11;
+            this.PlaceCubeButton.Tag = "Place Cube (G)";
             this.PlaceCubeButton.UseVisualStyleBackColor = true;
             // 
             // groupBox2
@@ -293,6 +309,7 @@ namespace Karol.Core
             this.KillButton.Name = "KillButton";
             this.KillButton.Size = new System.Drawing.Size(84, 23);
             this.KillButton.TabIndex = 13;
+            this.KillButton.Tag = "Suicide (Del)";
             this.KillButton.Text = "Suicide";
             this.KillButton.UseVisualStyleBackColor = true;
             // 
@@ -604,6 +621,7 @@ namespace Karol.Core
             this.MinimizeBox = false;
             this.Name = "ControllerForm";
             this.Text = "Karol Controller";
+            this.Load += new System.EventHandler(this.ControllerForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -649,7 +667,6 @@ namespace Karol.Core
         public System.Windows.Forms.CheckBox IsVisibleCheckbox;
         public System.Windows.Forms.Button KillButton;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.CheckBox MoreInfoCheckBox;
         public System.Windows.Forms.TextBox FaceDirectionTextBox;
         private System.Windows.Forms.Label label7;
         public System.Windows.Forms.TextBox PositionTextBox;
@@ -660,5 +677,7 @@ namespace Karol.Core
         public System.Windows.Forms.CheckBox HasBrickCheckBox;
         public System.Windows.Forms.CheckBox BackPackEmptyCheckBox;
         public System.Windows.Forms.CheckBox BackPackFullCheckBox;
+        private System.Windows.Forms.ToolTip ToolTip;
+        public System.Windows.Forms.CheckBox MoreInfoCheckBox;
     }
 }

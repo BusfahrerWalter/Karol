@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestApp", "TestApp\TestApp.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doc", "Doc\Doc.csproj", "{5043171E-9754-4BDD-A686-B13F76659742}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComponentTest", "ComponentTest\ComponentTest.csproj", "{35F691B2-11E2-439A-99B2-A627B1B95186}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComponentTest", "ComponentTest\ComponentTest.csproj", "{35F691B2-11E2-439A-99B2-A627B1B95186}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

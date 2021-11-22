@@ -5,6 +5,7 @@ using System;
 using System.Drawing;
 using System.Threading;
 using System.Collections.Generic;
+using System.IO;
 
 namespace TestApp
 {
@@ -12,6 +13,17 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
+            World w = World.Load(@"C:\Users\damuelle\Desktop\Brams\Test.cskw");
+
+            //foreach(string file in Directory.EnumerateFiles(@"C:\Users\damuelle\Desktop\Brams"))
+            //{
+            //    if (!file.EndsWith(".cskw") && !file.EndsWith(".kdw"))
+            //        continue;
+
+            //    Console.WriteLine($"Next: {file}");
+            //    World w = World.Load(file);
+            //}
+
             //World w = new World(40, 3, 12);
             //RobotOptions o = new RobotOptions(w)
             //{
@@ -114,24 +126,22 @@ namespace TestApp
             //    t.Start();
             //}
 
-            World w = new World(20, 2, 20);
-            for (int i = 0; i < 3; i++)
-            {
-                Robot r = new Robot(i, i, w);
-                Thread t = new Thread(() =>
-                {
-                    r.Delay = 20;
+            //World w = new World(20, 2, 20);
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    Robot r = new Robot(i, i, w);
+            //    Thread t = new Thread(() =>
+            //    {
+            //        r.Delay = 20;
 
-                    while (true)
-                    {
-                        r.TurnRight();
+            //        while (true)
+            //        {
+            //            r.TurnRight();
+            //        }
+            //    });
 
-                    }
-
-                });
-
-                t.Start();
-            }
+            //    t.Start();
+            //}
         }
     }
 }

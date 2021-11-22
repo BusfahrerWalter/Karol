@@ -94,6 +94,9 @@ namespace Karol
                 { Keys.Q, Form.TurnLeftButton.PerformClick },
                 { Keys.R, Form.PickUpBrickButton.PerformClick },
                 { Keys.F, Form.PlaceBrickButton.PerformClick },
+                { Keys.T, Form.PickUpCubeButton.PerformClick },
+                { Keys.G, Form.PlaceCubeButton.PerformClick },
+                { Keys.Delete, Form.KillButton.PerformClick },
                 { Keys.M, PlaceOrPickUpMark },
             };
 

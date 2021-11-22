@@ -52,5 +52,32 @@ namespace Karol.Core
                 MoreInfoCheckBox.Text = "Less Info";
             }
         }
+
+        private void LogListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ToolTip.SetToolTip(LogListBox, LogListBox.SelectedItem.ToString());
+        }
+
+        private void ControllerForm_Load(object sender, EventArgs e)
+        {
+            SetChildToolTips(this);
+        }
+
+        private void SetChildToolTips(Control parent)
+        {
+            foreach(Control ctrl in parent.Controls)
+            {
+                if(ctrl.Tag is string str)
+                {
+                    ctrl.MouseHover += (s, args) =>
+                    {
+                        ToolTip.SetToolTip(s as Control, str);
+                    };
+                }
+
+                if(ctrl.Controls.Count > 0)
+                    SetChildToolTips(ctrl);
+            }
+        }
     }
 }
