@@ -8,7 +8,7 @@ using Karol.Core.Annotations;
 
 namespace Karol.Core.WorldElements
 {
-    [WorldElementInfo('M')]
+    [WorldElementInfo('M', IsCasheable = false)]
     internal class Marker : WorldElement, IContainer
     {
         private event EventHandler onWorldSet;
@@ -26,8 +26,9 @@ namespace Karol.Core.WorldElements
         {
             get
             {
-                if (IsEmpty)
+                if (IsEmpty) 
                     return string.Empty;
+
                 return Content is Robot r ? $"R{r.FaceDirection.Offset}" : Content.ID.ToString();
             }
             set
@@ -57,10 +58,11 @@ namespace Karol.Core.WorldElements
             Content = robot;
         }
 
-        public void Reset()
+        public void Reset(bool redraw = true)
         {
             Content = null;
-            World.Update(Position.X, Position.Z, this);
+            if(redraw)
+                World.Update(Position.X, Position.Z, this);
         }
 
         internal override void OnWorldSet()

@@ -4,7 +4,8 @@
 - [Karol](api/Karol.yml)
 - [Karol.Core](api/Karol.Core.yml)
 
-Hier steht vielleicht mal ein text...
+Karol f&uuml;r C# <br>
+Roboter k&ouml;nnen in einer Welt tolle sachen machen...
 
 ## Screenshots
 #### Welt mit 2 Robotern
@@ -15,6 +16,9 @@ Hier steht vielleicht mal ein text...
 
 #### 2D Ansicht
 ![Ups.. hier sollte ein bild sein!](images/img3.png)
+
+#### Verschiedene Farben
+![Ups.. hier sollte ein bild sein!](images/img4.png)
 
 ## Beispiel Code
 #### Erstellen einer Welt mit Roboter
@@ -42,11 +46,11 @@ while (sandler.Position.Y < world.Height - 1)
 }
 ```
 
-#### Intelligentes l&ouml;sen eines Labyrinths
+#### Mehr oder weniger Intelligentes l&ouml;sen eines Labyrinths
 ```C#
-World world = World.Load("Pfad zu Welt Datei");
-Robot egon34 = world.Robots[0]; // Erster Roboter in der Welt
-Random rand = new Random();     // Zufallszahlen generator
+World world = World.Load("Pfad zu Welt Datei"); // Welt Dateiformat .kdw oder .cskw
+Robot egon34 = world.GetRobot(0); // Erster Roboter in der Welt
+Random rand = new Random();       // Zufallszahlen generator
 
 egon34.Delay = 0; // Damit es nich so lang dauert...
 
@@ -68,3 +72,57 @@ while (!egon34.HasMark)
     }
 }
 ```
+
+#### Markieren des gesammten Bodens
+```C#
+World world = new World(15, 5, 10);     // Welt erzeugen
+Robot robo = new Robot(0, 0, world);    // Roboter an der Position 0, 0, 0 in "world" erzeugen
+
+robo.Delay = 30;    // Damit es nich so lang dauert...
+
+for(int i = 0; i < world.Width; i++)
+{
+    while (!robo.HasWall)
+    {
+        robo.PlaceMark();
+        robo.Move();
+    }
+
+    if (i == world.Width - 1)
+        break;
+
+    robo.PlaceMark();
+
+    if (i % 2 == 0)
+    {
+        robo.TurnRight();
+        robo.Move();
+        robo.TurnRight();
+    }
+    else
+    {
+        robo.TurnLeft();
+        robo.Move();
+        robo.TurnLeft();
+    }
+}
+
+robo.PlaceMark();
+```
+
+#### Welten k&ouml;nnen auch aus strings geladen werden!
+```C#
+string str = "C_Gartenzaun_Karol_World\n" +
+             "Size: 3,2,3\n" +
+             "---  \n" +
+             "_ _ R(2)\n" +
+             "Q Q _\n" +
+             "_ Q Q\n";
+
+MemoryStream stream = new MemoryStream(Encoding.ASCII.GetBytes(str));
+World world = World.Load(stream);
+```
+
+ergibt folgende Welt...
+<br>
+![Ups.. hier sollte ein bild sein!](images/img5.png)

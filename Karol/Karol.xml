@@ -161,6 +161,21 @@
             Versatz von zeile zu zeile in Pixeln
             </summary>
         </member>
+        <member name="P:Karol.Core.Annotations.WorldElementInfoAttribute.ID">
+            <summary>
+            ID des beschriebenen Elements (für Speichern und Laden)
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Annotations.WorldElementInfoAttribute.IncludeInEditor">
+            <summary>
+            Gibt an ob das beschriebene Element im Editor platziert werden kann
+            </summary>
+        </member>
+        <member name="P:Karol.Core.Annotations.WorldElementInfoAttribute.IsCasheable">
+            <summary>
+            Gibt an ob das beschriebene Element beim Laden gecasht werden kann
+            </summary>
+        </member>
         <member name="F:Karol.Core.ControllerForm.components">
             <summary>
             Required designer variable.
@@ -702,6 +717,11 @@
         <member name="P:Karol.Core.WorldElements.IContainer.ContentOffset">
             <summary>
             Offset um das der Content versetzt werden soll
+            </summary>
+        </member>
+        <member name="M:Karol.Core.WorldElements.IContainer.Reset(System.Boolean)">
+            <summary>
+            Setzt das Element auf seinen Anfangszustand (Leer) zurück
             </summary>
         </member>
         <member name="P:Karol.Core.WorldElements.Marker.Content">
@@ -1946,7 +1966,7 @@
         </member>
         <member name="M:Karol.World.GetRobot(System.Int32)">
             <summary>
-            Gibt den Roboter an dem spezifizierten Index zurück. Oder null wenn an dem Index kein Roboter existiert.
+            Gibt den Roboter an dem spezifizierten Index (Rückennummer - 1) zurück. Oder null wenn an dem Index kein Roboter existiert.
             </summary>
             <param name="index">Index des Roboters</param>
             <returns>Roboter mit dem gegebenen Index</returns>

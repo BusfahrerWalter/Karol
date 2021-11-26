@@ -21,7 +21,10 @@ namespace Karol.Core
 
         public static Bitmap[] LoadRobotBitmaps(int roboNumber)
         {
-            roboNumber = Math.Min(roboNumber + 1, 9);
+            roboNumber++;
+            if (roboNumber > 9)
+                roboNumber = 1;
+
             var flags = BindingFlags.Static | BindingFlags.NonPublic;
             return new Bitmap[]
             {

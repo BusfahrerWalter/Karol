@@ -22,5 +22,10 @@ namespace Karol.Core.WorldElements
         /// Offset um das der Content versetzt werden soll
         /// </summary>
         Point ContentOffset { get; }
+
+        /// <summary>
+        /// Setzt das Element auf seinen Anfangszustand (Leer) zurück
+        /// </summary>
+        void Reset(bool redraw = true);
     }
 }

@@ -82,9 +82,17 @@ namespace Karol.Core
             if (!World.IsPositionValid(pos.X, stackSize, pos.Y))
                 return;
 
+            var cell = World.GetCell(pos.X, stackSize, pos.Y);
             if (Remove)
             {
-                World.SetCell(pos.X, stackSize, pos.Y, null, true);
+                if(cell is IContainer cont && !cont.IsEmpty)
+                {
+                    cont.Reset();
+                }
+                else
+                {
+                    World.SetCell(pos.X, stackSize, pos.Y, null, true);
+                }
             }
             else
             {

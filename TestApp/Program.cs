@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Threading;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace TestApp
 {
@@ -13,7 +14,42 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            World w = World.Load(@"C:\Users\damuelle\Desktop\Brams\Test.cskw");
+            World w = new World(5, 5, 5);
+            Robot r = new Robot(3, 3, w);
+
+            //World world = new World(15, 5, 10);     // Welt erzeugen
+            //Robot robo = new Robot(0, 0, world);    // Roboter an der Position 0, 0, 0 in "world" erzeugen
+
+            //robo.Delay = 30;    // Damit es nich so lang dauert...
+
+            //for(int i = 0; i < world.Width; i++)
+            //{
+            //    while (!robo.HasWall)
+            //    {
+            //        robo.PlaceMark();
+            //        robo.Move();
+            //    }
+
+            //    if (i == world.Width - 1)
+            //        break;
+
+            //    robo.PlaceMark();
+
+            //    if (i % 2 == 0)
+            //    {
+            //        robo.TurnRight();
+            //        robo.Move();
+            //        robo.TurnRight();
+            //    }
+            //    else
+            //    {
+            //        robo.TurnLeft();
+            //        robo.Move();
+            //        robo.TurnLeft();
+            //    }
+            //}
+
+            //robo.PlaceMark();
 
             //foreach(string file in Directory.EnumerateFiles(@"C:\Users\damuelle\Desktop\Brams"))
             //{

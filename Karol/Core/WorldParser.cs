@@ -9,6 +9,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using System.Runtime.CompilerServices;
+using Karol.Core.Annotations;
+using System.Reflection;
 
 [assembly: InternalsVisibleTo("ComponentTest")]
 namespace Karol.Core
@@ -185,8 +187,8 @@ namespace Karol.Core
                         }
 
                         char id = char.ToUpper(arr[x][0]);
-                        bool hasMetaData = HasMetadata(arr[x]);
-                        WorldElement cell = (last != null && !hasMetaData && last.ID == id) ? last : WorldElement.ForID(id);
+                        GetMetaData(arr[x], out string metadata);
+                        WorldElement cell = (last != null && last.Metadata == metadata && last.ID == id) ? last : WorldElement.ForID(id);
                         
                         if (cell == null)
                         {
@@ -195,10 +197,11 @@ namespace Karol.Core
                         else
                         {
                             world.SetCell(x, y, z, cell, false);
-                            if (GetMetaData(arr[x], out string metadata))
+                            if (metadata != string.Empty)
                                 cell.Metadata = metadata;
 
-                            last = cell;
+                            if(cell.GetInfo().IsCasheable)
+                                last = cell;
                         }
 
                         SetProgress(world, (double)iteration / count);

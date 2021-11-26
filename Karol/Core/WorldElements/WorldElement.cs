@@ -187,6 +187,19 @@ namespace Karol.Core.WorldElements
             return (WorldElement)Activator.CreateInstance(type, true);
         }
 
+        internal static Type[] GetSubTypes()
+        {
+            if (ElementTypes == null)
+            {
+                ElementTypes = typeof(WorldElement).Assembly
+                    .GetTypes()
+                    .Where(t => t.IsSubclassOf(typeof(WorldElement)))
+                    .ToArray();
+            }
+
+            return ElementTypes;
+        }
+
         internal static void Destroy(WorldElement element, bool isTargetInGrid = true)
         {
             if (element == null)
@@ -197,7 +210,9 @@ namespace Karol.Core.WorldElements
             else
                 element.OnDestroy();
         }
+        #endregion
 
+        #region Reder Methoden (Naja)
         /// <summary>
         /// Gibt zurück ob sich der Pixel im bereich dieses Elements befindet.
         /// </summary>

@@ -187,7 +187,7 @@ namespace Karol
             {
                 while (!WorldForm.IsDisposed)
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(1000);
                     lock (worldThread)
                     {
                         Monitor.Pulse(worldThread);
@@ -653,7 +653,7 @@ namespace Karol
         }
 
         /// <summary>
-        /// Gibt den Roboter an dem spezifizierten Index zurück. Oder null wenn an dem Index kein Roboter existiert.
+        /// Gibt den Roboter an dem spezifizierten Index (Rückennummer - 1) zurück. Oder null wenn an dem Index kein Roboter existiert.
         /// </summary>
         /// <param name="index">Index des Roboters</param>
         /// <returns>Roboter mit dem gegebenen Index</returns>
@@ -661,7 +661,7 @@ namespace Karol
         {
             if (index >= RobotCollection.Count)
                 return null;
-
+            
             return RobotCollection[index];
         }
         #endregion

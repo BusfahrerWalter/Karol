@@ -40,18 +40,18 @@ namespace Karol
         public static Color DefaultPaint = Color.Red;
 
         private Direction _faceDirection = Direction.North;
-        private bool _isVisible = true;
-        private int _bricksInBackpack;
-        private bool reloadData = true;
-        private bool isMoving = false;
-        private bool addToList = false;
+        private bool _isVisible = true;     // Ist der Roboter sichtbar oder nicht
+        private int _bricksInBackpack;      // Ziegel im Rucksack
+        private bool reloadData = true;     // Sollen Standardwerte in OnWorldSet nochmal gesetzt werden
+        private bool isMoving = false;      // Bewegt sich der Roboter gerade
+        private bool addToList = false;     // Wurde der Roboter schon in der Welt Regestriert
 
         private Bitmap[] RoboterBitmaps { get; set; } = new Bitmap[4];
         private DateTime WaitStartTime { get; set; }
         internal Marker Mark { get; set; }
         internal override string Metadata
         {
-            get => $"{FaceDirection.Offset}";
+            get => IsFacingNorth ? string.Empty : $"{FaceDirection.Offset}";
             set
             {
                 if (int.TryParse(value, out int offset))
@@ -343,16 +343,18 @@ namespace Karol
         /// </summary>
         internal Robot(int xStart, int zStart, World world, Direction initDir, bool updateView = true, bool placeInWorld = true)
         {
-            ValidatePos(new Position(xStart, 0, zStart), world);
+            if(placeInWorld)
+                ValidatePos(new Position(xStart, 0, zStart), world);
 
             _faceDirection = initDir;
             Position = new Position(xStart, world.GetStackSize(xStart, zStart), zStart);
             World = world;
 
-            CheckStartPos();
-
             if (placeInWorld)
+            {
+                CheckStartPos();
                 world.SetCell(xStart, zStart, this, updateView);
+            }
 
             World.RobotCollection.Add(this);
         }
@@ -617,6 +619,8 @@ namespace Karol
 
             isMoving = true;
             Position newPos = FaceDirection.OffsetPosition(Position);
+            bool is2D = World.RenderingMode == WorldRenderingMode.Render2D;
+
             if (!World.IsPositionValid(newPos))
                 throw new InvalidMoveException(Position, newPos);
 
@@ -631,13 +635,13 @@ namespace Karol
             {
                 if (HasMark)
                 {
-                    Mark.Reset();
+                    Mark.Reset(is2D);
                     Mark = null;
                     OnLeaveMark();
                 }
                 else
                 {
-                    World.SetCell(Position, null);               
+                    World.SetCell(Position, null, is2D);               
                 }
 
                 Mark = mark;
@@ -650,7 +654,7 @@ namespace Karol
             {
                 if (HasMark)
                 {
-                    Mark.Reset();
+                    Mark.Reset(is2D);
                     Mark = null;
                     OnLeaveMark();
 
@@ -659,7 +663,7 @@ namespace Karol
                 }
                 else
                 {
-                    World.SetCell(Position, null, World.RenderingMode == WorldRenderingMode.Render2D); //TODO:
+                    World.SetCell(Position, null, is2D); //TODO:
                     World.SetCell(newPos, this);
                     Position = newPos;
                 }
