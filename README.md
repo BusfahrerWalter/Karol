@@ -1,9 +1,11 @@
 C# Karol
 
 Mit Karol kann man den Ablauf seines Programmes v.a. Schleifen oder Verzweigungen gut visualisieren.
+<br>
 PERFEKT für Anfänger die keine Ahnung von dem haben was sie eigentlich tun...
 
 In karol enthalten sind Welten in einer Bestimmten größe.
+<br>
 Diese können alles von Robotern die herrumlaufen bis hin zu Marken auf dem Boden enthalten.
 
 Roboter können...
