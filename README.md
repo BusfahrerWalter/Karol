@@ -22,7 +22,7 @@ Diese können dann über den Geschriebenen Code oder über den Intigrierten Cont
 <br>
 Vrosicht! 
 <br>
-Roboter die gegen Wände, andere Roboter oder zu hohe Türme laufen werden alles Vernichten (eine Exeption werfen)!
+Roboter die gegen Wände, andere Roboter oder zu hohe Türme laufen werden alles Vernichten (eine Exception werfen)!
 
 Roboter können...
 - Gehen
@@ -32,7 +32,7 @@ Roboter können...
 - Merken ob sie sich auf einer Marke, vor einer Wand, einem Ziegel oder einem Anderen Roboter befinden
 - Tolle Geräusche machen
 - Nicht in andere Roboter laufen
-- Fatale Exeptions werfen
+- Fatale Exceptions werfen
 
 ### RobotOptions
 Mithilfe der RobotOptions können Roboter von begin an nach Ihren Wünschen gestalten werden.
