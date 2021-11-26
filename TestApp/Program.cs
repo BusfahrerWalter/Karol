@@ -14,8 +14,30 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            World w = new World(5, 5, 5);
-            Robot r = new Robot(3, 3, w);
+            World world = World.Load(@"H:\Daten\Fächer\java\lib\karol\labs\lab4.kdw"); // Welt Dateiformat .kdw oder .cskw
+            Robot egon34 = world.GetRobot(0); // Erster Roboter in der Welt
+            Random rand = new Random();       // Zufallszahlen generator
+
+            egon34.Delay = 0; // Damit es nich so lang dauert...
+            egon34.Wait(1000);
+
+            while (!egon34.HasMark)
+            {
+                if (!egon34.HasWall)
+                {
+                    egon34.Move();
+                }
+
+                int num = rand.Next(100);
+                if (num <= 30)
+                {
+                    egon34.TurnLeft();
+                }
+                else if (num >= 70)
+                {
+                    egon34.TurnRight();
+                }
+            }
 
             //World world = new World(15, 5, 10);     // Welt erzeugen
             //Robot robo = new Robot(0, 0, world);    // Roboter an der Position 0, 0, 0 in "world" erzeugen

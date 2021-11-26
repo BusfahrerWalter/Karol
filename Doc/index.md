@@ -4,8 +4,49 @@
 - [Karol](api/Karol.yml)
 - [Karol.Core](api/Karol.Core.yml)
 
-Karol f&uuml;r C# <br>
-Roboter k&ouml;nnen in einer Welt tolle sachen machen...
+<br>
+
+Mit Karol kann man den Ablauf seines Programmes v.a. Schleifen oder Verzweigungen gut visualisieren.
+<br>
+PERFEKT f&uuml;r Anf&auml;nger die keine Ahnung von dem haben was sie eigentlich tun...
+
+#### World
+In Karol enthalten sind Welten in einer Bestimmten gr&ouml;&szlig;e.
+<br>
+Diese k&ouml;nnen alles von Robotern die herrumlaufen bis hin zu Marken auf dem Boden enthalten.
+<br>
+Nat&uuml;rlich k&ouml;nnen Welten auch als Datei gespeichert und wieder geladen werden. 
+<br>
+Auch Welten aus der "&auml;hnlichen" Java Karol Bibliothek sind beim Laden Kompatibel.
+
+#### Robot
+Roboter M&uuml;SSEN innerhalb einer Welt Leben! Ihre existenz ist ohne diese nicht m&ouml;glich.
+<br>
+Nach der erzeugung einer Welt k&ouml;nnen in dieser bis zu 2147483647 Roboter platziert werden.
+<br>
+Diese k&ouml;nnen dann &uuml;ber den Geschriebenen Code oder &uuml;ber den Intigrierten Controller gesteuert werden.
+<br>
+Vrosicht! 
+<br>
+Roboter die gegen W&auml;nde, andere Roboter oder zu hohe T&uuml;rme laufen werden alles Vernichten (eine Exception werfen)!
+
+Roboter k&ouml;nnen...
+- Gehen
+- Ziegel plazieren oder aufheben
+- Marken platzieren oder aufheben
+- Quader platzieren oder aufheben
+- Merken ob sie sich auf einer Marke, vor einer Wand, einem Ziegel oder einem Anderen Roboter befinden
+- Tolle Ger&auml;usche machen
+- Nicht in andere Roboter laufen
+- Fatale Exceptions werfen
+
+#### RobotOptions
+Mithilfe der RobotOptions k&ouml;nnen Roboter von begin an nach Ihren W&uuml;nschen gestalten werden.
+<br>
+Nicht nur standard werte wie Blickrichtung, Position oder Delay lassen sich hier &auml;ndern,
+<br>
+sondern sogar das aussehen des Roboters kann selbst bestimmt werden (Nur so lange der Vorrat reicht!).
+
 
 ## Screenshots
 #### Welt mit 2 Robotern
@@ -126,3 +167,8 @@ World world = World.Load(stream);
 ergibt folgende Welt...
 <br>
 ![Ups.. hier sollte ein bild sein!](images/img5.png)
+
+
+<br>
+<br>
+<i>Written by Daniel M&uuml;ller 12b</i>
