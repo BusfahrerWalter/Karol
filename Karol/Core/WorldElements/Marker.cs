@@ -50,7 +50,7 @@ namespace Karol.Core.WorldElements
         {
             CanStackOnTop = false;
             CanPickUp = false;
-            Info2D.FillColor = Color.Yellow;
+            ViewColor2D = Color.Yellow;
         }
 
         public Marker(Robot robot) : this()

@@ -46,7 +46,7 @@ namespace Karol.Core.WorldElements
                 if (int.TryParse(arr[0], out int r) && int.TryParse(arr[1], out int g) && int.TryParse(arr[2], out int b))
                 {
                     Paint = Color.FromArgb(255, r, g, b);
-                    Info2D.FillColor = Paint;
+                    ViewColor2D = Paint;
                 }
             }
         }
@@ -54,7 +54,7 @@ namespace Karol.Core.WorldElements
         public Brick(Color paint) : base()
         {
             Paint = paint;
-            Info2D.FillColor = Paint;
+            ViewColor2D = Paint;
         }
 
         public Brick() : this(Color.Red) { }

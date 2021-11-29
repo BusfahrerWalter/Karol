@@ -129,28 +129,18 @@ namespace Karol.Core.Rendering
         {
             Rectangle rect = new Rectangle(CellToPixelPos(e.Position, null), CellSize);
             SizeF textSize = g.MeasureString(stackSize.ToString(), Font);
-            Brush textBrush;
+            Brush textBrush = new SolidBrush(e.ViewColor2D.Invert());
 
-            if (e.Info2D.DrawSolidColor)
+            if (e is ICustomRenderBehavior2D rb)
             {
-                var c = (Color)e.Info2D.FillColor;
-                g.FillRectangle(new SolidBrush(c), rect);
-                textBrush = new SolidBrush(c.Invert());
-            }
-            else
-            {
-                if(clear)
-                    g.FillRectangle(Brushes.White, rect);
+                var color = rb.Render(rect, stackSize, g);
+                if (color == null)
+                    return;
 
-                if(e.Position.Y > 0)
-                {
-                    var cellBelow = World.GetCell(e.Position.X, e.Position.Y - 1, e.Position.Z);
-                    DrawCell(stackSize, cellBelow, g);
-                }
-
-                g.DrawImage(e.Info2D.Image, rect);
-                textBrush = Brushes.White;     
+                textBrush = new SolidBrush((Color)color);
             }
+
+            g.FillRectangle(new SolidBrush(e.ViewColor2D), rect);
 
             if (e is IContainer container && !container.IsEmpty)
             {

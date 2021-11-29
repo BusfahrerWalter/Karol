@@ -13,7 +13,6 @@ namespace Karol.Core.Rendering
     {
         private const int PixelWidth = 30;
         private const int PixelHeight = 15;
-        private readonly Size RoboImageSize = Resources.robot0.Size;
         private readonly Bounds Padding = new Bounds(30, 0, 50, 0);
 
         /// <summary>
@@ -254,10 +253,9 @@ namespace Karol.Core.Rendering
 
         private void DrawCell(Point pos, WorldElement cell, Graphics g)
         {
-            if(cell is Robot)
+            if(cell is ICustomRenderBehavior3D rb)
             {
-                pos.Y += cell.BitMap.Height - RoboImageSize.Height;
-                g.DrawImage(cell.BitMap, new Rectangle(pos, RoboImageSize));
+                rb.Render(pos, g);
             }
             else
             {

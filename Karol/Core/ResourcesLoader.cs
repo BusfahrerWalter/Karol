@@ -21,6 +21,7 @@ namespace Karol.Core
 
         public static Bitmap[] LoadRobotBitmaps(int roboNumber)
         {
+
             roboNumber++;
             if (roboNumber > 9)
                 roboNumber = 1;

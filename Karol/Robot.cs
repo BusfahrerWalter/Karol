@@ -6,11 +6,8 @@ using Karol.Core.WorldElements;
 using Karol.Extensions;
 using Karol.Properties;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Media;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 
 namespace Karol
@@ -19,7 +16,7 @@ namespace Karol
     /// Ein Roboter der sich in einer Welt bewegen und dort leben kann...
     /// </summary>
     [WorldElementInfo('R')]
-    public class Robot : WorldElement
+    public class Robot : WorldElement, ICustomRenderBehavior3D, ICustomRenderBehavior2D
     {
         #region Properties / Felder
         /// <summary>
@@ -323,7 +320,6 @@ namespace Karol
             {
                 _faceDirection = value;
                 BitMap = IsVisible ? RoboterBitmaps[value.Offset] : ImageExtension.EmptyBitmap;
-                Info2D.Image = ResourcesLoader.RobotBitmaps2D[value.Offset];
             }
         }
         #endregion
@@ -555,11 +551,10 @@ namespace Karol
 
             CanStackOnTop = false;
             CanPickUp = false;
-            Info2D.Image = Resources.Robot_2D_N;
             XOffset = -2;
             YOffset = -2;
 
-            RoboterBitmaps = ResourcesLoader.LoadRobotBitmaps(World.RoboterCount);
+            RoboterBitmaps = ResourcesLoader.LoadRobotBitmaps(0);
             FaceDirection = _faceDirection;
             BitMap = RoboterBitmaps[FaceDirection.Offset];
             Identifier = World.RoboterCount + 1;
@@ -880,5 +875,123 @@ namespace Karol
             onMove?.Invoke(this, EventArgs.Empty);
         }
         #endregion
+
+        #region Overrides
+        void ICustomRenderBehavior3D.Render(Point defaultPos, Graphics g)
+        {
+            defaultPos.Y += BitMap.Height - Resources.robot0.Height;
+            g.DrawImage(BitMap, new Rectangle(defaultPos, Resources.robot0.Size));
+
+            if (IsFacingEast || IsFacingWest || Identifier >= 100)
+                return;
+
+            int xOffset = IsFacingSouth ? 2 : -3;
+            var font = new Font(FontFamily.GenericSansSerif, 12);
+            var size = g.MeasureString(Identifier.ToString(), font);
+            var textPos = new PointF(defaultPos.X + Resources.robot0.Width / 2 - size.Width / 2 + xOffset, defaultPos.Y + 25);
+
+            g.DrawString(Identifier.ToString(), font, Brushes.Black, textPos);
+        }
+
+        Color? ICustomRenderBehavior2D.Render(Rectangle rect, int stackSize, Graphics g)
+        {
+            var cell = HasMark ? Mark : World.GetCell(Position.X, Math.Max(Position.Y - 1, 0), Position.Z);
+
+            if(cell == this)
+                g.FillRectangle(Brushes.White, rect);
+
+            g.FillRectangle(new SolidBrush(cell.ViewColor2D), rect);
+            g.DrawImage(ResourcesLoader.RobotBitmaps2D[FaceDirection.Offset], rect);
+            return Color.White;
+        }
+        #endregion
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
