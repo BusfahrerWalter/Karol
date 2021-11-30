@@ -554,7 +554,7 @@ namespace Karol
             XOffset = -2;
             YOffset = -2;
 
-            RoboterBitmaps = ResourcesLoader.LoadRobotBitmaps(0);
+            RoboterBitmaps = ResourcesLoader.RobotBitmaps;
             FaceDirection = _faceDirection;
             BitMap = RoboterBitmaps[FaceDirection.Offset];
             Identifier = World.RoboterCount + 1;
@@ -879,8 +879,8 @@ namespace Karol
         #region Overrides
         void ICustomRenderBehavior3D.Render(Point defaultPos, Graphics g)
         {
-            defaultPos.Y += BitMap.Height - Resources.robot0.Height;
-            g.DrawImage(BitMap, new Rectangle(defaultPos, Resources.robot0.Size));
+            defaultPos.Y += BitMap.Height - Resources.robotN1.Height;
+            g.DrawImage(BitMap, new Rectangle(defaultPos, Resources.robotN1.Size));
 
             if (IsFacingEast || IsFacingWest || Identifier >= 100)
                 return;
@@ -888,7 +888,7 @@ namespace Karol
             int xOffset = IsFacingSouth ? 2 : -3;
             var font = new Font(FontFamily.GenericSansSerif, 12);
             var size = g.MeasureString(Identifier.ToString(), font);
-            var textPos = new PointF(defaultPos.X + Resources.robot0.Width / 2 - size.Width / 2 + xOffset, defaultPos.Y + 25);
+            var textPos = new PointF(defaultPos.X + Resources.robotN1.Width / 2 - size.Width / 2 + xOffset, defaultPos.Y + 25);
 
             g.DrawString(Identifier.ToString(), font, Brushes.Black, textPos);
         }
@@ -907,91 +907,6 @@ namespace Karol
         #endregion
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

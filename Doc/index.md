@@ -168,6 +168,20 @@ ergibt folgende Welt...
 <br>
 ![Ups.. hier sollte ein bild sein!](images/img5.png)
 
+#### Roboter anhand eines [RobotOptions](api/Karol.Core.RobotOptions.html) Objekt erzeugen
+```C#
+World welt = new World(20, 5, 20);
+RobotOptions options = new RobotOptions(welt)
+{
+    Set = ImageSet.Magenta,
+    Delay = 6,
+    StartX = 6,
+    StartZ = 6
+};
+
+Robot robot = new Robot(options);
+```
+
 
 <br>
 <br>

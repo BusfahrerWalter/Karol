@@ -16,7 +16,7 @@ namespace Karol.Core.Extensions
             if (!form.IsHandleCreated)
                 return;
 
-            if (form.IsDisposed)
+            if (form.IsDisposed || form.Disposing)
                 return;
 
             try

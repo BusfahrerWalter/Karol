@@ -77,8 +77,6 @@ namespace Karol
             Form.PlaceMarkButton.Enabled = !ControlledRobot.HasMark;
             Form.Text = $"Karol Controller - Robot {ControlledRobot.Identifier}";
 
-            UpdateInfo();
-
             ActiveControllers.Add(this);
             InputMap = new Dictionary<Keys, Action>()
             {
@@ -121,6 +119,11 @@ namespace Karol
                 ControlledRobot.onPlaceBrickPreview -= OnPlaceBrick;
                 ControlledRobot.onPickUpBrickPreview -= OnPickUpBrick;
                 ControlledRobot.onMove -= OnMove;
+            };
+
+            Form.Load += (e, args) =>
+            {
+                UpdateInfo();
             };
 
             Form.KeyUp += (e, args) =>
@@ -279,6 +282,8 @@ namespace Karol
                 {
                     ControlledRobot.PlaceCube();
                 });
+
+                UpdateInfo();
             };
 
             Form.PickUpCubeButton.Click += (e, args) =>
@@ -287,6 +292,8 @@ namespace Karol
                 {
                     ControlledRobot.PickUpCube();
                 });
+
+                UpdateInfo();
             };
 
             Form.IsVisibleCheckbox.Click += (e, args) =>

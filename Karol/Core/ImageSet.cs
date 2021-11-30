@@ -26,7 +26,7 @@ namespace Karol.Core
         /// <summary>
         /// Standard Skin eines Roboters (Ohne Nummer)
         /// </summary>
-        public static ImageSet Default => Create(Resources.robot2, Resources.robot3, Resources.robot0, Resources.robot1);
+        public static ImageSet Default => Create(Resources.robotN1, Resources.robotO1, Resources.robotS1, Resources.robotW1);
 
         /// <summary>
         /// Magenta Skin für einen Roboter (Ohne Nummer)

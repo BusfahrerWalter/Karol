@@ -986,26 +986,6 @@
               Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:Karol.Properties.Resources.robot0">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robot1">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robot2">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robot3">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
         <member name="P:Karol.Properties.Resources.robotMagentaE">
             <summary>
               Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
@@ -1031,132 +1011,12 @@
               Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:Karol.Properties.Resources.robotN2">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotN3">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotN4">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotN5">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotN6">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotN7">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotN8">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotN9">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
         <member name="P:Karol.Properties.Resources.robotO1">
             <summary>
               Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:Karol.Properties.Resources.robotO2">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotO3">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotO4">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotO5">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotO6">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotO7">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotO8">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotO9">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
         <member name="P:Karol.Properties.Resources.robotS1">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotS2">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotS3">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotS4">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotS5">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotS6">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotS7">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotS8">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotS9">
             <summary>
               Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
             </summary>
@@ -1167,46 +1027,6 @@
             </summary>
         </member>
         <member name="P:Karol.Properties.Resources.robotW1">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotW2">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotW3">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotW4">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotW5">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotW6">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotW7">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotW8">
-            <summary>
-              Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:Karol.Properties.Resources.robotW9">
             <summary>
               Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
             </summary>

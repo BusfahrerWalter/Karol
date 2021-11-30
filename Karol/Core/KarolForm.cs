@@ -1,5 +1,6 @@
 ﻿using Karol.Core;
 using Karol.Core.Rendering;
+using Karol.Core.Extensions;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -290,7 +291,10 @@ namespace Karol
         #region Events
         private void World_onRenderingModeChanged(object sender, WorldRenderingMode e)
         {
-            Invoke((MethodInvoker)delegate
+            if (IsDisposed || Disposing)
+                return;
+
+            this.InvokeFormMethod(() =>
             {
                 View2DButton.Checked = e == WorldRenderingMode.Render2D;
                 EditorButton.Enabled = e == WorldRenderingMode.Render2D;

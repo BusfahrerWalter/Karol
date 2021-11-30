@@ -166,18 +166,6 @@
   <data name="Quader" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\Quader.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="robot0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robot0.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robot1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robot1.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robot2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robot2.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robot3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robot3.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="robotMagentaE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\robotMagentaE.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -193,113 +181,17 @@
   <data name="robotN1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\robotN1.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="robotN2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotN2.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotN3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotN3.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotN4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotN4.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotN5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotN5.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotN6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotN6.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotN7" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotN7.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotN8" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotN8.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotN9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotN9.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="robotO1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\robotO1.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="robotO2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotO2.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotO3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotO3.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotO4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotO4.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotO5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotO5.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotO6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotO6.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotO7" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotO7.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotO8" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotO8.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotO9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotO9.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="robotS1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\robotS1.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotS2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotS2.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotS3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotS3.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotS4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotS4.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotS5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotS5.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotS6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotS6.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotS7" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotS7.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotS8" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotS8.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotS9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotS9.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="RobotSound" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Sounds\WEEEEEEEEEE.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="robotW1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\robotW1.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotW2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotW2.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotW3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotW3.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotW4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotW4.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotW5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotW5.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotW6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotW6.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotW7" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotW7.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotW8" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotW8.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="robotW9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\robotW9.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Robot_2D_E" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\Robot 2D E.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
