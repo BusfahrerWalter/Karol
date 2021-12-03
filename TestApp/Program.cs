@@ -12,8 +12,13 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            World w = new World(10, 5, 10);
-            Robot r = new Robot(1, 1, w);
+            string str = "C_Gartenzaun_Karol_World\n" +
+                         "Size: 3,2,3\n---\nB _ R(2)\nQ Q\n_ Q Q\n---\nB\n";
+
+            MemoryStream stream = new MemoryStream(Encoding.ASCII.GetBytes(str));
+            World world = World.Load(stream);
+            Robot robo = world.GetRobot(0);
+            Controller.Create(robo);
         }
     }
 }

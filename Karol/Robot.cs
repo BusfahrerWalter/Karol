@@ -509,13 +509,13 @@ namespace Karol
             return World.HasCellAt(facePos.X, y, facePos.Z, out WorldElement e) && e is Cube;
         }
 
-        private void CheckFacePos(out Position facePos)
+        private void CheckFacePos(out Position facePos, string type)
         {
             facePos = FaceDirection.OffsetPosition(Position);
             if (!World.IsPositionValid(facePos))
             {
                 facePos.Y = 0;
-                throw new InvalidActionException($"An der Position {facePos} kann kein Block platziert werden!");
+                throw new InvalidActionException($"An der Position {facePos} kann kein {type} platziert werden, da dort eine Wand ist!");
             }
 
             int stackSize = World.GetStackSize(facePos.X, facePos.Z);
@@ -524,7 +524,7 @@ namespace Karol
             if (stackSize >= World.SizeY || (cell != null && !cell.CanStackOnTop))
             {
                 facePos.Y = stackSize;
-                throw new InvalidActionException($"An der Position {facePos} kann kein Block platziert werden!");
+                throw new InvalidActionException($"An der Position {facePos} kann kein {type} platziert werden!");
             }
         }
 
@@ -681,7 +681,7 @@ namespace Karol
             if (MaxBackpackSize != -1 && BricksInBackpack <= 0)
                 throw new InvalidActionException($"Kann keine Ziegel mehr platzieren. Rucksack ist leer!");
 
-            CheckFacePos(out Position facePos);
+            CheckFacePos(out Position facePos, "Ziegel");
 
             var newCell = World.AddToStack(facePos.X, facePos.Z, new Brick(paintOverride));
             BricksInBackpack--;
@@ -713,16 +713,13 @@ namespace Karol
 
             var facePos = FaceDirection.OffsetPosition(Position);
             if (!World.IsPositionValid(facePos))
-                throw new InvalidActionException($"An der Position {facePos} kann kein Ziegel aufgehogen werden!");
+                throw new InvalidActionException($"An der Position {facePos} kann kein Ziegel aufgehogen werden, da dort eine Wand ist!");
 
             int stackSize = World.GetStackSize(facePos.X, facePos.Z);
             var cell = World.GetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z);
 
             if (cell == null || !cell.CanPickUp)
-            {
-                WaitDefault();
-                return;
-            }
+                throw new InvalidActionException($"An der Position {facePos} kann kein Ziegel aufgehoben werden!");
 
             BricksInBackpack++;
             World.SetCell(facePos.X, Math.Max(stackSize - 1, 0), facePos.Z, null, true);
@@ -770,7 +767,7 @@ namespace Karol
         public void PlaceCube()
         {
             PrepareWait();
-            CheckFacePos(out Position facePos);
+            CheckFacePos(out Position facePos, "Quader");
 
             var newCell = World.AddToStack(facePos.X, facePos.Z, new Cube());
             World.Update(facePos.X, facePos.Y, newCell);
@@ -788,7 +785,7 @@ namespace Karol
 
             var facePos = FaceDirection.OffsetPosition(Position);
             if (!World.IsPositionValid(facePos))
-                throw new InvalidActionException($"An der Position {facePos} kann kein Quader aufgehogen werden!");
+                throw new InvalidActionException($"An der Position {facePos} kann kein Quader aufgehogen werden, da dort eine Wand ist!");
 
             int stackSize = World.GetStackSize(facePos.X, facePos.Z);
             int y = Math.Max(stackSize - 1, 0);
@@ -801,10 +798,7 @@ namespace Karol
             }
 
             if (!(cell is Cube))
-            {
-                WaitDefault();
-                return;
-            }
+                throw new InvalidActionException($"An der Position {facePos} kann kein Quader aufgehogen werden!");
 
             World.SetCell(facePos.X, y, facePos.Z, null, true);
             WaitDefault();

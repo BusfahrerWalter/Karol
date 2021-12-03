@@ -72,6 +72,8 @@ namespace Karol.Core
             this.PositionTextBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.ListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ClearButton = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BrickCountInput)).BeginInit();
@@ -79,6 +81,7 @@ namespace Karol.Core
             ((System.ComponentModel.ISupportInitialize)(this.JumpHeightInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DelayInput)).BeginInit();
             this.groupBox3.SuspendLayout();
+            this.ListContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // ButtonRight
@@ -192,6 +195,7 @@ namespace Karol.Core
             this.LogListBox.TabIndex = 8;
             this.LogListBox.Tag = "Exception List";
             this.LogListBox.SelectedIndexChanged += new System.EventHandler(this.LogListBox_SelectedIndexChanged);
+            this.LogListBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LogListBox_MouseDown);
             // 
             // PickUpMarkButton
             // 
@@ -606,6 +610,20 @@ namespace Karol.Core
             this.label6.TabIndex = 0;
             this.label6.Text = "Position";
             // 
+            // ListContextMenu
+            // 
+            this.ListContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ClearButton});
+            this.ListContextMenu.Name = "ListContextMenu";
+            this.ListContextMenu.Size = new System.Drawing.Size(181, 48);
+            // 
+            // ClearButton
+            // 
+            this.ClearButton.Name = "ClearButton";
+            this.ClearButton.Size = new System.Drawing.Size(180, 22);
+            this.ClearButton.Text = "Clear";
+            this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
+            // 
             // ControllerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -631,6 +649,7 @@ namespace Karol.Core
             ((System.ComponentModel.ISupportInitialize)(this.DelayInput)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.ListContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -679,5 +698,7 @@ namespace Karol.Core
         public System.Windows.Forms.CheckBox BackPackFullCheckBox;
         private System.Windows.Forms.ToolTip ToolTip;
         public System.Windows.Forms.CheckBox MoreInfoCheckBox;
+        private System.Windows.Forms.ContextMenuStrip ListContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem ClearButton;
     }
 }

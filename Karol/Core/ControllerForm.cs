@@ -79,5 +79,19 @@ namespace Karol.Core
                     SetChildToolTips(ctrl);
             }
         }
+
+        private void LogListBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+
+            var obj = sender as Control;
+            ListContextMenu.Show(obj, e.Location);
+        }
+
+        private void ClearButton_Click(object sender, EventArgs e)
+        {
+            LogListBox.Items.Clear();
+        }
     }
 }

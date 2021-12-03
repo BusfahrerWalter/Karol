@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="articles\" />
+    <Folder Include="articles\downloads\data\" />
   </ItemGroup>
 
 </Project>
