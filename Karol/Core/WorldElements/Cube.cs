@@ -7,7 +7,7 @@ using Karol.Properties;
 
 namespace Karol.Core.WorldElements
 {
-    [WorldElementInfo('Q')]
+    [WorldElementInfo('Q', IsCasheable = false)]
     internal class Cube : WorldElement
     {
         private bool isDummyDead;

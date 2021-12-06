@@ -20,7 +20,7 @@ Roboter können in einer Welt tolle sachen machen...</Description>
     <DefineConstants>TRACE</DefineConstants>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes>r</PackageReleaseNotes>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
