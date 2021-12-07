@@ -97,7 +97,7 @@ namespace ComponentTest
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "TestSave.cskw");
 
             World w1 = new World(3, 3, 3);
-            Robot r1 = new Robot(1, 1, w1);
+            Robot r1 = new Robot(w1, 1, 1);
 
             w1.Save(path);
         }
@@ -109,7 +109,7 @@ namespace ComponentTest
             string path = @"C:\System Volume Information\TestSave.cskw";
 
             World w1 = new World(3, 3, 3);
-            Robot r1 = new Robot(1, 1, w1);
+            Robot r1 = new Robot(w1, 1, 1);
 
             w1.Save(path);
         }
@@ -121,7 +121,7 @@ namespace ComponentTest
             string path = @"C:\AAAAAAAAAAAAAAAAAAAAAAAAAAA\TestSave.cskw";
 
             World w1 = new World(3, 3, 3);
-            Robot r1 = new Robot(1, 1, w1);
+            Robot r1 = new Robot(w1, 1, 1);
 
             w1.Save(path);
         }
@@ -177,7 +177,7 @@ namespace ComponentTest
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "TestScreenshot.png");
 
             World w1 = new World(5, 2, 5);
-            Robot r1 = new Robot(1, 1, w1, Direction.East);
+            Robot r1 = new Robot(w1, 1, 1, Direction.East);
             w1.SaveScreenshot(path);
         }
 
@@ -188,7 +188,7 @@ namespace ComponentTest
             string path = @"C:\AAAAAAAAAAAAAAAAAAAAAAAAAAA\TestScreenshot.png";
 
             World w1 = new World(5, 2, 5);
-            Robot r1 = new Robot(1, 1, w1, Direction.East);
+            Robot r1 = new Robot(w1, 1, 1, Direction.East);
             w1.SaveScreenshot(path);
         }
 
@@ -262,7 +262,7 @@ namespace ComponentTest
             w1.Save(path);
 
             World w2 = World.Load(path);
-            Robot r1 = new Robot(1, 0, w2);
+            Robot r1 = new Robot(w2, 1, 0);
 
             w2.RenderingMode = WorldRenderingMode.Render2D;
         }

@@ -69,11 +69,11 @@ namespace Karol
         /// <summary>
         /// Erstellt einen neuen Roboter.
         /// </summary>
+        /// <param name="world">Welt in der der Roboter leben soll</param>
         /// <param name="xStart">Start X Position des Roboters</param>
         /// <param name="zStart">Start Z Position des Roboters</param>
-        /// <param name="world">Welt in der der Roboter leben soll</param>
         /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
-        public SuperRobot(int xStart, int zStart, World world) : base(xStart, zStart, world)
+        public SuperRobot(World world, int xStart, int zStart) : base(world, xStart, zStart)
         {
             SetUpEvents();
         }
@@ -81,13 +81,13 @@ namespace Karol
         /// <summary>
         /// Erstellt einen neuen Roboter.
         /// </summary>
+        /// <param name="world">Welt in der der Roboter leben soll</param>
         /// <param name="xStart">Start X Position des Roboters</param>
         /// <param name="zStart">Start Z Position des Roboters</param>
-        /// <param name="world">Welt in der der Roboter leben soll</param>
         /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North
         /// </param>
         /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
-        public SuperRobot(int xStart, int zStart, World world, Direction initialDirection) : base(xStart, zStart, world, initialDirection)
+        public SuperRobot(World world, int xStart, int zStart, Direction initialDirection) : base(world, xStart, zStart, initialDirection)
         {
             SetUpEvents();
         }
@@ -107,7 +107,7 @@ namespace Karol
         /// <param name="options">Roboter Optionen</param>
         /// <param name="startX">X Start Position des Roboters</param>
         /// <param name="startZ">Z Start Posotion des Roboters</param>
-        public SuperRobot(int startX, int startZ, RobotOptions options) : base(startX, startZ, options)
+        public SuperRobot(RobotOptions options, int startX, int startZ) : base(options, startX, startZ)
         {
             SetUpEvents();
         }

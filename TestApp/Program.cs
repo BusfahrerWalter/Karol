@@ -10,15 +10,37 @@ namespace TestApp
 {
     class Program
     {
+        public static World w => new World(10, 10, 10);
+
         static void Main(string[] args)
         {
-            string str = "C_Gartenzaun_Karol_World\n" +
-                         "Size: 3,2,3\n---\nB _ R(2)\nQ Q\n_ Q Q\n---\nB\n";
+            World w = new World(10, 10, 10);
+            Robot r = new Robot(w, 5, 5);
+            Random rand = new Random();
+            Action[] acts = new Action[]
+            {
+                r.Move,
+                r.TurnLeft,
+                r.TurnRight,
+                r.Place,
+                r.PickUp
+            };
 
-            MemoryStream stream = new MemoryStream(Encoding.ASCII.GetBytes(str));
-            World world = World.Load(stream);
-            Robot robo = world.GetRobot(0);
-            Controller.Create(robo);
+            r.Delay = 10;
+            r.JumpHeight = 100;
+
+            while (!false)
+            {
+                int num = rand.Next(0, acts.Length);
+                try
+                {
+                    acts[num].Invoke();
+                }
+                catch(Exception e) 
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
         }
     }
 }

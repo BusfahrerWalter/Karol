@@ -679,13 +679,13 @@
             Erzeugt eine neue Instantz der RobotOptions Klasse
             </summary>
         </member>
-        <member name="M:Karol.Core.RobotOptions.#ctor(System.Int32,System.Int32,Karol.World)">
+        <member name="M:Karol.Core.RobotOptions.#ctor(Karol.World,System.Int32,System.Int32)">
             <summary>
             Erzeugt eine neue Instantz der RobotOptions Klasse
             </summary>
+            <param name="world">Zielwelt</param>
             <param name="startX">Start X Position</param>
             <param name="startZ">Start Z Position</param>
-            <param name="world">Zielwelt</param>
         </member>
         <member name="M:Karol.Core.RobotOptions.GetImages">
             <summary>
@@ -1240,24 +1240,24 @@
             Erstellt einen neuen Roboter
             </summary>
         </member>
-        <member name="M:Karol.Robot.#ctor(System.Int32,System.Int32,Karol.World,Karol.Core.Direction)">
+        <member name="M:Karol.Robot.#ctor(Karol.World,System.Int32,System.Int32,Karol.Core.Direction)">
             <summary>
             Erstellt einen neuen Roboter.
             </summary>
+            <param name="world">Welt in der der Roboter leben soll</param>
             <param name="xStart">Start X Position des Roboters</param>
             <param name="zStart">Start Z Position des Roboters</param>
-            <param name="world">Welt in der der Roboter leben soll</param>
             <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North
             </param>
             <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         </member>
-        <member name="M:Karol.Robot.#ctor(System.Int32,System.Int32,Karol.World)">
+        <member name="M:Karol.Robot.#ctor(Karol.World,System.Int32,System.Int32)">
             <summary>
             Erstellt einen neuen Roboter.
             </summary>
+            <param name="world">Welt in der der Roboter leben soll</param>
             <param name="xStart">Start X Position des Roboters</param>
             <param name="zStart">Start Z Position des Roboters</param>
-            <param name="world">Welt in der der Roboter leben soll</param>
             <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         </member>
         <member name="M:Karol.Robot.#ctor(Karol.World)">
@@ -1281,7 +1281,7 @@
             </summary>
             <param name="options">Roboter Optionen</param>
         </member>
-        <member name="M:Karol.Robot.#ctor(System.Int32,System.Int32,Karol.Core.RobotOptions)">
+        <member name="M:Karol.Robot.#ctor(Karol.Core.RobotOptions,System.Int32,System.Int32)">
             <summary>
             Erstellt einen neuen Roboter anhand der übergebennen Optionen
             </summary>
@@ -1433,22 +1433,22 @@
             <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North</param>
             <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         </member>
-        <member name="M:Karol.SuperRobot.#ctor(System.Int32,System.Int32,Karol.World)">
+        <member name="M:Karol.SuperRobot.#ctor(Karol.World,System.Int32,System.Int32)">
             <summary>
             Erstellt einen neuen Roboter.
             </summary>
+            <param name="world">Welt in der der Roboter leben soll</param>
             <param name="xStart">Start X Position des Roboters</param>
             <param name="zStart">Start Z Position des Roboters</param>
-            <param name="world">Welt in der der Roboter leben soll</param>
             <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         </member>
-        <member name="M:Karol.SuperRobot.#ctor(System.Int32,System.Int32,Karol.World,Karol.Core.Direction)">
+        <member name="M:Karol.SuperRobot.#ctor(Karol.World,System.Int32,System.Int32,Karol.Core.Direction)">
             <summary>
             Erstellt einen neuen Roboter.
             </summary>
+            <param name="world">Welt in der der Roboter leben soll</param>
             <param name="xStart">Start X Position des Roboters</param>
             <param name="zStart">Start Z Position des Roboters</param>
-            <param name="world">Welt in der der Roboter leben soll</param>
             <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North
             </param>
             <exception cref="T:Karol.Core.Exceptions.InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
@@ -1459,7 +1459,7 @@
             </summary>
             <param name="options">Roboter Optionen</param>
         </member>
-        <member name="M:Karol.SuperRobot.#ctor(System.Int32,System.Int32,Karol.Core.RobotOptions)">
+        <member name="M:Karol.SuperRobot.#ctor(Karol.Core.RobotOptions,System.Int32,System.Int32)">
             <summary>
             Erstellt einen neuen Roboter anhand der übergebennen Optionen
             </summary>

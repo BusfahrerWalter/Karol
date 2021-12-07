@@ -22,8 +22,8 @@ namespace ComponentTest
         {
             World w1 = TestWorld;
 
-            Robot r1 = new Robot(1, 1, w1);
-            Robot r3 = new Robot(2, 2, w1, Direction.East);
+            Robot r1 = new Robot(w1, 1, 1);
+            Robot r3 = new Robot(w1, 2, 2, Direction.East);
             Robot r2 = new Robot(w1);      // sollte auf Position 0, 0, 0 sein 
         }
 
@@ -40,21 +40,21 @@ namespace ComponentTest
             };
 
             Robot r1 = new Robot(o);
-            Robot r2 = new Robot(1, 1, o); // überschreibt die in den Options definierte Position...
+            Robot r2 = new Robot(o, 1, 1); // überschreibt die in den Options definierte Position...
         }
 
         [TestMethod("Constructor mit ungültiger Position")]
         [ExpectedException(typeof(InvalidPositionException))]
         public void TestConstructor3()
         {
-            Robot r1 = new Robot(-1, 0, TestWorld);
+            Robot r1 = new Robot(TestWorld, -1, 0);
         }
 
         [TestMethod("Constructor mit zu großer Position")]
         [ExpectedException(typeof(InvalidPositionException))]
         public void TestConstructor3einHalb()
         {
-            Robot r1 = new Robot(999999999, 666, TestWorld);
+            Robot r1 = new Robot(TestWorld, 999999999, 666);
         }
 
         [TestMethod("Andere Constructoren?")]
@@ -62,9 +62,9 @@ namespace ComponentTest
         {
             World w1 = TestWorld;
 
-            Robot r1 = new Robot(1, 0, w1);
+            Robot r1 = new Robot(w1, 1, 0);
             Robot r2 = new Robot(w1);
-            Robot r3 = new Robot(2, 1, w1, Direction.South);
+            Robot r3 = new Robot(w1, 2, 1, Direction.South);
             Robot r4 = new Robot(TestWorld, Direction.West); // ist in anderer welt als die anderen...
         }
 
@@ -72,8 +72,8 @@ namespace ComponentTest
         public void TestDefaultValues()
         {
             World w1 = TestWorld;
-            Robot r1 = new Robot(3, 3, w1);
-            Robot r2 = new Robot(0, 0, w1);
+            Robot r1 = new Robot(w1, 3, 3);
+            Robot r2 = new Robot(w1, 0, 0);
 
             Assert.AreNotEqual(r1, r2);
 
@@ -133,7 +133,7 @@ namespace ComponentTest
         public void TestRobotRotate1()
         {
             World w1 = TestWorld;
-            Robot r1 = new Robot(1, 1, w1);
+            Robot r1 = new Robot(w1, 1, 1);
             r1.Delay = 10;
 
             Assert.AreEqual(Direction.North, r1.FaceDirection);
@@ -155,7 +155,7 @@ namespace ComponentTest
         public void TestRobotMove1()
         {
             World w1 = TestWorld;
-            Robot r1 = new Robot(1, 1, w1);
+            Robot r1 = new Robot(w1, 1, 1);
             r1.Delay = 10;
 
             r1.Move();
@@ -167,7 +167,7 @@ namespace ComponentTest
         public void TestRobotMove2()
         {
             World w1 = TestWorld;
-            Robot r1 = new Robot(1, 1, w1);
+            Robot r1 = new Robot(w1, 1, 1);
             r1.Delay = 10;
 
             r1.Move();
@@ -181,7 +181,7 @@ namespace ComponentTest
         public void TestRobotMove3()
         {
             World w1 = TestWorld;
-            Robot r1 = new Robot(1, 1, w1);
+            Robot r1 = new Robot(w1, 1, 1);
             r1.Delay = 10;
 
             for(int i = 0; i < 4; i++)
@@ -199,7 +199,7 @@ namespace ComponentTest
         [ExpectedException(typeof(InvalidMoveException))]
         public void TestMove4()
         {
-            Robot r1 = new Robot(1, 0, TestWorld);
+            Robot r1 = new Robot(TestWorld, 1, 0);
             r1.Delay = 10;
 
             while (true)
@@ -217,7 +217,7 @@ namespace ComponentTest
                 { new Position(1, 0, 4), new Cube() }
             });
 
-            Robot r1 = new Robot(1, 0, w);
+            Robot r1 = new Robot(w, 1, 0);
             r1.Delay = 10;
 
             while (!false)
@@ -238,7 +238,7 @@ namespace ComponentTest
                 { new Position(1, 3, 2), new Brick() }
             });
 
-            Robot r1 = new Robot(1, 0, w);
+            Robot r1 = new Robot(w, 1, 0);
             r1.Delay = 10;
             r1.JumpHeight = 1;
 
@@ -259,7 +259,7 @@ namespace ComponentTest
                 { new Position(1, 3, 2), new Brick() }
             });
 
-            Robot r1 = new Robot(1, 0, w);
+            Robot r1 = new Robot(w, 1, 0);
             r1.Delay = 10;
             r1.JumpHeight = 5;
 
@@ -271,7 +271,7 @@ namespace ComponentTest
         public void TestHasWall1()
         {
             World w1 = TestWorld;
-            Robot r1 = new Robot(0, 0, w1);
+            Robot r1 = new Robot(w1, 0, 0);
             r1.Delay = 10;
 
             Assert.IsFalse(r1.HasWall);
@@ -283,14 +283,14 @@ namespace ComponentTest
         public void TestHasWall2()
         {
             World w1 = TestWorld;
-            Robot r1 = new Robot(0, 0, w1);
+            Robot r1 = new Robot(w1, 0, 0);
             Assert.IsFalse(r1.HasWall);
 
             World we = WorldParser.Generate(5, 5, 5, new Dictionary<Position, WorldElement>()
             {
                 { new Position(0, 0, 1), new Cube() }
             });
-            Robot re = new Robot(0, 0, we);
+            Robot re = new Robot(we, 0, 0);
             Assert.IsTrue(re.HasWall);
         }
 
@@ -298,7 +298,7 @@ namespace ComponentTest
         public void TestHasMark1()
         {
             World w1 = TestWorld;
-            Robot r1 = new Robot(0, 0, w1);
+            Robot r1 = new Robot(w1, 0, 0);
             r1.Delay = 10;
 
             Assert.IsFalse(r1.HasMark);
@@ -312,7 +312,7 @@ namespace ComponentTest
         public void TestHasMark21()
         {
             World w1 = TestWorld;
-            Robot r1 = new Robot(0, 0, w1);
+            Robot r1 = new Robot(w1, 0, 0);
             r1.Delay = 10;
 
             Assert.IsFalse(r1.HasMark);
@@ -334,7 +334,7 @@ namespace ComponentTest
                 { new Position(0, 0, 1), new Brick() }
             });
 
-            Robot r1 = new Robot(0, 0, w1);
+            Robot r1 = new Robot(w1, 0, 0);
             Assert.IsTrue(r1.HasBrick);
             Assert.IsFalse(r1.HasBrickLeft);
             Assert.IsFalse(r1.HasBrickRight);
@@ -354,7 +354,7 @@ namespace ComponentTest
         [TestMethod("FaceDirection Test")]
         public void TestFaceDirection()
         {
-            Robot r1 = new Robot(0, 0, TestWorld);
+            Robot r1 = new Robot(TestWorld, 0, 0);
             r1.Delay = 10;
 
             Assert.IsTrue(r1.IsFacingNorth);
@@ -391,8 +391,8 @@ namespace ComponentTest
         public void TestHasRobot()
         {
             World w1 = TestWorld;
-            Robot r1 = new Robot(4, 4, w1);
-            Robot r2 = new Robot(4, 5, w1);
+            Robot r1 = new Robot(w1, 4, 4);
+            Robot r2 = new Robot(w1, 4, 5);
             r2.Delay = 10;
 
             Assert.IsFalse(r2.HasRobot);
@@ -407,7 +407,7 @@ namespace ComponentTest
         [TestMethod("Backpack Test")]
         public void TestBackpack1()
         {
-            Robot r1 = new Robot(2, 2, TestWorld);
+            Robot r1 = new Robot(TestWorld, 2, 2);
             r1.Delay = 10;
 
             Assert.IsFalse(r1.IsBackpackEmpty);
@@ -457,7 +457,7 @@ namespace ComponentTest
         [ExpectedException(typeof(InvalidActionException))]
         public void TestBackpack2()
         {
-            Robot r1 = new Robot(2, 2, TestWorld);
+            Robot r1 = new Robot(TestWorld, 2, 2);
             r1.Delay = 10;
             r1.MaxBackpackSize = 10;
             r1.BricksInBackpack = 0;
@@ -469,7 +469,7 @@ namespace ComponentTest
         [ExpectedException(typeof(InvalidActionException))]
         public void TestBackpack3()
         {
-            Robot r1 = new Robot(2, 2, TestWorld);
+            Robot r1 = new Robot(TestWorld, 2, 2);
             r1.Delay = 10;
             r1.MaxBackpackSize = 7;
             r1.BricksInBackpack = 7;
@@ -480,14 +480,14 @@ namespace ComponentTest
         [TestMethod("Sound machen")]
         public void TestMakeSound()
         {
-            Robot r1 = new Robot(0, 3, TestWorld);
+            Robot r1 = new Robot(TestWorld, 0, 3);
             r1.MakeSound();
         }
 
         [TestMethod("Sichtbarkeit testen")]
         public void TestIsVisible()
         {
-            Robot r1 = new Robot(4, 2, TestWorld);
+            Robot r1 = new Robot(TestWorld, 4, 2);
 
             Assert.IsTrue(r1.IsVisible);
             r1.IsVisible = false;
@@ -507,8 +507,8 @@ namespace ComponentTest
                 { new Position(1, 3, 2), new Brick() }
             });
 
-            Robot r1 = new Robot(1, 1, w);
-            Robot r2 = new Robot(0, 1, w);
+            Robot r1 = new Robot(w, 1, 1);
+            Robot r2 = new Robot(w, 0, 1);
             r1.Delay = 10;
             r2.Delay = 10;
 
@@ -533,8 +533,8 @@ namespace ComponentTest
                 { new Position(1, 3, 2), new Brick(Color.Green) }
             });
 
-            Robot r1 = new Robot(1, 1, w);
-            Robot r2 = new Robot(0, 1, w);
+            Robot r1 = new Robot(w, 1, 1);
+            Robot r2 = new Robot(w, 0, 1);
             r1.Delay = 10;
             r2.Delay = 10;
 

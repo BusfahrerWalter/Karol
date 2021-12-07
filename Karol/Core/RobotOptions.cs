@@ -80,15 +80,15 @@ namespace Karol.Core
         /// Erzeugt eine neue Instantz der RobotOptions Klasse
         /// </summary>
         public RobotOptions(World world) 
-            : this(0, 0, world) { }
+            : this(world, 0, 0) { }
 
         /// <summary>
         /// Erzeugt eine neue Instantz der RobotOptions Klasse
         /// </summary>
+        /// <param name="world">Zielwelt</param>
         /// <param name="startX">Start X Position</param>
         /// <param name="startZ">Start Z Position</param>
-        /// <param name="world">Zielwelt</param>
-        public RobotOptions(int startX, int startZ, World world)
+        public RobotOptions(World world, int startX, int startZ)
         {
             World = world;
             StartX = startX;

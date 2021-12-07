@@ -358,24 +358,24 @@ namespace Karol
         /// <summary>
         /// Erstellt einen neuen Roboter.
         /// </summary>
+        /// <param name="world">Welt in der der Roboter leben soll</param>
         /// <param name="xStart">Start X Position des Roboters</param>
         /// <param name="zStart">Start Z Position des Roboters</param>
-        /// <param name="world">Welt in der der Roboter leben soll</param>
         /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North
         /// </param>
         /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
-        public Robot(int xStart, int zStart, World world, Direction initialDirection) 
+        public Robot(World world, int xStart, int zStart, Direction initialDirection)
             : this(xStart, zStart, world, initialDirection, true) { }
 
         /// <summary>
         /// Erstellt einen neuen Roboter.
         /// </summary>
+        /// <param name="world">Welt in der der Roboter leben soll</param>
         /// <param name="xStart">Start X Position des Roboters</param>
         /// <param name="zStart">Start Z Position des Roboters</param>
-        /// <param name="world">Welt in der der Roboter leben soll</param>
         /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
-        public Robot(int xStart, int zStart, World world)
-            : this(xStart, zStart, world, Direction.North) { }
+        public Robot(World world, int xStart, int zStart)
+            : this(world, xStart, zStart, Direction.North) { }
 
         /// <summary>
         /// Erstellt einen neuen Roboter. An der Position 0, 0
@@ -383,7 +383,7 @@ namespace Karol
         /// <param name="world">Welt in der der Roboter leben soll</param>
         /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         public Robot(World world) 
-            : this(0, 0, world) { }
+            : this(world, 0, 0) { }
 
         /// <summary>
         /// Erstellt einen neuen Roboter. An der Position 0, 0
@@ -392,14 +392,14 @@ namespace Karol
         /// <param name="initialDirection">Start Blickrichtung des Roboters. <br></br>Standard ist Direction.North</param>
         /// <exception cref="InvalidActionException">Wird geworfen wenn der Roboter an einer Ungültigen Position platziert wird</exception>
         public Robot(World world, Direction initialDirection) 
-            : this(0, 0, world, initialDirection) { }
+            : this(world, 0, 0, initialDirection) { }
 
         /// <summary>
         /// Erstellt einen neuen Roboter anhand der übergebennen Optionen
         /// </summary>
         /// <param name="options">Roboter Optionen</param>
         public Robot(RobotOptions options) 
-            : this(options.StartX, options.StartZ, options) { }
+            : this(options, options.StartX, options.StartZ) { }
 
         /// <summary>
         /// Erstellt einen neuen Roboter anhand der übergebennen Optionen
@@ -407,7 +407,7 @@ namespace Karol
         /// <param name="options">Roboter Optionen</param>
         /// <param name="xStart">X Start Position des Roboters</param>
         /// <param name="zStart">Z Start Posotion des Roboters</param>
-        public Robot(int xStart, int zStart, RobotOptions options)
+        public Robot(RobotOptions options, int xStart, int zStart)
         {
             ValidatePos(new Position(xStart, 0, zStart), options.World);
 
@@ -754,8 +754,8 @@ namespace Karol
             if (!HasMark)
                 throw new InvalidActionException($"Kann an Position {Position} keine Marke aufheben!");
 
-            World.SetCell(Position, this);
             Mark = null;
+            World.SetCell(Position, this);
             OnLeaveMark();
             WaitDefault();
         }
@@ -873,6 +873,9 @@ namespace Karol
         #region Overrides
         void ICustomRenderBehavior3D.Render(Point defaultPos, Graphics g)
         {
+            if (!IsVisible)
+                return;
+
             defaultPos.Y += BitMap.Height - Resources.robotN1.Height;
             g.DrawImage(BitMap, new Rectangle(defaultPos, Resources.robotN1.Size));
 
@@ -893,9 +896,12 @@ namespace Karol
 
             if(cell == this)
                 g.FillRectangle(Brushes.White, rect);
-
+            
             g.FillRectangle(new SolidBrush(cell.ViewColor2D), rect);
-            g.DrawImage(ResourcesLoader.RobotBitmaps2D[FaceDirection.Offset], rect);
+            
+            if(IsVisible)
+                g.DrawImage(ResourcesLoader.RobotBitmaps2D[FaceDirection.Offset], rect);
+
             return Color.White;
         }
         #endregion
