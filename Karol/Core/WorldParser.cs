@@ -145,15 +145,14 @@ namespace Karol.Core
 
             string sizeLine = NextLine(reader);
             var dimension = sizeLine.Trim().Replace(" ", "")[5..].Split(',');
-            int iteration = 0;
+            double iteration = 0;
 
             int xSize = int.Parse(dimension[0]);
             int ySize = int.Parse(dimension[1]);
             int zSize = int.Parse(dimension[2]);
-            int count = xSize * ySize * zSize;
+            double count = xSize * ySize * zSize;
 
             World world = new World(xSize, ySize, zSize);
-            WorldElement last = null;
 
             EnableProgressBar(world, true);
 
@@ -188,7 +187,7 @@ namespace Karol.Core
 
                         char id = char.ToUpper(arr[x][0]);
                         GetMetaData(arr[x], out string metadata);
-                        WorldElement cell = (last != null && last.Metadata == metadata && last.ID == id) ? last : WorldElement.ForID(id);
+                        WorldElement cell = WorldElement.ForID(id);
                         
                         if (cell == null)
                         {
@@ -199,13 +198,10 @@ namespace Karol.Core
                             world.SetCell(x, y, z, cell, false);
                             if (metadata != string.Empty)
                                 cell.Metadata = metadata;
-
-                            if(cell.GetInfo().IsCasheable)
-                                last = cell;
                         }
-
-                        SetProgress(world, (double)iteration / count);
                     }
+
+                    SetProgress(world, iteration / count);
                 }
             }
 
@@ -242,7 +238,6 @@ namespace Karol.Core
             int rYpos = int.Parse(posArr[6]);
 
             World world = new World(xSize, ySize, zSize);
-            WorldElement last = null;
             Dictionary<char, char> IDMap = new Dictionary<char, char>()
             {
                 { 'n', EmptyCellID },
@@ -266,9 +261,8 @@ namespace Karol.Core
                     char c = Translate(block[0]);
                     if (!hasPlacedCube)
                     {
-                        var cell = last != null && last.ID == c ? last : WorldElement.ForID(c);
+                        var cell = WorldElement.ForID(c);
                         world.SetCell(x, z, cell, false);
-                        last = cell;
                     }
 
                     hasPlacedCube = !hasPlacedCube && c == 'Q';
@@ -326,7 +320,6 @@ namespace Karol.Core
 
             var map = new Bitmap(filePath);
             World world = new World(map.Width, worldHeight, map.Height);
-            Brick last = null;
 
             EnableProgressBar(world, true);
 
@@ -338,9 +331,7 @@ namespace Karol.Core
                     if (color.A == 0)
                         continue;
 
-                    var cell = last != null && last.Paint == color ? last : new Brick(color);
-                    world.SetGridElement(x, 0, map.Height - y - 1, cell);
-                    last = cell;
+                    world.SetGridElement(x, 0, map.Height - y - 1, new Brick(color));
                 }
 
                 double val = (double)(x + 1) / map.Width;

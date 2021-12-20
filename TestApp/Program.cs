@@ -10,35 +10,25 @@ namespace TestApp
 {
     class Program
     {
-        public static World w => new World(10, 10, 10);
-
         static void Main(string[] args)
         {
-            World w = new World(10, 10, 10);
-            Robot r = new Robot(w, 5, 5);
-            Random rand = new Random();
-            Action[] acts = new Action[]
-            {
-                r.Move,
-                r.TurnLeft,
-                r.TurnRight,
-                r.Place,
-                r.PickUp
-            };
+            //World w = World.Load(@"H:\Daten\Fächer\java\lib\karol\labs\lab8.kdw");
+            World w = new World(30, 10, 30);
 
-            r.Delay = 10;
-            r.JumpHeight = 100;
-
-            while (!false)
+            for(int i = 0; i < w.Width; i++)
             {
-                int num = rand.Next(0, acts.Length);
-                try
+                for(int j = 0; j < w.Depth; j++)
                 {
-                    acts[num].Invoke();
+                    Robot r = new Robot(w, i, j);
                 }
-                catch(Exception e) 
+            }
+
+            while (true)
+            {
+                Console.ReadLine();
+                foreach (var r in w.Robots)
                 {
-                    Console.WriteLine(e.Message);
+                    r.IsVisible = !r.IsVisible;
                 }
             }
         }

@@ -280,10 +280,10 @@ namespace Karol
             get
             {
                 var pos = FaceDirection.OffsetPosition(Position);
-                pos.Y = World.GetStackSize(pos.X, pos.Z) - 1;
                 if (!World.IsPositionValid(pos))
                     return -1;
 
+                pos.Y = Math.Max(World.GetStackSize(pos.X, pos.Z) - 1, 0);
                 var cell = World.GetCell(pos);
                 if (!(cell is Robot robo))
                     return -1;
