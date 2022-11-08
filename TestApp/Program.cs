@@ -23,7 +23,7 @@ namespace TestApp
                 }
             }
 
-            while (true)
+            while (!false)
             {
                 Console.ReadLine();
                 foreach (var r in w.Robots)
